@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour
 
     Rigidbody rb;
 
+    public float health;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -19,19 +21,29 @@ public class Enemy : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(rb.velocity);
+        Debug.Log(health);
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
         Vector3 directionToPlayer = transform.position - player.transform.position;
         directionToPlayer = directionToPlayer.normalized * forceMultiplier;
 
-        //if(distanceToPlayer < 5f)
-        //{
-            rb.AddForce(-directionToPlayer * Time.deltaTime);
-        //}
+        
+        rb.AddForce(-directionToPlayer * Time.deltaTime);
+
+        if(health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
 
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Bullet")
+        {
+            health -= 1;
+        }
+    }
 
 }
