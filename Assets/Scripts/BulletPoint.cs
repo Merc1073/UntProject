@@ -19,7 +19,7 @@ public class BulletPoint : MonoBehaviour
 
     void Start()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()

@@ -40,8 +40,6 @@ public class Movement : MonoBehaviour
                 Vector3 directionToMouse = transform.position - hit.point;
                 directionToMouse = directionToMouse.normalized * forceMultiplier;
 
-                Debug.Log(directionToMouse);
-
                 //clone = Instantiate(clone, hit.point + tranDif, rotation);
                 rb.AddForce(-directionToMouse + tranDif * Time.deltaTime);
             }

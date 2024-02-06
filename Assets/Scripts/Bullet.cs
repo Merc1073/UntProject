@@ -9,10 +9,6 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed;
     float timer;
 
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
