@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     //public GameObject clone;
     //public Quaternion rotation;
 
-    //public Vector3 tranDif;
+    public Vector3 tranDif;
 
     public float forceMultiplier;
 
@@ -21,19 +21,31 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        
+
+
+        //if(rb.velocity.magnitude > topSpeed)
+        //{
+        //    rb.velocity = rb.velocity.normalized;
+        //}
+
+                
         if(Input.GetMouseButton(0))
         {
-            while(true)
-            {
-                RaycastHit hit;
 
-                if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
-                {
-                    //clone = Instantiate(clone, hit.point + tranDif, rotation);
-                    rb.AddForce(transform.position + hit.point * forceMultiplier * Time.deltaTime);
-                }
+            RaycastHit hit;
+
+            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+            {
+
+                Vector3 directionToMouse = transform.position - hit.point;
+                directionToMouse = directionToMouse.normalized * forceMultiplier;
+
+                Debug.Log(directionToMouse);
+
+                //clone = Instantiate(clone, hit.point + tranDif, rotation);
+                rb.AddForce(-directionToMouse + tranDif * Time.deltaTime);
             }
+            
 
         }
 
