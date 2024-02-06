@@ -10,8 +10,12 @@ public class Enemy : MonoBehaviour
 
     public GameScript gamescript;
 
+    public HealthBar healthbar;
+
     public AudioSource audiosource;
     public AudioClip yoda;
+
+    public Transform canvasTransform;
 
     public float forceMultiplier;
 
@@ -21,7 +25,11 @@ public class Enemy : MonoBehaviour
 
     Rigidbody rb;
 
-    public float health;
+    public int maxHealth;
+    public int health;
+
+
+
 
     void Start()
     {
@@ -32,6 +40,9 @@ public class Enemy : MonoBehaviour
         gamescript = FindObjectOfType<GameScript>();
 
         audiosource = FindObjectOfType<AudioSource>();
+
+        health = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
 
         
     }
@@ -73,6 +84,11 @@ public class Enemy : MonoBehaviour
 
     }
 
+    private void LateUpdate()
+    {
+        
+    }
+
     private void OnTriggerEnter(Collider other)
     {
 
@@ -82,6 +98,8 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "Bullet")
         {
             health -= 1;
+            healthbar.SetHealth(health);
+
             rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
         }
     }
