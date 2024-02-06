@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FollowMouse : MonoBehaviour
 {
+
+    public Vector3 tranDif;
+
     void Start()
     {
         
@@ -15,7 +18,7 @@ public class FollowMouse : MonoBehaviour
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
         {
-            transform.position = hit.point;
+            transform.position = hit.point + tranDif;
         }
     }
 }

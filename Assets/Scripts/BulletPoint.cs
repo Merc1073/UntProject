@@ -10,6 +10,7 @@ public class BulletPoint : MonoBehaviour
 
     public GameObject player;
     public GameObject bullet;
+    public GameObject reticle;
 
     public float rotateVelocity;
     public float rotateSpeedMovement;
@@ -20,6 +21,7 @@ public class BulletPoint : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        reticle = GameObject.FindGameObjectWithTag("Reticle");
     }
 
     void Update()
@@ -37,7 +39,7 @@ public class BulletPoint : MonoBehaviour
 
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
-                Quaternion rotationToLookAt = Quaternion.LookRotation(hit.point - transform.position);
+                Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
                 float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
                 transform.eulerAngles = new Vector3(0, rotationY, 0);
 

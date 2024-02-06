@@ -30,8 +30,6 @@ public class Enemy : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(counter);
-
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
         Vector3 directionToPlayer = transform.position - player.transform.position;

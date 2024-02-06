@@ -10,6 +10,7 @@ public class Coin : MonoBehaviour
 
     public float forceMultiplier;
     public float explosionForce;
+    public float speed;
 
     bool distanceTriggered = false;
 
@@ -38,7 +39,8 @@ public class Coin : MonoBehaviour
 
         if(distanceTriggered == true)
         {
-            rb.AddForce(-directionToPlayer * forceMultiplier, ForceMode.Impulse);
+            speed += 0.25f;
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
         }
     }
 

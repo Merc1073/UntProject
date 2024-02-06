@@ -153,7 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
   forceMultiplier: 1
-  explosionForce: 100
+  explosionForce: 1000
+  speed: 1
 --- !u!54 &6634931503627846824
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162,8 +163,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4328880441346068242}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 20
+  m_Mass: 40
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
