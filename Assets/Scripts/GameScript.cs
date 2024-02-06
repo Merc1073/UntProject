@@ -16,13 +16,19 @@ public class GameScript : MonoBehaviour
     public Vector3 reticlePointSpawn;
 
     public float timer;
+    public float newTimer;
+
+    bool enemyFull = false;
+
+    public int counter;
+    public int maxEnemies;
 
 
 
     void Start()
     {
         Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
-        Instantiate(Enemy, enemySpawn, Quaternion.Euler(0, 0, 0));
+        //Instantiate(Enemy, enemySpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
 
@@ -31,16 +37,42 @@ public class GameScript : MonoBehaviour
     void Update()
     {
 
-        enemySpawn = new Vector3(Random.Range(10, -10), 1, (Random.Range(10, -10)));
-
-        timer += Time.deltaTime;
-
-        if(timer >= 3)
+        if(counter >= maxEnemies)
         {
-            Instantiate(Enemy, enemySpawn, Quaternion.Euler(0, 0, 0));
-            timer = 0;
+            enemyFull = true;
         }
 
+        if(counter < maxEnemies)
+        {
+            enemyFull = false; 
+        }
 
+        if(enemyFull == false)
+        {
+            
+
+
+            newTimer -= 0.0001f;
+            timer -= Time.deltaTime;
+
+            if (timer <= 0)
+            {
+                SpawnEnemy();
+                timer = newTimer;
+            }
+        }
     }
+
+    public void SpawnEnemy()
+    {
+        enemySpawn = new Vector3(Random.Range(10, -10), 1, (Random.Range(10, -10)));
+        Instantiate(Enemy, enemySpawn, Quaternion.Euler(0, 0, 0));
+        counter++;
+    }
+
+    public void ReduceEnemy()
+    {
+        counter--;
+    }
+
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.UI;
 using UnityEngine;
 
 
@@ -12,8 +13,16 @@ public class BulletPoint : MonoBehaviour
     public GameObject bullet;
     public GameObject reticle;
 
+    public AudioSource src;
+    public AudioClip pewSound;
+
     public float rotateVelocity;
     public float rotateSpeedMovement;
+
+    public float fireRate;
+    public float cooldown;
+
+    public bool canFire = false;
 
     public Vector3 tranDif;
 
@@ -22,20 +31,34 @@ public class BulletPoint : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         reticle = GameObject.FindGameObjectWithTag("Reticle");
+
+        src = FindObjectOfType<AudioSource>();
     }
 
     void Update()
     {
 
         transform.position = player.transform.position + tranDif;
-        
 
-        if(Input.GetMouseButtonDown(1))
+        fireRate += Time.deltaTime;  
+
+        if(fireRate >= cooldown)
+        {
+            canFire = true;
+            fireRate = cooldown;
+        }
+
+
+        if(Input.GetMouseButton(1) && canFire == true)
         {
 
-            RaycastHit hit;
+            //src.clip = pewSound;
+            src.pitch = Random.Range(0.3f, 1f);
+            src.PlayOneShot(pewSound);
 
-            
+            fireRate = 0;
+
+            RaycastHit hit;
 
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
@@ -48,7 +71,10 @@ public class BulletPoint : MonoBehaviour
                 clone = Instantiate(bullet, transform.position, rotationToLookAt);
                 
             }
-        }
 
+            canFire = false;
+
+        }
     }
+
 }

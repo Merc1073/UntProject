@@ -8,6 +8,9 @@ public class Coin : MonoBehaviour
     public GameObject player;
     Rigidbody rb;
 
+    public AudioSource src;
+    public AudioClip coinSound;
+
     public float forceMultiplier;
     public float explosionForce;
     public float speed;
@@ -22,10 +25,14 @@ public class Coin : MonoBehaviour
 
         rb.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
+        src = FindObjectOfType<AudioSource>();
+
     }
 
     void Update()
     {
+
+        
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
@@ -48,6 +55,10 @@ public class Coin : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
+            src.pitch = Random.Range(0.5f, 0.8f);
+            //src.clip = coinSound;
+            src.PlayOneShot(coinSound);
+
             Destroy(this.gameObject);
         }
     }

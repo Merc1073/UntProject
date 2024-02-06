@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
+  src: {fileID: 0}
+  coinSound: {fileID: 8300000, guid: 04cc858d61b53d34c81bb2e10ea99336, type: 3}
   forceMultiplier: 1
   explosionForce: 1000
   speed: 1

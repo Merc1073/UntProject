@@ -8,11 +8,14 @@ public class Enemy : MonoBehaviour
     public GameObject player;
     public GameObject coin;
 
-    public float forceMultiplier;
-    public float explosionForce;
-    public float fieldOfImpact;
+    public GameScript gamescript;
 
-    public float counter;
+    public AudioSource audiosource;
+    public AudioClip yoda;
+
+    public float forceMultiplier;
+
+    public float coinCounter;
 
     Vector3 coinPosition;
 
@@ -25,6 +28,12 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindGameObjectWithTag("Player");
+
+        gamescript = FindObjectOfType<GameScript>();
+
+        audiosource = FindObjectOfType<AudioSource>();
+
+        
     }
 
     void Update()
@@ -44,14 +53,19 @@ public class Enemy : MonoBehaviour
             GameObject clone;
             
 
-            while(counter != 0)
+            while(coinCounter != 0)
             {
                 coinPosition = new Vector3(Random.Range(0.5f, -0.5f), 0, Random.Range(0.5f, -0.5f));
                 clone = Instantiate(coin, transform.position + coinPosition, Quaternion.Euler(0, Random.Range(0, 360), 0));
-                //rb.AddExplosionForce(explosionForce, transform.position, fieldOfImpact);
-                counter--;
+                coinCounter--;
             }
-            
+
+            gamescript.ReduceEnemy();
+
+            audiosource.pitch = 1;
+            //audiosource.clip = yoda;
+            audiosource.PlayOneShot(yoda);
+
             Destroy(this.gameObject);
 
 
