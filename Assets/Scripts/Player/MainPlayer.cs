@@ -11,16 +11,26 @@ public class MainPlayer : MonoBehaviour
 
     public float forceMultiplier;
 
+    public float currentHealth;
+    public float maxHealth;
+
+    private HealthBar playerHealthBar;
+
     Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        playerHealthBar = GetComponentInChildren<HealthBar>();
+
+        currentHealth = maxHealth;
+        playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+
     }
 
     void Update()
     {
-
                 
         if(Input.GetMouseButton(0))
         {
@@ -36,15 +46,13 @@ public class MainPlayer : MonoBehaviour
                 //clone = Instantiate(clone, hit.point + tranDif, rotation);
                 rb.AddForce(-directionToMouse + tranDif * Time.deltaTime);
             }
-            
-
         }
-
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void DecreasePlayerHealth(float health)
     {
-        
+        currentHealth -= health;
+        playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
     }
 
 }

@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b513985cd9be16146b4f892ef33e28c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDrain: 0.2
   image: {fileID: 3092156377432477689}
   gradient:
     serializedVersion: 2
@@ -5218,7 +5219,6 @@ MonoBehaviour:
   player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
   coin: {fileID: 569179437891186330, guid: 284327538c8a44f40b3a5e95fef3d904, type: 3}
   gamescript: {fileID: 0}
-  healthbar: {fileID: 8308260224993967807}
   src: {fileID: 0}
   explosionSound: {fileID: 8300000, guid: 4dca1918e9eda4442956516424d7e956, type: 3}
   particles: {fileID: 4340203014591403147}

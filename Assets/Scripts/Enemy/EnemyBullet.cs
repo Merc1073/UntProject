@@ -12,6 +12,12 @@ public class EnemyBullet : MonoBehaviour
     public ParticleSystem particles;
     public MeshRenderer mesh;
 
+    public MainPlayer player;
+
+    private void Start()
+    {
+        player = FindObjectOfType<MainPlayer>();
+    }
 
     void Update()
     {
@@ -28,8 +34,31 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((other.gameObject.tag == "Player" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
+
+        if(other.gameObject.tag == "Player")
         {
+
+            player.DecreasePlayerHealth(1f);
+
+            var em = particles.emission;
+            var dur = particles.main.duration;
+
+            em.enabled = true;
+
+            transform.parent.position = transform.position;
+
+            particles.Play();
+
+            particOnce = false;
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), 0);
+        }
+
+        if ((other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
+        {
+
+            player.DecreasePlayerHealth(1f);
 
             var em = particles.emission;
             var dur = particles.main.duration;

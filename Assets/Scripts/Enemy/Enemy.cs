@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
 
     public GameScript gamescript;
 
-    public HealthBar healthbar;
+    private HealthBar enemyHealthBar;
 
     public AudioSource src;
     public AudioClip explosionSound;
@@ -49,8 +49,10 @@ public class Enemy : MonoBehaviour
 
         src = FindObjectOfType<AudioSource>();
 
+        enemyHealthBar = GetComponentInChildren<HealthBar>();
+
         currentHealth = maxHealth;
-        healthbar.UpdateHealthBar(maxHealth, currentHealth);
+        enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
 
     }
 
@@ -119,7 +121,7 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "Bullet")
         {
             currentHealth -= 1;
-            healthbar.UpdateHealthBar(maxHealth, currentHealth);
+            enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
 
             rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
         }

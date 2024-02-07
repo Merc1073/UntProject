@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2531a825dbc26b14392c63f9db5547d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
+  Player: {fileID: 3093773531564783751, guid: 84812442a012d3f4697efa559a27603a, type: 3}
   Enemy: {fileID: 3470168901668137282, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
   BulletPoint: {fileID: 6187562490401238630, guid: dcd26e0e78d847144b7a4e8fc5d19091, type: 3}
   Reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
@@ -293,12 +293,12 @@ MonoBehaviour:
   enemySpawn: {x: -15, y: 1, z: 0}
   bulletPointSpawn: {x: 0, y: 1, z: 0}
   reticlePointSpawn: {x: 0, y: 1, z: 0}
-  timer: 3
-  newTimer: 3
+  timer: 0
+  newTimer: 0
   enemyFull: 0
   canSpawnEnemies: 1
   counter: 0
-  maxEnemies: 10
+  maxEnemies: 1
 --- !u!4 &168306414
 Transform:
   m_ObjectHideFlags: 0
@@ -312,7 +312,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &358407679
 GameObject:
@@ -913,7 +913,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1639288635
 GameObject:
