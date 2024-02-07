@@ -293,8 +293,10 @@ MonoBehaviour:
   enemySpawn: {x: -15, y: 1, z: 0}
   bulletPointSpawn: {x: 0, y: 1, z: 0}
   reticlePointSpawn: {x: 0, y: 1, z: 0}
-  timer: 1
-  newTimer: 1
+  timer: 3
+  newTimer: 3
+  enemyFull: 0
+  canSpawnEnemies: 1
   counter: 0
   maxEnemies: 10
 --- !u!4 &168306414
@@ -324,6 +326,7 @@ GameObject:
   - component: {fileID: 358407682}
   - component: {fileID: 358407681}
   - component: {fileID: 358407680}
+  - component: {fileID: 358407684}
   m_Layer: 0
   m_Name: Wall (2)
   m_TagString: Wall
@@ -417,6 +420,33 @@ Transform:
   m_Father: {fileID: 1639288636}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!54 &358407684
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358407679}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +588,7 @@ GameObject:
   - component: {fileID: 823009282}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -933,6 +963,7 @@ GameObject:
   - component: {fileID: 1795959907}
   - component: {fileID: 1795959906}
   - component: {fileID: 1795959905}
+  - component: {fileID: 1795959909}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Wall
@@ -1026,6 +1057,33 @@ Transform:
   m_Father: {fileID: 1639288636}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1795959909
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795959904}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1877500649
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,6 +1096,7 @@ GameObject:
   - component: {fileID: 1877500652}
   - component: {fileID: 1877500651}
   - component: {fileID: 1877500650}
+  - component: {fileID: 1877500654}
   m_Layer: 0
   m_Name: Wall (1)
   m_TagString: Wall
@@ -1131,3 +1190,30 @@ Transform:
   m_Father: {fileID: 1639288636}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1877500654
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877500649}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0

@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     Rigidbody rb;
 
     public int maxHealth;
-    public int health;
+    public int currentHealth;
 
     public bool particOnce = true;
 
@@ -49,17 +49,13 @@ public class Enemy : MonoBehaviour
 
         src = FindObjectOfType<AudioSource>();
 
-        health = maxHealth;
-        healthbar.SetMaxHealth(maxHealth);
-
-        //Instantiate(enemyBulletPoint, enemyBulletPointPosition + tranDif, Quaternion.Euler(0, 0, 0));
+        currentHealth = maxHealth;
+        healthbar.UpdateHealthBar(maxHealth, currentHealth);
 
     }
 
     void Update()
     {
-
-        //enemyBulletPoint.transform.position = transform.position + tranDif;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
@@ -69,7 +65,7 @@ public class Enemy : MonoBehaviour
         
         rb.AddForce(-directionToPlayer * Time.deltaTime);
 
-        if(health <= 0)
+        if(currentHealth <= 0)
         {
 
             GameObject clone;
@@ -99,7 +95,7 @@ public class Enemy : MonoBehaviour
     private void LateUpdate()
     {
         canvasTransform.position = transform.position + new Vector3(0, 4, 2);
-        canvasTransform.rotation = Quaternion.Euler(0.25f, 0, 0);
+        canvasTransform.rotation = Quaternion.Euler(90, 0, 0);
         //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
@@ -120,8 +116,8 @@ public class Enemy : MonoBehaviour
 
             //particOnce = false;
 
-            health -= 1;
-            healthbar.SetHealth(health);
+            currentHealth -= 1;
+            healthbar.UpdateHealthBar(maxHealth, currentHealth);
 
             rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
         }

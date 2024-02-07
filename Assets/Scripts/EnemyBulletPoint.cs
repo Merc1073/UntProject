@@ -52,7 +52,7 @@ public class EnemyBulletPoint : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = transform.parent.position + new Vector3(0, 1.25f, 0);
+        transform.position = transform.parent.position;
         //transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 }
