@@ -5,14 +5,14 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
 
-    public GameObject player;
+    GameObject player;
 
     public float smoothSpeed;
     public Vector3 offset;
 
     private void Start()
     {
-        //player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void FixedUpdate()

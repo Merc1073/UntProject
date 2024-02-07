@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
-  Enemy: {fileID: 4276543164396957435, guid: 94391a81625b49346b7774138e27e7cf, type: 3}
+  Enemy: {fileID: 3470168901668137282, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
   BulletPoint: {fileID: 6187562490401238630, guid: dcd26e0e78d847144b7a4e8fc5d19091, type: 3}
   Reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
   playerSpawn: {x: 5, y: 1, z: 0}
@@ -785,8 +785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599d327ce38b2744b9acd33bdec72e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
-  smoothSpeed: 0.5
+  smoothSpeed: 0.05
   offset: {x: 0, y: 60, z: 0}
 --- !u!1 &1338819076
 GameObject:

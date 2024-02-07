@@ -16,8 +16,8 @@ public class Enemy : MonoBehaviour
     public AudioSource src;
     public AudioClip explosionSound;
 
-    //public ParticleSystem particles;
-    //public MeshRenderer mesh;
+    public ParticleSystem particles;
+    public MeshRenderer mesh;
 
     public Transform canvasTransform;
 
@@ -85,8 +85,19 @@ public class Enemy : MonoBehaviour
             src.volume = 0.4f;
             src.PlayOneShot(explosionSound);
 
-            Destroy(this.gameObject);
+            var em = particles.emission;
+            var dur = particles.main.duration;
 
+            em.enabled = true;
+
+            transform.parent.position = transform.position;
+
+            particles.Play();
+
+            particOnce = false;
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), 0);
 
         }
 
@@ -107,20 +118,16 @@ public class Enemy : MonoBehaviour
 
         if (other.gameObject.tag == "Bullet")
         {
-
-            //var em = particles.emission;
-            //var dur = particles.duration;
-
-            //em.enabled = true;
-            //particles.Play();
-
-            //particOnce = false;
-
             currentHealth -= 1;
             healthbar.UpdateHealthBar(maxHealth, currentHealth);
 
             rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
         }
+    }
+
+    void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 
 }
