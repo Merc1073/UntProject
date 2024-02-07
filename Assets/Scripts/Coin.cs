@@ -5,7 +5,11 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
 
-    public GameObject player;
+    GameObject playerObject;
+
+    MainPlayer playerScript;
+    BulletPoint bulletReticle;
+
     Rigidbody rb;
 
     public AudioSource src;
@@ -25,7 +29,10 @@ public class Coin : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        player = GameObject.FindGameObjectWithTag("Player");
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        playerScript = FindObjectOfType<MainPlayer>();
+        bulletReticle = FindObjectOfType<BulletPoint>();
 
         rb.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
@@ -35,11 +42,11 @@ public class Coin : MonoBehaviour
 
     void Update()
     {
-        if(player != null)
+        if(playerObject != null)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, playerObject.transform.position);
 
-            Vector3 directionToPlayer = transform.position - player.transform.position;
+            Vector3 directionToPlayer = transform.position - playerObject.transform.position;
             //directionToPlayer = directionToPlayer.normalized * forceMultiplier;
 
             if (distanceToPlayer <= 10f)
@@ -50,7 +57,7 @@ public class Coin : MonoBehaviour
             if (distanceTriggered == true)
             {
                 speed += 0.25f;
-                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, playerObject.transform.position, speed * Time.deltaTime);
             }
         }
         
@@ -58,25 +65,32 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player" && particOnce)
+        if(playerObject != null)
         {
-            //src.pitch = Random.Range(0.5f, 0.8f);
-            src.volume = 0.2f;
-            src.clip = coinSound;
-            src.Play();
+            if (other.gameObject.tag == "Player" && particOnce)
+            {
+                //src.pitch = Random.Range(0.5f, 0.8f);
+                src.volume = 0.2f;
+                src.clip = coinSound;
+                src.Play();
 
-            var em = particles.emission;
-            var dur = particles.main.duration;
+                var em = particles.emission;
+                var dur = particles.main.duration;
 
-            em.enabled = true;
-            particles.Play();
+                em.enabled = true;
+                particles.Play();
 
-            particOnce = false;
+                particOnce = false;
 
-            Destroy(mesh);
-            Invoke(nameof(DestroyObj), dur);
+                playerScript.AddCoins(1);
+                bulletReticle.IncreaseFireRate(0.01f);
 
+                Destroy(mesh);
+                Invoke(nameof(DestroyObj), dur);
+
+            }
         }
+        
     }
 
     void DestroyObj()

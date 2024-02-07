@@ -128,9 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65513cf4e713d4f43abf618ac6bbccbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
   bullet: {fileID: 953082054146030705, guid: 0a88a979fba7ae5479bf48c65ec3b762, type: 3}
-  reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
   groundMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -138,7 +136,8 @@ MonoBehaviour:
   pewSound: {fileID: 8300000, guid: ca9091bf8810ec642b03eced312a34c3, type: 3}
   rotateVelocity: 0
   rotateSpeedMovement: 0
-  fireRate: 0.1
-  fireRateCooldown: 0.1
+  fireRate: 1
+  maxFireRate: 1
+  fireRateCooldown: 1
   canFire: 0
   tranDif: {x: 0, y: 0, z: 0}

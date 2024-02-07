@@ -14,6 +14,8 @@ public class MainPlayer : MonoBehaviour
     public float currentHealth;
     public float maxHealth;
 
+    public int coinCount;
+
     public bool particOnce = true;
 
     public ParticleSystem particles;
@@ -40,7 +42,7 @@ public class MainPlayer : MonoBehaviour
 
     void Update()
     {
-        
+
         if(currentHealth < 0)
         {
             currentHealth = 0;
@@ -97,6 +99,11 @@ public class MainPlayer : MonoBehaviour
     void DestroyObj()
     {
         Destroy(gameObject);
+    }
+
+    public void AddCoins(int coins)
+    {
+        coinCount += coins;
     }
 
 }

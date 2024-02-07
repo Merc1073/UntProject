@@ -5216,16 +5216,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa4445c6702ec90418c0bac86a7648ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
   coin: {fileID: 569179437891186330, guid: 284327538c8a44f40b3a5e95fef3d904, type: 3}
-  gamescript: {fileID: 0}
   src: {fileID: 0}
   explosionSound: {fileID: 8300000, guid: 4dca1918e9eda4442956516424d7e956, type: 3}
   particles: {fileID: 4340203014591403147}
   mesh: {fileID: 7276595464276888887}
   canvasTransform: {fileID: 3445202577235606017}
   forceMultiplier: 1000
-  coinCounter: 6
+  currentCoinCounter: 0
+  minCoins: 3
+  maxCoins: 6
   enemyBulletPointPosition: {x: 0, y: 0, z: 0}
   tranDif: {x: 0, y: 3, z: 0}
   maxHealth: 5
@@ -5523,7 +5523,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6696639396183245616}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5570,7 +5570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4559bf54103d874689475e1aef526b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 2
+  fireRate: 0
   fireRateCooldown: 2
   rotateVelocity: 0
   rotateSpeedMovement: 0

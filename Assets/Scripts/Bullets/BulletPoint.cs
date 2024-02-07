@@ -9,9 +9,11 @@ public class BulletPoint : MonoBehaviour
 {
 
 
-    private GameObject player;
+    private GameObject playerObject;
     public GameObject bullet;
     private GameObject reticle;
+
+    private MainPlayer playerScript;
 
     public LayerMask groundMask;
 
@@ -22,6 +24,7 @@ public class BulletPoint : MonoBehaviour
     public float rotateSpeedMovement;
 
     public float fireRate;
+    public float maxFireRate;
     public float fireRateCooldown;
 
     public bool canFire = false;
@@ -31,19 +34,25 @@ public class BulletPoint : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        playerObject = GameObject.FindGameObjectWithTag("Player");
         reticle = GameObject.FindGameObjectWithTag("Reticle");
+
+        playerScript = FindObjectOfType<MainPlayer>();
 
         src = FindObjectOfType<AudioSource>();
     }
 
     void Update()
     {
-        if(player != null)
+        if(playerObject != null)
         {
-            transform.position = player.transform.position + tranDif;
+            transform.position = playerObject.transform.position + tranDif;
 
             fireRate += Time.deltaTime;
+
+            Debug.Log(maxFireRate);
+
+            fireRateCooldown = maxFireRate;
 
             if (fireRate >= fireRateCooldown)
             {
@@ -85,6 +94,11 @@ public class BulletPoint : MonoBehaviour
     public void DestroyObj()
     {
         Destroy(gameObject);
+    }
+
+    public void IncreaseFireRate(float rateOfFire)
+    {
+        maxFireRate -= rateOfFire;
     }
 
 }

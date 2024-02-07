@@ -6,10 +6,10 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    public GameObject player;
+    GameObject player;
     public GameObject coin;
 
-    public GameScript gamescript;
+    GameScript gamescript;
 
     private HealthBar enemyHealthBar;
 
@@ -23,7 +23,11 @@ public class Enemy : MonoBehaviour
 
     public float forceMultiplier;
 
-    public float coinCounter;
+    float appearingSpeed;
+
+    public int currentCoinCounter;
+    public int minCoins;
+    public int maxCoins;
 
     Vector3 coinPosition;
     public Vector3 enemyBulletPointPosition;
@@ -54,10 +58,19 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
         enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
 
+        transform.localScale = Vector3.zero;
     }
 
     void Update()
     {
+
+        if(appearingSpeed < 3)
+        {
+            appearingSpeed += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 1f, 1f), appearingSpeed * Time.deltaTime);
+        }
+
+
         if(player != null)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
@@ -72,13 +85,14 @@ public class Enemy : MonoBehaviour
             {
 
                 GameObject clone;
+                currentCoinCounter = Random.Range(minCoins, maxCoins);
 
-
-                while (coinCounter != 0)
+                while (currentCoinCounter != 0)
                 {
+
                     coinPosition = new Vector3(Random.Range(0.5f, -0.5f), 0, Random.Range(0.5f, -0.5f));
                     clone = Instantiate(coin, transform.position + coinPosition, Quaternion.Euler(0, Random.Range(0, 360), 0));
-                    coinCounter--;
+                    currentCoinCounter--;
                 }
 
                 gamescript.ReduceEnemy();
