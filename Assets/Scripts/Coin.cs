@@ -35,24 +35,25 @@ public class Coin : MonoBehaviour
 
     void Update()
     {
+        if(player != null)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
+            Vector3 directionToPlayer = transform.position - player.transform.position;
+            //directionToPlayer = directionToPlayer.normalized * forceMultiplier;
+
+            if (distanceToPlayer <= 10f)
+            {
+                distanceTriggered = true;
+            }
+
+            if (distanceTriggered == true)
+            {
+                speed += 0.25f;
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+            }
+        }
         
-
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-        Vector3 directionToPlayer = transform.position - player.transform.position;
-        //directionToPlayer = directionToPlayer.normalized * forceMultiplier;
-
-        if(distanceToPlayer <= 10f)
-        {
-            distanceTriggered = true;
-        }
-
-        if(distanceTriggered == true)
-        {
-            speed += 0.25f;
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-        }
     }
 
     private void OnTriggerEnter(Collider other)

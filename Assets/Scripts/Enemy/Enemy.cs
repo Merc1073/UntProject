@@ -58,50 +58,53 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-        Vector3 directionToPlayer = transform.position - player.transform.position;
-        directionToPlayer = directionToPlayer.normalized * forceMultiplier;
-
-        
-        rb.AddForce(-directionToPlayer * Time.deltaTime);
-
-        if(currentHealth <= 0)
+        if(player != null)
         {
+            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-            GameObject clone;
-            
+            Vector3 directionToPlayer = transform.position - player.transform.position;
+            directionToPlayer = directionToPlayer.normalized * forceMultiplier;
 
-            while(coinCounter != 0)
+
+            rb.AddForce(-directionToPlayer * Time.deltaTime);
+
+            if (currentHealth <= 0)
             {
-                coinPosition = new Vector3(Random.Range(0.5f, -0.5f), 0, Random.Range(0.5f, -0.5f));
-                clone = Instantiate(coin, transform.position + coinPosition, Quaternion.Euler(0, Random.Range(0, 360), 0));
-                coinCounter--;
+
+                GameObject clone;
+
+
+                while (coinCounter != 0)
+                {
+                    coinPosition = new Vector3(Random.Range(0.5f, -0.5f), 0, Random.Range(0.5f, -0.5f));
+                    clone = Instantiate(coin, transform.position + coinPosition, Quaternion.Euler(0, Random.Range(0, 360), 0));
+                    coinCounter--;
+                }
+
+                gamescript.ReduceEnemy();
+
+                src.pitch = 1;
+                //src.clip = explosionSound;
+                src.volume = 0.4f;
+                src.PlayOneShot(explosionSound);
+
+                var em = particles.emission;
+                var dur = particles.main.duration;
+
+                em.enabled = true;
+
+                transform.parent.position = transform.position;
+
+                particles.Play();
+
+                particOnce = false;
+
+                Destroy(mesh);
+                Invoke(nameof(DestroyObj), 0);
+
             }
-
-            gamescript.ReduceEnemy();
-
-            src.pitch = 1;
-            //src.clip = explosionSound;
-            src.volume = 0.4f;
-            src.PlayOneShot(explosionSound);
-
-            var em = particles.emission;
-            var dur = particles.main.duration;
-
-            em.enabled = true;
-
-            transform.parent.position = transform.position;
-
-            particles.Play();
-
-            particOnce = false;
-
-            Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
-
         }
+        
 
     }
 
@@ -114,17 +117,20 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-        Vector3 directionToPlayer = transform.position - player.transform.position;
-        directionToPlayer = directionToPlayer.normalized * forceMultiplier;
-
-        if (other.gameObject.tag == "Bullet")
+        if(player != null)
         {
-            currentHealth -= 1;
-            enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+            Vector3 directionToPlayer = transform.position - player.transform.position;
+            directionToPlayer = directionToPlayer.normalized * forceMultiplier;
 
-            rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
+            if (other.gameObject.tag == "Bullet")
+            {
+                currentHealth -= 1;
+                enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+
+                rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
+            }
         }
+        
     }
 
     void DestroyObj()

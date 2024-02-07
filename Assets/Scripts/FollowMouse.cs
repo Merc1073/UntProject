@@ -23,4 +23,10 @@ public class FollowMouse : MonoBehaviour
             transform.position = hit.point + tranDif;
         }
     }
+
+    public void DestroyObj()
+    {
+        Destroy(gameObject);
+    }
+
 }

@@ -25,29 +25,31 @@ public class EnemyBulletPoint : MonoBehaviour
 
     private void Update()
     {
-        fireRate += Time.deltaTime;
-
-        if (fireRate >= fireRateCooldown)
+        if(player != null)
         {
-            canFire = true;
-            fireRate = fireRateCooldown;
+            fireRate += Time.deltaTime;
+
+            if (fireRate >= fireRateCooldown)
+            {
+                canFire = true;
+                fireRate = fireRateCooldown;
+            }
+
+            if (canFire == true)
+            {
+                fireRate = 0;
+
+                Quaternion rotationToLookAt = Quaternion.LookRotation(player.transform.position - transform.position);
+                float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
+                transform.eulerAngles = new Vector3(0, rotationY, 0);
+
+                GameObject clone;
+
+                clone = Instantiate(enemyBullet, transform.position, rotationToLookAt);
+
+                canFire = false;
+            }
         }
-
-        if (canFire == true)
-        {
-            fireRate = 0;
-
-            Quaternion rotationToLookAt = Quaternion.LookRotation(player.transform.position - transform.position);
-            float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
-            transform.eulerAngles = new Vector3(0, rotationY, 0);
-
-            GameObject clone;
-
-            clone = Instantiate(enemyBullet, transform.position, rotationToLookAt);
-
-            canFire = false;
-        }
-
     }
 
     private void LateUpdate()

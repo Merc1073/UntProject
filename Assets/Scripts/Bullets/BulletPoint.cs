@@ -9,9 +9,9 @@ public class BulletPoint : MonoBehaviour
 {
 
 
-    public GameObject player;
+    private GameObject player;
     public GameObject bullet;
-    public GameObject reticle;
+    private GameObject reticle;
 
     public LayerMask groundMask;
 
@@ -39,45 +39,52 @@ public class BulletPoint : MonoBehaviour
 
     void Update()
     {
-
-        transform.position = player.transform.position + tranDif;
-
-        fireRate += Time.deltaTime;  
-
-        if(fireRate >= fireRateCooldown)
+        if(player != null)
         {
-            canFire = true;
-            fireRate = fireRateCooldown;
-        }
+            transform.position = player.transform.position + tranDif;
 
+            fireRate += Time.deltaTime;
 
-        if(Input.GetMouseButton(1) && canFire == true)
-        {
-
-            //src.clip = pewSound;
-            //src.pitch = Random.Range(0.3f, 1f);
-            src.volume = 1f;
-            src.PlayOneShot(pewSound);
-
-            fireRate = 0;
-
-            RaycastHit hit;
-
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+            if (fireRate >= fireRateCooldown)
             {
-                Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
-                float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
-                transform.eulerAngles = new Vector3(0, rotationY, 0);
-
-                GameObject clone;
-
-                clone = Instantiate(bullet, transform.position, rotationToLookAt);
-                
+                canFire = true;
+                fireRate = fireRateCooldown;
             }
 
-            canFire = false;
 
+            if (Input.GetMouseButton(1) && canFire == true)
+            {
+
+                //src.clip = pewSound;
+                //src.pitch = Random.Range(0.3f, 1f);
+                src.volume = 1f;
+                src.PlayOneShot(pewSound);
+
+                fireRate = 0;
+
+                RaycastHit hit;
+
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+                {
+                    Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
+                    float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
+                    transform.eulerAngles = new Vector3(0, rotationY, 0);
+
+                    GameObject clone;
+
+                    clone = Instantiate(bullet, transform.position, rotationToLookAt);
+
+                }
+
+                canFire = false;
+
+            }
         }
+    }
+
+    public void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 
 }

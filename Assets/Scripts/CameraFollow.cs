@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
 
-    GameObject player;
+    private GameObject player;
 
     public float smoothSpeed;
     public Vector3 offset;
@@ -17,9 +17,12 @@ public class CameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 desiredPosition = player.transform.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+        if(player != null)
+        {
+            Vector3 desiredPosition = player.transform.position + offset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
-        transform.position = smoothedPosition;
+            transform.position = smoothedPosition;
+        }  
     }
 }

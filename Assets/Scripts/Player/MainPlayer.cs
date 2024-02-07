@@ -14,7 +14,14 @@ public class MainPlayer : MonoBehaviour
     public float currentHealth;
     public float maxHealth;
 
+    public bool particOnce = true;
+
+    public ParticleSystem particles;
+    public MeshRenderer mesh;
+
     private HealthBar playerHealthBar;
+    private FollowMouse aimReticle;
+    private BulletPoint bulletReticle;
 
     Rigidbody rb;
 
@@ -23,6 +30,8 @@ public class MainPlayer : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         playerHealthBar = GetComponentInChildren<HealthBar>();
+        aimReticle = FindObjectOfType<FollowMouse>();
+        bulletReticle = FindObjectOfType<BulletPoint>();
 
         currentHealth = maxHealth;
         playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
@@ -31,7 +40,37 @@ public class MainPlayer : MonoBehaviour
 
     void Update()
     {
-                
+        
+        if(currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
+
+        if(currentHealth == 0)
+        {
+            //src.pitch = 1;
+            //src.clip = explosionSound;
+            //src.volume = 0.4f;
+            //src.PlayOneShot(explosionSound);
+
+            var em = particles.emission;
+            var dur = particles.main.duration;
+
+            em.enabled = true;
+
+            transform.parent.position = transform.position;
+
+            particles.Play();
+
+            particOnce = false;
+
+            aimReticle.DestroyObj();
+            bulletReticle.DestroyObj();
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), 0);
+        }
+
         if(Input.GetMouseButton(0))
         {
 
@@ -53,6 +92,11 @@ public class MainPlayer : MonoBehaviour
     {
         currentHealth -= health;
         playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+    }
+
+    void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 
 }
