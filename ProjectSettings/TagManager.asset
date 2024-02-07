@@ -10,6 +10,8 @@ TagManager:
   - Reticle
   - Wall
   - AudioStuff
+  - EnemyBullet
+  - Ground
   layers:
   - Default
   - TransparentFX

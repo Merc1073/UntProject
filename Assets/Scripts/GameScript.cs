@@ -18,7 +18,8 @@ public class GameScript : MonoBehaviour
     public float timer;
     public float newTimer;
 
-    bool enemyFull = false;
+    public bool enemyFull = false;
+    public bool canSpawnEnemies = false;
 
     public int counter;
     public int maxEnemies;
@@ -37,26 +38,30 @@ public class GameScript : MonoBehaviour
     void Update()
     {
 
-        if(counter >= maxEnemies)
+        if(canSpawnEnemies == true)
         {
-            enemyFull = true;
-        }
 
-        if(counter < maxEnemies)
-        {
-            enemyFull = false; 
-        }
-
-        if(enemyFull == false)
-        {
-            
-            newTimer -= 0.0001f;
-            timer -= Time.deltaTime;
-
-            if (timer <= 0)
+            if(counter >= maxEnemies)
             {
-                SpawnEnemy();
-                timer = newTimer;
+                enemyFull = true;
+            }
+
+            if(counter < maxEnemies)
+            {
+                enemyFull = false; 
+            }
+
+            if(enemyFull == false)
+            {
+            
+                newTimer -= 0.0001f;
+                timer -= Time.deltaTime;
+
+                if (timer <= 0)
+                {
+                    SpawnEnemy();
+                    timer = newTimer;
+                }
             }
         }
     }

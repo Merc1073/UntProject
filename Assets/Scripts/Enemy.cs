@@ -26,6 +26,8 @@ public class Enemy : MonoBehaviour
     public float coinCounter;
 
     Vector3 coinPosition;
+    public Vector3 enemyBulletPointPosition;
+    public Vector3 tranDif;
 
     Rigidbody rb;
 
@@ -50,11 +52,14 @@ public class Enemy : MonoBehaviour
         health = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
 
-        
+        //Instantiate(enemyBulletPoint, enemyBulletPointPosition + tranDif, Quaternion.Euler(0, 0, 0));
+
     }
 
     void Update()
     {
+
+        //enemyBulletPoint.transform.position = transform.position + tranDif;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 

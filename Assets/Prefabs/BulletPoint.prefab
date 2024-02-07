@@ -136,6 +136,6 @@ MonoBehaviour:
   rotateVelocity: 0
   rotateSpeedMovement: 0
   fireRate: 0.1
-  cooldown: 0.1
+  fireRateCooldown: 0.1
   canFire: 0
   tranDif: {x: 0, y: 0, z: 0}

@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class EnemyBullet : MonoBehaviour
 {
-
     public float bulletSpeed;
     float timer;
 
@@ -18,11 +16,10 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         transform.position += transform.forward * bulletSpeed * Time.deltaTime;
-        
 
         timer += Time.deltaTime;
 
-        if(timer >= 2f)
+        if (timer >= 2f)
         {
             Destroy(this.gameObject);
         }
@@ -31,7 +28,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if((other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
+        if ((other.gameObject.tag == "Player" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
         {
 
             var em = particles.emission;
@@ -48,12 +45,10 @@ public class Bullet : MonoBehaviour
             Destroy(mesh);
             Invoke(nameof(DestroyObj), 0);
         }
-
     }
 
     void DestroyObj()
     {
         Destroy(gameObject);
     }
-
 }

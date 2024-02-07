@@ -20,7 +20,7 @@ public class BulletPoint : MonoBehaviour
     public float rotateSpeedMovement;
 
     public float fireRate;
-    public float cooldown;
+    public float fireRateCooldown;
 
     public bool canFire = false;
 
@@ -42,10 +42,10 @@ public class BulletPoint : MonoBehaviour
 
         fireRate += Time.deltaTime;  
 
-        if(fireRate >= cooldown)
+        if(fireRate >= fireRateCooldown)
         {
             canFire = true;
-            fireRate = cooldown;
+            fireRate = fireRateCooldown;
         }
 
 

@@ -8,6 +8,8 @@ public class MainPlayer : MonoBehaviour
     //public GameObject clone;
     //public Quaternion rotation;
 
+
+
     public Vector3 tranDif;
 
     public float forceMultiplier;
