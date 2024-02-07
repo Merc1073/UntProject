@@ -515,13 +515,14 @@ MonoBehaviour:
   coin: {fileID: 569179437891186330, guid: 284327538c8a44f40b3a5e95fef3d904, type: 3}
   gamescript: {fileID: 0}
   healthbar: {fileID: 8778757844620531938}
-  audiosource: {fileID: 0}
-  yoda: {fileID: 8300000, guid: b229d20a0483f2142ae4d27d9c3155e1, type: 3}
+  src: {fileID: 0}
+  explosionSound: {fileID: 8300000, guid: 4dca1918e9eda4442956516424d7e956, type: 3}
   canvasTransform: {fileID: 3674482872255013182}
   forceMultiplier: 1000
   coinCounter: 6
   maxHealth: 5
   health: 5
+  particOnce: 1
 --- !u!54 &4859458915327756290
 Rigidbody:
   m_ObjectHideFlags: 0

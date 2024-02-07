@@ -11,11 +11,15 @@ public class Coin : MonoBehaviour
     public AudioSource src;
     public AudioClip coinSound;
 
+    public ParticleSystem particles;
+    public MeshRenderer mesh;
+
     public float forceMultiplier;
     public float explosionForce;
     public float speed;
 
     bool distanceTriggered = false;
+    public bool particOnce = true;
 
     void Start()
     {
@@ -53,15 +57,30 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == "Player" && particOnce)
         {
             //src.pitch = Random.Range(0.5f, 0.8f);
             src.volume = 0.2f;
-            //src.clip = coinSound;
-            src.PlayOneShot(coinSound);
+            src.clip = coinSound;
+            src.Play();
 
-            Destroy(this.gameObject);
+            var em = particles.emission;
+            var dur = particles.main.duration;
+
+            em.enabled = true;
+            particles.Play();
+
+            particOnce = false;
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), dur);
+
         }
+    }
+
+    void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 
 }

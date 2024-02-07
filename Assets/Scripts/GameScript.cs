@@ -50,8 +50,6 @@ public class GameScript : MonoBehaviour
         if(enemyFull == false)
         {
             
-
-
             newTimer -= 0.0001f;
             timer -= Time.deltaTime;
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -12,8 +13,11 @@ public class Enemy : MonoBehaviour
 
     public HealthBar healthbar;
 
-    public AudioSource audiosource;
-    public AudioClip yoda;
+    public AudioSource src;
+    public AudioClip explosionSound;
+
+    //public ParticleSystem particles;
+    //public MeshRenderer mesh;
 
     public Transform canvasTransform;
 
@@ -28,6 +32,8 @@ public class Enemy : MonoBehaviour
     public int maxHealth;
     public int health;
 
+    public bool particOnce = true;
+
 
 
 
@@ -39,7 +45,7 @@ public class Enemy : MonoBehaviour
 
         gamescript = FindObjectOfType<GameScript>();
 
-        audiosource = FindObjectOfType<AudioSource>();
+        src = FindObjectOfType<AudioSource>();
 
         health = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
@@ -73,9 +79,10 @@ public class Enemy : MonoBehaviour
 
             gamescript.ReduceEnemy();
 
-            audiosource.pitch = 1;
-            //audiosource.clip = yoda;
-            audiosource.PlayOneShot(yoda);
+            src.pitch = 1;
+            //src.clip = explosionSound;
+            src.volume = 0.4f;
+            src.PlayOneShot(explosionSound);
 
             Destroy(this.gameObject);
 
@@ -99,6 +106,15 @@ public class Enemy : MonoBehaviour
 
         if (other.gameObject.tag == "Bullet")
         {
+
+            //var em = particles.emission;
+            //var dur = particles.duration;
+
+            //em.enabled = true;
+            //particles.Play();
+
+            //particOnce = false;
+
             health -= 1;
             healthbar.SetHealth(health);
 

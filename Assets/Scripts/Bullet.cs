@@ -9,6 +9,11 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed;
     float timer;
 
+    public bool particOnce = true;
+
+    public ParticleSystem particles;
+    public MeshRenderer mesh;
+
 
     void Update()
     {
@@ -25,15 +30,39 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Enemy")
+        if(other.gameObject.tag == "Enemy" && particOnce)
         {
-            Destroy(this.gameObject);
+
+            var em = particles.emission;
+            var dur = particles.main.duration;
+
+            em.enabled = true;
+            particles.Play();
+
+            particOnce = false;
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), dur);
         }
 
-        if (other.gameObject.tag == "Wall")
+        if (other.gameObject.tag == "Wall" && particOnce)
         {
-            Destroy(this.gameObject);
+            var em = particles.emission;
+            var dur = particles.main.duration;
+
+            em.enabled = true;
+            particles.Play();
+
+            particOnce = false;
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), dur);
         }
+    }
+
+    void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 
 }

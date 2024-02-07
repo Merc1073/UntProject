@@ -54,6 +54,7 @@ public class BulletPoint : MonoBehaviour
 
             //src.clip = pewSound;
             //src.pitch = Random.Range(0.3f, 1f);
+            src.volume = 1f;
             src.PlayOneShot(pewSound);
 
             fireRate = 0;
