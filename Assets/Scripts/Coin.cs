@@ -55,7 +55,8 @@ public class Coin : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            src.pitch = Random.Range(0.5f, 0.8f);
+            //src.pitch = Random.Range(0.5f, 0.8f);
+            src.volume = 0.2f;
             //src.clip = coinSound;
             src.PlayOneShot(coinSound);
 

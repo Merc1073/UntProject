@@ -86,7 +86,9 @@ public class Enemy : MonoBehaviour
 
     private void LateUpdate()
     {
-        
+        canvasTransform.position = transform.position + new Vector3(0, 4, 2);
+        canvasTransform.rotation = Quaternion.Euler(0.25f, 0, 0);
+        //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
     private void OnTriggerEnter(Collider other)
