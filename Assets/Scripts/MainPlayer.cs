@@ -12,6 +12,8 @@ public class MainPlayer : MonoBehaviour
 
     public Vector3 tranDif;
 
+    public LayerMask groundMask;
+
     public float forceMultiplier;
 
     Rigidbody rb;
@@ -36,7 +38,7 @@ public class MainPlayer : MonoBehaviour
 
             RaycastHit hit;
 
-            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
             {
 
                 Vector3 directionToMouse = transform.position - hit.point;

@@ -13,6 +13,8 @@ public class BulletPoint : MonoBehaviour
     public GameObject bullet;
     public GameObject reticle;
 
+    public LayerMask groundMask;
+
     public AudioSource src;
     public AudioClip pewSound;
 
@@ -61,7 +63,7 @@ public class BulletPoint : MonoBehaviour
 
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
             {
                 Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
                 float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));

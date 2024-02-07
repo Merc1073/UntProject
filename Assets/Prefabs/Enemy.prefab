@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 672895627444487814}
   - component: {fileID: 5590144060888492922}
   - component: {fileID: 7905986560368117221}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: HealthbarCANVAS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 1359905039493839974}
   - component: {fileID: 4828154018499432855}
   - component: {fileID: 2408501085044610750}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Leg2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 1761057594797586477}
   - component: {fileID: 4859458915327756290}
   - component: {fileID: 8905985462732112044}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 7047916432754648260}
   - component: {fileID: 3771458213379615960}
   - component: {fileID: 5600998865353830205}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Leg1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 7267030390200774934}
   - component: {fileID: 8373589825671988693}
   - component: {fileID: 3526738973584026202}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemyBulletPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -661,7 +661,7 @@ GameObject:
   - component: {fileID: 1847788721454795129}
   - component: {fileID: 4762737012299338336}
   - component: {fileID: 5317253049221757836}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Healthbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -131,6 +131,9 @@ MonoBehaviour:
   player: {fileID: 2842509540668955921, guid: 84812442a012d3f4697efa559a27603a, type: 3}
   bullet: {fileID: 953082054146030705, guid: 0a88a979fba7ae5479bf48c65ec3b762, type: 3}
   reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1024
   src: {fileID: 0}
   pewSound: {fileID: 8300000, guid: ca9091bf8810ec642b03eced312a34c3, type: 3}
   rotateVelocity: 0

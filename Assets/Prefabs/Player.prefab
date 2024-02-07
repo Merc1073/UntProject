@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6635950278657407131}
   - component: {fileID: 8500998227401590502}
   - component: {fileID: 8598298704662948842}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -121,6 +121,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tranDif: {x: 0, y: 1, z: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1024
   forceMultiplier: 12
 --- !u!54 &8500998227401590502
 Rigidbody:
