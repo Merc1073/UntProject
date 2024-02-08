@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
 {
 
     GameObject player;
+    Rigidbody rb;
+
     public GameObject coin;
 
     GameScript gamescript;
@@ -21,26 +23,28 @@ public class Enemy : MonoBehaviour
 
     public Transform canvasTransform;
 
-    public float forceMultiplier;
 
-    float appearingSpeed;
+    [SerializeField] float growthDuration;
+    [SerializeField] float fadeDuration;
+
+
+    public float forceMultiplier;
 
     public int currentCoinCounter;
     public int minCoins;
     public int maxCoins;
 
+    public int maxHealth;
+    public int currentHealth;
+
     public Vector3 coinPosition;
     public Vector3 enemyBulletPointPosition;
     public Vector3 tranDif;
 
-    Rigidbody rb;
-
-    public int maxHealth;
-    public int currentHealth;
+    public Vector3 originalTransformScale;
+    public Vector3 targetGrowthScale;
 
     public bool particOnce = true;
-    public bool sizeIsMax = false;
-
 
 
 
@@ -64,25 +68,48 @@ public class Enemy : MonoBehaviour
         }
 
         transform.localScale = Vector3.zero;
+
+        StartCoroutine(Grow());
+        StartCoroutine(FadeIn());
+
+    }
+
+    private IEnumerator FadeIn()
+    {
+
+        Color color = mesh.material.color;
+        float targetAlpha = 1f;
+
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            color.a = Mathf.Lerp(0f, targetAlpha, t / fadeDuration);
+            mesh.material.color = color;
+            yield return null;
+
+        }
+
+        color.a = targetAlpha;
+        mesh.material.color = color;
+
+    }
+
+    private IEnumerator Grow()
+    {
+
+        Vector3 originalSize = originalTransformScale;
+
+        for(float t = 0; t < growthDuration; t += Time.deltaTime)
+        {
+            transform.localScale = Vector3.Lerp(originalSize, targetGrowthScale, t/ growthDuration);
+            yield return null;
+        }
+
+        transform.localScale = targetGrowthScale;
+
     }
 
     void Update()
     {
-
-        if(sizeIsMax == false)
-        {
-
-            appearingSpeed += Time.deltaTime;
-
-            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 1f, 1f), Time.deltaTime * 3);
-
-            if(appearingSpeed >= 1f)
-            {
-                sizeIsMax = true;
-            }
-
-        }
-
 
         if(player != null)
         {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2556403517315017911}
   - component: {fileID: 1908901443586249906}
   - component: {fileID: 4490577221056396719}
+  - component: {fileID: 5233088656019502624}
   m_Layer: 9
   m_Name: Bullet
   m_TagString: Untagged
@@ -4830,6 +4831,19 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &5233088656019502624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953082054146030705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be8e7372198255141926bcfd0ecc7116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 0
 --- !u!1 &1482955976472740044
 GameObject:
   m_ObjectHideFlags: 0
@@ -5122,11 +5136,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 30
-  speed: 0
+  magnetSpeed: 0.25
   magnetDistance: 10
   particOnce: 1
   sizeIsMax: 0
   distanceTriggered: 0
+  growthDuration: 0.5
+  fadeDuration: 3
+  originalTransformScale: {x: 0, y: 0, z: 0}
+  targetGrowthScale: {x: 1, y: 1, z: 1}
   particles: {fileID: 4490577221056396719}
   mesh: {fileID: 8644433119879450849}
 --- !u!135 &1147075596534742356

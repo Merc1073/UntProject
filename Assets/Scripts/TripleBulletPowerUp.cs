@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
-public class MagnetPowerUp : MonoBehaviour
+public class TripleBulletPowerUp : MonoBehaviour
 {
-
     AudioSource src;
     public AudioClip powerupPickupNoise;
 
@@ -51,10 +48,10 @@ public class MagnetPowerUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
 
-            gameScript.ActivateMagnetPowerUp();
+            gameScript.ActivateTripleBulletPowerUp();
 
             src.pitch = 1;
             //src.clip = explosionSound;
@@ -81,5 +78,4 @@ public class MagnetPowerUp : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
 }

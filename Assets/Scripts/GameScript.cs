@@ -11,13 +11,19 @@ public class GameScript : MonoBehaviour
     public GameObject Enemy;
     public GameObject BulletPoint;
     public GameObject Reticle;
+
     public GameObject MagnetPowerUp;
+    public GameObject TripleBulletPowerUp;
 
     private MainPlayer playerScript;
     private BulletPoint bulletReticle;
 
     [Header("Special Booleans")]
     public bool isMagnetPowerUpActive = false;
+    public bool isTripleBulletPowerUpActive = false;
+
+    public bool isGameModeRapidFire = false;
+    public bool isGameModeGrowing = false;
 
     [Header("Texts")]
     [SerializeField] Text fireRateText;
@@ -33,23 +39,40 @@ public class GameScript : MonoBehaviour
 
     public Vector3 bulletPointSpawn;
     public Vector3 reticlePointSpawn;
+
     public Vector3 magnetPowerUpSpawn;
+    public Vector3 tripBulletPowerUpSpawn;
 
     [Header("Number Variables")]
     [SerializeField] float totalTime;
     [SerializeField] int seconds;
     [SerializeField] int respawnSeconds;
 
-    public float respawnTimer;
-    public float newTimer;
+    [SerializeField] float originalTimerSpawnMagnetPowerUp;
+    [SerializeField] float magnetRespawnTimer;
+
+    [SerializeField] float originalTimerSpawnTripleBulletPowerUp;
+    [SerializeField] float tripleBulletRespawnTimer;
+
+    public float enemyRespawnTimer;
+
+
+    public float newEnemyTimer;
 
     [Header("Booleans")]
     public bool enemyFull = false;
-    public bool canSpawnEnemies = false;
     public bool keepReducingSpawnTimer = false;
+
+    public bool canSpawnEnemies = false;
+    public bool canSpawnMagnetPowerUp = false;
+    public bool canSpawnTripleBulletPowerUp = false;
+
 
     public int enemyCounter;
     public int maxEnemies;
+
+    public bool spawnMagnetPowerUpNow = false;
+    public bool spawnTripleBulletPowerUpNow = false;
 
 
 
@@ -58,7 +81,10 @@ public class GameScript : MonoBehaviour
         Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
-        Instantiate(MagnetPowerUp, magnetPowerUpSpawn, Quaternion.Euler(0, 0, 0));
+
+        //Instantiate(MagnetPowerUp, magnetPowerUpSpawn, Quaternion.Euler(0, 0, 0));
+        //Instantiate(TripleBulletPowerUp, tripBulletPowerUpSpawn, Quaternion.Euler(0, 0, 0));
+
 
         playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
@@ -67,8 +93,45 @@ public class GameScript : MonoBehaviour
 
     void Update()
     {
+
+        if(spawnMagnetPowerUpNow == true)
+        {
+            DebugSpawnMagnetPowerUp();
+        }
+
+        if(spawnTripleBulletPowerUpNow == true)
+        {
+            DebugSpawnTripleBulletPowerUp();
+        }
+
+
+        if(canSpawnMagnetPowerUp == true)
+        {
+            magnetRespawnTimer -= Time.deltaTime;
+
+            if(magnetRespawnTimer <= 0) 
+            {
+                SpawnMagnetPowerUp();
+
+                magnetRespawnTimer = originalTimerSpawnMagnetPowerUp;
+            }
+        }
+
+        if(canSpawnTripleBulletPowerUp == true)
+        {
+            tripleBulletRespawnTimer -= Time.deltaTime;
+
+            if (tripleBulletRespawnTimer <= 0)
+            {
+                SpawnTripleBulletPowerUp();
+
+                tripleBulletRespawnTimer = originalTimerSpawnTripleBulletPowerUp; 
+            }
+        }
+
         if (playerScript != null)
         {
+
             totalTime += Time.deltaTime;
             seconds = (int)(totalTime);
 
@@ -94,28 +157,28 @@ public class GameScript : MonoBehaviour
                 {
                     if(keepReducingSpawnTimer == true)
                     {
-                        newTimer -= 0.0001f;
-                        respawnTimer -= Time.deltaTime;
+                        newEnemyTimer -= 0.0001f;
+                        enemyRespawnTimer -= Time.deltaTime;
 
-                        respawnSeconds = (int)(respawnTimer % 60);
+                        respawnSeconds = (int)(enemyRespawnTimer % 60);
 
-                        if (respawnTimer <= 0)
+                        if (enemyRespawnTimer <= 0)
                         {
                             SpawnEnemy();
-                            respawnTimer = newTimer;
+                            enemyRespawnTimer = newEnemyTimer;
                         }
                     }
 
                     else
                     {
-                        respawnTimer -= Time.deltaTime;
+                        enemyRespawnTimer -= Time.deltaTime;
 
-                        respawnSeconds = (int)(respawnTimer % 60);
+                        respawnSeconds = (int)(enemyRespawnTimer % 60);
 
-                        if (respawnTimer <= 0)
+                        if (enemyRespawnTimer <= 0)
                         {
                             SpawnEnemy();
-                            respawnTimer = newTimer;
+                            enemyRespawnTimer = newEnemyTimer;
                         }
                     }
                     
@@ -126,7 +189,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        enemySpawn = new Vector3(Random.Range(40, -40), 1, (Random.Range(40, -40)));
+        enemySpawn = new Vector3(Random.Range(80, -80), 1, (Random.Range(80, -80)));
         Instantiate(Enemy, enemySpawn + tranDif, Quaternion.Euler(0, 0, 0));
         enemyCounter++;
     }
@@ -134,11 +197,41 @@ public class GameScript : MonoBehaviour
     public void ReduceEnemy()
     {
         enemyCounter--;
+        enemyCounter--;
     }
 
     public void ActivateMagnetPowerUp()
     {
         isMagnetPowerUpActive = true;
+    }
+
+    public void ActivateTripleBulletPowerUp()
+    {
+        isTripleBulletPowerUpActive = true;
+    }
+
+    public void DebugSpawnMagnetPowerUp()
+    {
+        Instantiate(MagnetPowerUp, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+
+        spawnMagnetPowerUpNow = false;
+    }
+
+    public void SpawnMagnetPowerUp()
+    {
+        Instantiate(MagnetPowerUp, new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20)), Quaternion.Euler(0, 0, 0));
+    }
+
+    public void DebugSpawnTripleBulletPowerUp()
+    {
+        Instantiate(TripleBulletPowerUp, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+
+        spawnTripleBulletPowerUpNow = false;
+    }
+
+    public void SpawnTripleBulletPowerUp()
+    {
+        Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20)), Quaternion.Euler(0, 0, 0));
     }
 
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3266829184472316821}
   - component: {fileID: 8297638688743679312}
   - component: {fileID: 145365066247237466}
+  - component: {fileID: 1100667051533672724}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 195418191451930847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8424789778763505628}
@@ -4888,6 +4889,19 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1100667051533672724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195418191451930847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be8e7372198255141926bcfd0ecc7116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 0
 --- !u!1 &4796854264353173360
 GameObject:
   m_ObjectHideFlags: 0
@@ -5408,17 +5422,20 @@ MonoBehaviour:
   particles: {fileID: 145365066247237466}
   mesh: {fileID: 4690040329474444373}
   canvasTransform: {fileID: 4970000710892416787}
+  growthDuration: 2
+  fadeDuration: 2
   forceMultiplier: 1000
   currentCoinCounter: 0
   minCoins: 3
   maxCoins: 6
+  maxHealth: 5
+  currentHealth: 5
   coinPosition: {x: 0, y: -2, z: 0}
   enemyBulletPointPosition: {x: 0, y: 0, z: 0}
   tranDif: {x: 0, y: 3, z: 0}
-  maxHealth: 5
-  currentHealth: 5
+  originalTransformScale: {x: 0, y: 0, z: 0}
+  targetGrowthScale: {x: 1, y: 1, z: 1}
   particOnce: 1
-  sizeIsMax: 0
 --- !u!54 &91220153606161697
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -14,6 +14,8 @@ public class BulletPoint : MonoBehaviour
 
     private MainPlayer playerScript;
 
+    GameScript gameScript;
+
     public LayerMask groundMask;
 
     public AudioSource src;
@@ -40,6 +42,7 @@ public class BulletPoint : MonoBehaviour
         reticle = GameObject.FindGameObjectWithTag("Reticle");
 
         playerScript = FindObjectOfType<MainPlayer>();
+        gameScript = FindObjectOfType<GameScript>();
 
         src = FindObjectOfType<AudioSource>();
     }
@@ -62,47 +65,19 @@ public class BulletPoint : MonoBehaviour
             }
 
 
-            if (Input.GetMouseButton(0) && fireRateCooldown <= 0)
+            if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
             {
-                Fire();
+                FireNormalBullet();
             }
 
-            if (Input.GetMouseButton(1) && fireRateCooldown <= 0)
+            if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == true)
             {
-
-                src.volume = 1f;
-                src.PlayOneShot(pewSound);
-
-                RaycastHit hit;
-
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
-                {
-                    Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
-
-                    GameObject clone1, clone2, clone3;
-                    
-
-                    clone1 = Instantiate(bullet, transform.position, rotationToLookAt);
-
-
-                    clone2 = Instantiate(bullet, transform.position, rotationToLookAt);
-                    clone2.transform.Rotate(0, 10, 0);
-
-                    clone3 = Instantiate(bullet, transform.position, rotationToLookAt);
-                    clone3.transform.Rotate(0, -10, 0);
-
-                }
-
-                fireRateCooldown = fireRate;
-
-                canFire = false;
-
+                FireTripleBullet();
             }
-
         }
     }
 
-    public void Fire()
+    public void FireNormalBullet()
     {
         src.volume = 1f;
         src.PlayOneShot(pewSound);
@@ -118,6 +93,34 @@ public class BulletPoint : MonoBehaviour
             GameObject clone;
 
             clone = Instantiate(bullet, transform.position, rotationToLookAt);
+        }
+
+        fireRateCooldown = fireRate;
+
+        canFire = false;
+    }
+
+    public void FireTripleBullet()
+    {
+        src.volume = 1f;
+        src.PlayOneShot(pewSound);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+        {
+            Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
+
+            GameObject clone1, clone2, clone3;
+
+            clone1 = Instantiate(bullet, transform.position, rotationToLookAt);
+
+            clone2 = Instantiate(bullet, transform.position, rotationToLookAt);
+            clone2.transform.Rotate(0, 10, 0);
+
+            clone3 = Instantiate(bullet, transform.position, rotationToLookAt);
+            clone3.transform.Rotate(0, -10, 0);
+
         }
 
         fireRateCooldown = fireRate;

@@ -21,6 +21,9 @@ public class MainPlayer : MonoBehaviour
     public ParticleSystem particles;
     public MeshRenderer mesh;
 
+    AudioSource src;
+    public AudioClip gameOverNoise;
+
     private HealthBar playerHealthBar;
     private FollowMouse aimReticle;
     private BulletPoint bulletReticle;
@@ -34,6 +37,8 @@ public class MainPlayer : MonoBehaviour
         playerHealthBar = GetComponentInChildren<HealthBar>();
         aimReticle = FindObjectOfType<FollowMouse>();
         bulletReticle = FindObjectOfType<BulletPoint>();
+
+        src = FindObjectOfType<AudioSource>();
 
         currentHealth = maxHealth;
         playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
@@ -54,12 +59,9 @@ public class MainPlayer : MonoBehaviour
         if(currentHealth == 0)
         {
 
-            
-
-            //src.pitch = 1;
-            //src.clip = explosionSound;
-            //src.volume = 0.4f;
-            //src.PlayOneShot(explosionSound);
+            src.pitch = 1;
+            src.volume = 0.5f;
+            src.PlayOneShot(gameOverNoise);
 
             var em = particles.emission;
             var dur = particles.main.duration;

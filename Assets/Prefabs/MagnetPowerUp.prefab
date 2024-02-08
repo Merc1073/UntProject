@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1643599915772923978}
   - component: {fileID: 3978989693787343389}
   - component: {fileID: 1218730569008438569}
-  - component: {fileID: 2618457365586879980}
+  - component: {fileID: 7297044028310472148}
   - component: {fileID: 6791644118185905281}
   m_Layer: 0
   m_Name: Capsule
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &2618457365586879980
-CapsuleCollider:
+--- !u!135 &7297044028310472148
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,10 +103,8 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
+  serializedVersion: 3
+  m_Radius: 0.55
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6791644118185905281
 MonoBehaviour:
@@ -124,6 +122,7 @@ MonoBehaviour:
   particles: {fileID: 755085092618164836}
   mesh: {fileID: 1218730569008438569}
   particOnce: 1
+  fadeDuration: 1
 --- !u!1 &7512444815576764851
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +134,7 @@ GameObject:
   - component: {fileID: 540734772884841180}
   - component: {fileID: 3784249820989332360}
   - component: {fileID: 755085092618164836}
+  - component: {fileID: 5984414908732311770}
   m_Layer: 0
   m_Name: MagnetPowerUp
   m_TagString: Untagged
@@ -5012,3 +5012,16 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &5984414908732311770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7512444815576764851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be8e7372198255141926bcfd0ecc7116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 0

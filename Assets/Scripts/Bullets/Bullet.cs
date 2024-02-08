@@ -10,13 +10,20 @@ public class Bullet : MonoBehaviour
     float timer;
 
     float appearingSpeed;
-    public float speed;
+    float speed;
+    public float magnetSpeed;
 
     public float magnetDistance;
 
     public bool particOnce = true;
     public bool sizeIsMax = false;
     public bool distanceTriggered = false;
+
+    [SerializeField] float growthDuration;
+    [SerializeField] float fadeDuration;
+
+    public Vector3 originalTransformScale;
+    public Vector3 targetGrowthScale;
 
     public ParticleSystem particles;
     public MeshRenderer mesh;
@@ -25,9 +32,24 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
-        transform.localScale = Vector3.zero;
-
         gameScript = FindObjectOfType<GameScript>();
+
+        StartCoroutine(Grow());
+    }
+
+    private IEnumerator Grow()
+    {
+
+        Vector3 originalSize = originalTransformScale;
+
+        for (float t = 0; t < growthDuration; t += Time.deltaTime)
+        {
+            transform.localScale = Vector3.Lerp(originalSize, targetGrowthScale, t / growthDuration);
+            yield return null;
+        }
+
+        transform.localScale = targetGrowthScale;
+
     }
 
     void Update()
@@ -40,19 +62,7 @@ public class Bullet : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        if (sizeIsMax == false)
-        {
-
-            appearingSpeed += Time.deltaTime;
-
-            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 1f, 1f), Time.deltaTime * 3);
-
-            if (appearingSpeed >= 1f)
-            {
-                sizeIsMax = true;
-            }
-
-        }
+        
 
         if (gameScript.isMagnetPowerUpActive == true)
         {
@@ -78,7 +88,7 @@ public class Bullet : MonoBehaviour
 
                 if (distanceTriggered == true)
                 {
-                    speed += 0.5f;
+                    speed += magnetSpeed;
                     transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed * Time.deltaTime);
                 }
             }
@@ -95,7 +105,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if((other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
+        if((other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground"))
         {
 
             var em = particles.emission;

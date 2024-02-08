@@ -12,15 +12,49 @@ public class EnemyBullet : MonoBehaviour
     public ParticleSystem particles;
     public MeshRenderer mesh;
 
-    public MainPlayer player;
+    [SerializeField] float growthDuration;
+    [SerializeField] float fadeDuration;
+
+    public Vector3 originalTransformScale;
+    public Vector3 targetGrowthScale;
+
+    MainPlayer player;
 
     private void Start()
     {
         player = FindObjectOfType<MainPlayer>();
+
+        StartCoroutine(Grow());
+    }
+
+    private IEnumerator Grow()
+    {
+
+        Vector3 originalSize = originalTransformScale;
+
+        for (float t = 0; t < growthDuration; t += Time.deltaTime)
+        {
+            transform.localScale = Vector3.Lerp(originalSize, targetGrowthScale, t / growthDuration);
+            yield return null;
+        }
+
+        transform.localScale = targetGrowthScale;
+
     }
 
     void Update()
     {
+
+        if (transform.position.y < 1f)
+        {
+            transform.position += new Vector3(0, 0.1f, 0);
+        }
+
+        if (transform.position.y > 1f)
+        {
+            transform.position += new Vector3(0, -0.1f, 0);
+        }
+
         transform.position += transform.forward * bulletSpeed * Time.deltaTime;
 
         timer += Time.deltaTime;
@@ -29,6 +63,7 @@ public class EnemyBullet : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
     }
 
 
@@ -57,8 +92,6 @@ public class EnemyBullet : MonoBehaviour
 
         if ((other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
         {
-
-            player.DecreasePlayerHealth(1f);
 
             var em = particles.emission;
             var dur = particles.main.duration;
