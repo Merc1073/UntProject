@@ -64,28 +64,7 @@ public class BulletPoint : MonoBehaviour
 
             if (Input.GetMouseButton(0) && fireRateCooldown <= 0)
             {
-
-
-                src.volume = 1f;
-                src.PlayOneShot(pewSound);
-
-                RaycastHit hit;
-
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
-                {
-                    Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
-                    float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
-                    transform.eulerAngles = new Vector3(0, rotationY, 0);
-
-                    GameObject clone;
-
-                    clone = Instantiate(bullet, transform.position, rotationToLookAt);
-                }
-
-                fireRateCooldown = fireRate;
-
-                canFire = false;
-
+                Fire();
             }
 
             if (Input.GetMouseButton(1) && fireRateCooldown <= 0)
@@ -121,6 +100,29 @@ public class BulletPoint : MonoBehaviour
             }
 
         }
+    }
+
+    public void Fire()
+    {
+        src.volume = 1f;
+        src.PlayOneShot(pewSound);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+        {
+            Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
+            float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
+            transform.eulerAngles = new Vector3(0, rotationY, 0);
+
+            GameObject clone;
+
+            clone = Instantiate(bullet, transform.position, rotationToLookAt);
+        }
+
+        fireRateCooldown = fireRate;
+
+        canFire = false;
     }
 
     public void DestroyObj()

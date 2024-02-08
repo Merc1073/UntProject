@@ -127,6 +127,7 @@ MonoBehaviour:
   forceMultiplier: 1
   explosionForce: 1000
   speed: 1
+  maxDistanceToPlayer: 20
   particOnce: 1
 --- !u!54 &6607773555604504020
 Rigidbody:
@@ -295,7 +296,7 @@ Transform:
   m_GameObject: {fileID: 6829510767344726793}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 896163475592618928}

@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3542447778910580873}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 540734772884841180}
@@ -120,7 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26baf1e9c73a2146bd3c77cf3cc7e49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 953082054146030705, guid: 0a88a979fba7ae5479bf48c65ec3b762, type: 3}
   powerupPickupNoise: {fileID: 8300000, guid: 91af601e88985d74abb9cfccbf404f28, type: 3}
   particles: {fileID: 755085092618164836}
   mesh: {fileID: 1218730569008438569}

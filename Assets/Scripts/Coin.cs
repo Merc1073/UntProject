@@ -22,6 +22,8 @@ public class Coin : MonoBehaviour
     public float explosionForce;
     public float speed;
 
+    public float maxDistanceToPlayer;
+
     bool distanceTriggered = false;
     public bool particOnce = true;
 
@@ -42,6 +44,17 @@ public class Coin : MonoBehaviour
 
     void Update()
     {
+
+        if(transform.position.y < 0.52)
+        {
+            transform.position += new Vector3(0, 0.1f, 0);
+        }
+
+        if(transform.position.y > 0.52)
+        {
+            transform.position += new Vector3(0, -0.1f, 0);
+        }
+
         if(playerObject != null)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, playerObject.transform.position);
@@ -49,7 +62,7 @@ public class Coin : MonoBehaviour
             Vector3 directionToPlayer = transform.position - playerObject.transform.position;
             //directionToPlayer = directionToPlayer.normalized * forceMultiplier;
 
-            if (distanceToPlayer <= 10f)
+            if (distanceToPlayer <= maxDistanceToPlayer)
             {
                 distanceTriggered = true;
             }

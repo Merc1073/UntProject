@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
     public int minCoins;
     public int maxCoins;
 
-    Vector3 coinPosition;
+    public Vector3 coinPosition;
     public Vector3 enemyBulletPointPosition;
     public Vector3 tranDif;
 
@@ -57,7 +57,11 @@ public class Enemy : MonoBehaviour
         enemyHealthBar = GetComponentInChildren<HealthBar>();
 
         currentHealth = maxHealth;
-        enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+
+        if(enemyHealthBar)
+        {
+            enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+        }
 
         transform.localScale = Vector3.zero;
     }
@@ -99,7 +103,7 @@ public class Enemy : MonoBehaviour
                 while (currentCoinCounter != 0)
                 {
 
-                    coinPosition = new Vector3(Random.Range(0.5f, -0.5f), 0, Random.Range(0.5f, -0.5f));
+                    //coinPosition = new Vector3(Random.Range(0.5f, -0.5f), -2.0f, Random.Range(0.5f, -0.5f));
                     clone = Instantiate(coin, transform.position + coinPosition, Quaternion.Euler(0, Random.Range(0, 360), 0));
                     currentCoinCounter--;
                 }
@@ -148,7 +152,11 @@ public class Enemy : MonoBehaviour
             if (other.gameObject.tag == "Bullet")
             {
                 currentHealth -= 1;
-                enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+
+                if(enemyHealthBar)
+                {
+                    enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+                }
 
                 rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
             }
