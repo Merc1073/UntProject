@@ -25,6 +25,9 @@ public class BulletPoint : MonoBehaviour
     public float fireRate;
     public float maxFireRate;
     public float fireRateCooldown;
+    public float fireRateMultiplier;
+
+    public float roundsPerSecond;
 
     public bool canFire = false;
 
@@ -47,25 +50,19 @@ public class BulletPoint : MonoBehaviour
         {
             transform.position = playerObject.transform.position + tranDif;
 
-            fireRate += Time.deltaTime;
+            fireRate = 1 / fireRateMultiplier;
 
-            Debug.Log(maxFireRate);
+            fireRateCooldown -= Time.deltaTime;
 
-            fireRateCooldown = maxFireRate;
+            roundsPerSecond = fireRateMultiplier;
 
-            if(maxFireRate < 0.01f)
+            if(fireRateMultiplier > maxFireRate)
             {
-                maxFireRate = 0.01f;
-            }
-
-            if (fireRate >= fireRateCooldown)
-            {
-                canFire = true;
-                fireRate = fireRateCooldown;
+                fireRateMultiplier = maxFireRate;
             }
 
 
-            if (Input.GetMouseButton(1) && canFire == true)
+            if (Input.GetMouseButton(1) && fireRateCooldown <= 0)
             {
 
                 //src.clip = pewSound;
@@ -73,7 +70,7 @@ public class BulletPoint : MonoBehaviour
                 src.volume = 1f;
                 src.PlayOneShot(pewSound);
 
-                fireRate = 0;
+                //fireRateCooldown = fireRate;
 
                 RaycastHit hit;
 
@@ -89,6 +86,8 @@ public class BulletPoint : MonoBehaviour
 
                 }
 
+                fireRateCooldown = fireRate;
+
                 canFire = false;
 
             }
@@ -100,9 +99,9 @@ public class BulletPoint : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void IncreaseFireRate(float rateOfFire)
+    public void IncreaseFireRate(float addedFireRate)
     {
-        maxFireRate -= rateOfFire;
+        fireRateMultiplier += addedFireRate;
     }
 
 }

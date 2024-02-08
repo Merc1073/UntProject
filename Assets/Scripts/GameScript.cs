@@ -50,11 +50,11 @@ public class GameScript : MonoBehaviour
     {
 
         totalTime += Time.deltaTime;
-        seconds = (int)(totalTime % 60);
+        seconds = (int)(totalTime);
 
         
 
-        fireRateText.text = "Fire Rate: " + bulletReticle.maxFireRate.ToString();
+        fireRateText.text = "Fire Rate: " + bulletReticle.roundsPerSecond.ToString();
         respawnTimerText.text = "Enemy Respawn in: " + respawnSeconds.ToString();
         enemyCountText.text = "Total Enemies in arena: " + enemyCounter.ToString();
         timerText.text = "Timer: " + seconds.ToString();

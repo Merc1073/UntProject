@@ -78,15 +78,18 @@ public class Coin : MonoBehaviour
                 var dur = particles.main.duration;
 
                 em.enabled = true;
+
+                transform.parent.position = transform.position;
+
                 particles.Play();
 
                 particOnce = false;
 
                 playerScript.AddCoins(1);
-                bulletReticle.IncreaseFireRate(0.01f);
+                bulletReticle.IncreaseFireRate(0.1f);
 
                 Destroy(mesh);
-                Invoke(nameof(DestroyObj), dur);
+                Invoke(nameof(DestroyObj), 0);
 
             }
         }
