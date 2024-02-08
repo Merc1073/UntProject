@@ -54,7 +54,7 @@ MonoBehaviour:
   rotateVelocity: 0
   rotateSpeedMovement: 0
   fireRate: 0
-  maxFireRate: 8
+  maxFireRate: 16
   fireRateCooldown: 0
   fireRateMultiplier: 1
   roundsPerSecond: 0

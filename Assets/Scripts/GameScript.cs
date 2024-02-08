@@ -11,7 +11,9 @@ public class GameScript : MonoBehaviour
     public GameObject BulletPoint;
     public GameObject Reticle;
 
+    private MainPlayer playerScript;
     private BulletPoint bulletReticle;
+    
 
     [SerializeField] Text fireRateText, respawnTimerText, enemyCountText, timerText;
 
@@ -42,48 +44,51 @@ public class GameScript : MonoBehaviour
         Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
 
+        playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
 
     }
 
     void Update()
     {
-
-        totalTime += Time.deltaTime;
-        seconds = (int)(totalTime);
-
-        
-
-        fireRateText.text = "Fire Rate: " + bulletReticle.roundsPerSecond.ToString();
-        respawnTimerText.text = "Enemy Respawn in: " + respawnSeconds.ToString();
-        enemyCountText.text = "Total Enemies in arena: " + enemyCounter.ToString();
-        timerText.text = "Timer: " + seconds.ToString();
-
-        if(canSpawnEnemies == true)
+        if (playerScript != null)
         {
+            totalTime += Time.deltaTime;
+            seconds = (int)(totalTime);
 
-            if(enemyCounter >= maxEnemies)
+
+
+            fireRateText.text = "Fire Rate: " + bulletReticle.roundsPerSecond.ToString();
+            respawnTimerText.text = "Enemy Respawn in: " + respawnSeconds.ToString();
+            enemyCountText.text = "Total Enemies in arena: " + enemyCounter.ToString();
+            timerText.text = "Timer: " + seconds.ToString();
+
+            if (canSpawnEnemies == true)
             {
-                enemyFull = true;
-            }
 
-            if(enemyCounter < maxEnemies)
-            {
-                enemyFull = false; 
-            }
-
-            if(enemyFull == false)
-            {
-            
-                newTimer -= 0.0001f;
-                respawnTimer -= Time.deltaTime;
-
-                respawnSeconds = (int)(respawnTimer % 60);
-
-                if (respawnTimer <= 0)
+                if (enemyCounter >= maxEnemies)
                 {
-                    SpawnEnemy();
-                    respawnTimer = newTimer;
+                    enemyFull = true;
+                }
+
+                if (enemyCounter < maxEnemies)
+                {
+                    enemyFull = false;
+                }
+
+                if (enemyFull == false)
+                {
+
+                    newTimer -= 0.0001f;
+                    respawnTimer -= Time.deltaTime;
+
+                    respawnSeconds = (int)(respawnTimer % 60);
+
+                    if (respawnTimer <= 0)
+                    {
+                        SpawnEnemy();
+                        respawnTimer = newTimer;
+                    }
                 }
             }
         }
@@ -91,7 +96,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        enemySpawn = new Vector3(Random.Range(10, -10), 1, (Random.Range(10, -10)));
+        enemySpawn = new Vector3(Random.Range(40, -40), 1, (Random.Range(10, -10)));
         Instantiate(Enemy, enemySpawn, Quaternion.Euler(0, 0, 0));
         enemyCounter++;
     }

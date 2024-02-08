@@ -271,11 +271,11 @@ MonoBehaviour:
   bulletPointSpawn: {x: 0, y: 1, z: 0}
   reticlePointSpawn: {x: 0, y: 1, z: 0}
   respawnTimer: 0
-  newTimer: 6
+  newTimer: 3
   enemyFull: 0
   canSpawnEnemies: 1
   enemyCounter: 0
-  maxEnemies: 100
+  maxEnemies: 50
 --- !u!4 &168306414
 Transform:
   m_ObjectHideFlags: 0
