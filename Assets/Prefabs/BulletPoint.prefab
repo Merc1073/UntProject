@@ -53,10 +53,10 @@ MonoBehaviour:
   pewSound: {fileID: 8300000, guid: ca9091bf8810ec642b03eced312a34c3, type: 3}
   rotateVelocity: 0
   rotateSpeedMovement: 0
-  fireRate: 3
+  fireRate: 0
   maxFireRate: 8
   fireRateCooldown: 0
-  fireRateMultiplier: 3
+  fireRateMultiplier: 1
   roundsPerSecond: 0
   canFire: 0
   tranDif: {x: 0, y: 0, z: 0}
