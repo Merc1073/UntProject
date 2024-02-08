@@ -262,6 +262,8 @@ MonoBehaviour:
   Enemy: {fileID: 195418191451930847, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
   BulletPoint: {fileID: 183907940865509624, guid: dcd26e0e78d847144b7a4e8fc5d19091, type: 3}
   Reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
+  MagnetPowerUp: {fileID: 7512444815576764851, guid: ba75ac5667dde704494841fc1bc4ed93, type: 3}
+  isMagnetPowerUpActive: 0
   fireRateText: {fileID: 1787011600}
   respawnTimerText: {fileID: 653541279}
   enemyCountText: {fileID: 1717855474}
@@ -270,12 +272,13 @@ MonoBehaviour:
   enemySpawn: {x: -15, y: 1, z: 0}
   bulletPointSpawn: {x: 0, y: 1, z: 0}
   reticlePointSpawn: {x: 0, y: 1, z: 0}
+  magnetPowerUpSpawn: {x: 5, y: 1, z: 5}
   respawnTimer: 0
-  newTimer: 3
+  newTimer: 0
   enemyFull: 0
   canSpawnEnemies: 1
   enemyCounter: 0
-  maxEnemies: 50
+  maxEnemies: 1
 --- !u!4 &168306414
 Transform:
   m_ObjectHideFlags: 0

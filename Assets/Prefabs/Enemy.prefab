@@ -5417,6 +5417,7 @@ MonoBehaviour:
   maxHealth: 5
   currentHealth: 5
   particOnce: 1
+  sizeIsMax: 0
 --- !u!54 &91220153606161697
 Rigidbody:
   m_ObjectHideFlags: 0

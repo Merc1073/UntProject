@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
     public int currentHealth;
 
     public bool particOnce = true;
+    public bool sizeIsMax = false;
 
 
 
@@ -64,10 +65,18 @@ public class Enemy : MonoBehaviour
     void Update()
     {
 
-        if(appearingSpeed < 3)
+        if(sizeIsMax == false)
         {
+
             appearingSpeed += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 1f, 1f), appearingSpeed * Time.deltaTime);
+
+            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 1f, 1f), Time.deltaTime * 3);
+
+            if(appearingSpeed >= 1f)
+            {
+                sizeIsMax = true;
+            }
+
         }
 
 
@@ -144,7 +153,7 @@ public class Enemy : MonoBehaviour
                 rb.AddForce(directionToPlayer * Time.deltaTime, ForceMode.Impulse);
             }
         }
-        
+      
     }
 
     void DestroyObj()

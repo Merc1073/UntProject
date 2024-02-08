@@ -10,10 +10,13 @@ public class GameScript : MonoBehaviour
     public GameObject Enemy;
     public GameObject BulletPoint;
     public GameObject Reticle;
+    public GameObject MagnetPowerUp;
 
     private MainPlayer playerScript;
     private BulletPoint bulletReticle;
-    
+
+    public bool isMagnetPowerUpActive = false;
+
 
     [SerializeField] Text fireRateText, respawnTimerText, enemyCountText, timerText;
 
@@ -21,6 +24,7 @@ public class GameScript : MonoBehaviour
     public Vector3 enemySpawn;
     public Vector3 bulletPointSpawn;
     public Vector3 reticlePointSpawn;
+    public Vector3 magnetPowerUpSpawn;
 
     float totalTime;
 
@@ -43,6 +47,7 @@ public class GameScript : MonoBehaviour
         Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
         Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+        Instantiate(MagnetPowerUp, magnetPowerUpSpawn, Quaternion.Euler(0, 0, 0));
 
         playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
@@ -96,7 +101,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        enemySpawn = new Vector3(Random.Range(40, -40), 1, (Random.Range(10, -10)));
+        enemySpawn = new Vector3(Random.Range(40, -40), 1, (Random.Range(40, -40)));
         Instantiate(Enemy, enemySpawn, Quaternion.Euler(0, 0, 0));
         enemyCounter++;
     }
@@ -104,6 +109,11 @@ public class GameScript : MonoBehaviour
     public void ReduceEnemy()
     {
         enemyCounter--;
+    }
+
+    public void ActivateMagnetPowerUp()
+    {
+        isMagnetPowerUpActive = true;
     }
 
 }
