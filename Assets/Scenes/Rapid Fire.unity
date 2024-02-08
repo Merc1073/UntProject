@@ -259,8 +259,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 3093773531564783751, guid: 84812442a012d3f4697efa559a27603a, type: 3}
-  Enemy: {fileID: 3470168901668137282, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
-  BulletPoint: {fileID: 6187562490401238630, guid: dcd26e0e78d847144b7a4e8fc5d19091, type: 3}
+  Enemy: {fileID: 195418191451930847, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
+  BulletPoint: {fileID: 183907940865509624, guid: dcd26e0e78d847144b7a4e8fc5d19091, type: 3}
   Reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
   fireRateText: {fileID: 1787011600}
   respawnTimerText: {fileID: 653541279}
@@ -271,7 +271,7 @@ MonoBehaviour:
   bulletPointSpawn: {x: 0, y: 1, z: 0}
   reticlePointSpawn: {x: 0, y: 1, z: 0}
   respawnTimer: 0
-  newTimer: 10
+  newTimer: 6
   enemyFull: 0
   canSpawnEnemies: 1
   enemyCounter: 0
