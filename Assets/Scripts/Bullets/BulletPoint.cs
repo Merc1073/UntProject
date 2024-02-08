@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.UI;
 using UnityEngine;
 
 
@@ -53,6 +52,11 @@ public class BulletPoint : MonoBehaviour
             Debug.Log(maxFireRate);
 
             fireRateCooldown = maxFireRate;
+
+            if(maxFireRate < 0.01f)
+            {
+                maxFireRate = 0.01f;
+            }
 
             if (fireRate >= fireRateCooldown)
             {

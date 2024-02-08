@@ -5314,9 +5314,10 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 1024
-  forceMultiplier: 12
+  forceMultiplier: 5000
   currentHealth: 5
   maxHealth: 5
+  coinCount: 0
   particOnce: 1
   particles: {fileID: 2996236082224744620}
   mesh: {fileID: 4838352043180132795}

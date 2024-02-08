@@ -43,13 +43,19 @@ public class MainPlayer : MonoBehaviour
     void Update()
     {
 
-        if(currentHealth < 0)
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+
+        if (currentHealth < 0)
         {
             currentHealth = 0;
         }
 
         if(currentHealth == 0)
         {
+
+            
+
             //src.pitch = 1;
             //src.clip = explosionSound;
             //src.volume = 0.4f;
@@ -73,21 +79,24 @@ public class MainPlayer : MonoBehaviour
             Invoke(nameof(DestroyObj), 0);
         }
 
-        if(Input.GetMouseButton(0))
-        {
+        //if(Input.GetMouseButton(0))
+        //{
 
-            RaycastHit hit;
+        //    RaycastHit hit;
 
-            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
-            {
+        //    if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+        //    {
 
-                Vector3 directionToMouse = transform.position - hit.point;
-                directionToMouse = directionToMouse.normalized * forceMultiplier;
+        //        Vector3 directionToMouse = transform.position - hit.point;
+        //        directionToMouse = directionToMouse.normalized * forceMultiplier;
 
-                //clone = Instantiate(clone, hit.point + tranDif, rotation);
-                rb.AddForce(-directionToMouse + tranDif * Time.deltaTime);
-            }
-        }
+        //        //clone = Instantiate(clone, hit.point + tranDif, rotation);
+        //        rb.AddForce(-directionToMouse + tranDif * Time.deltaTime);
+        //    }
+        //}
+
+        rb.AddForce(new Vector3(moveHorizontal * forceMultiplier * Time.deltaTime, 0, moveVertical * forceMultiplier * Time.deltaTime));
+
     }
 
     public void DecreasePlayerHealth(float health)
