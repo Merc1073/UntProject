@@ -384,7 +384,7 @@ MonoBehaviour:
   originalTripleBulletPowerUpTime: 5
   enemyRespawnTimer: 5
   newEnemyTimer: 5
-  increaseInGlobalEnemyForceMultiplier: 12.5
+  increaseInGlobalEnemyForceMultiplier: 6.25
   globalEnemyForceMultiplier: 0
   coinCount: 0
   scoreCount: 0

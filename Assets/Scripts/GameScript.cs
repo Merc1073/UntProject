@@ -266,7 +266,7 @@ public class GameScript : MonoBehaviour
                             }
                         }
                         
-                        else if(newEnemyTimer > 2.5f)
+                        else if(newEnemyTimer > 3.75f)
                         {
                             newEnemyTimer -= stage2 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
@@ -280,7 +280,7 @@ public class GameScript : MonoBehaviour
                             }
                         }
 
-                        else if(newEnemyTimer > 1.25f)
+                        else if(newEnemyTimer > 2.5f)
                         {
                             newEnemyTimer -= stage3 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
@@ -294,7 +294,7 @@ public class GameScript : MonoBehaviour
                             }
                         }
 
-                        else if (newEnemyTimer > 0.625f)
+                        else if (newEnemyTimer > 1.25f)
                         {
                             newEnemyTimer -= stage4 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
@@ -376,7 +376,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnMagnetPowerUp()
     {
-        Instantiate(MagnetPowerUp, new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20)), Quaternion.Euler(0, 0, 0));
+        Instantiate(MagnetPowerUp, new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0));
     }
 
     public void DebugSpawnTripleBulletPowerUp()
@@ -388,7 +388,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnTripleBulletPowerUp()
     {
-        Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20)), Quaternion.Euler(0, 0, 0));
+        Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0));
     }
 
 }
