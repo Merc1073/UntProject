@@ -22,6 +22,8 @@ public class Coin : MonoBehaviour
     public float explosionForce;
     public float speed;
 
+    public float coinMagnetSpeed;
+
     public float maxDistanceToPlayer;
 
     bool distanceTriggered = false;
@@ -69,7 +71,7 @@ public class Coin : MonoBehaviour
 
             if (distanceTriggered == true)
             {
-                speed += 0.25f;
+                speed += coinMagnetSpeed;
                 transform.position = Vector3.MoveTowards(transform.position, playerObject.transform.position, speed * Time.deltaTime);
             }
         }
@@ -99,7 +101,7 @@ public class Coin : MonoBehaviour
                 particOnce = false;
 
                 playerScript.AddCoins(1);
-                bulletReticle.IncreaseFireRate(0.1f);
+                bulletReticle.IncreaseFireRate(0.05f);
 
                 Destroy(mesh);
                 Invoke(nameof(DestroyObj), 0);

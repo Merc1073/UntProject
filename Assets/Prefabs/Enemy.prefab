@@ -5416,7 +5416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa4445c6702ec90418c0bac86a7648ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 6829510767344726793, guid: 284327538c8a44f40b3a5e95fef3d904, type: 3}
+  coin: {fileID: 2454413220953191581, guid: 284327538c8a44f40b3a5e95fef3d904, type: 3}
   src: {fileID: 0}
   explosionSound: {fileID: 8300000, guid: 4dca1918e9eda4442956516424d7e956, type: 3}
   particles: {fileID: 145365066247237466}
@@ -5425,6 +5425,7 @@ MonoBehaviour:
   growthDuration: 2
   fadeDuration: 2
   forceMultiplier: 500
+  totalForceMultiplier: 0
   currentCoinCounter: 0
   minCoins: 3
   maxCoins: 6

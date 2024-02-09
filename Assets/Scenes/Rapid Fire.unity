@@ -391,6 +391,11 @@ MonoBehaviour:
   addedEnemyScore: 0
   scoreMultiplier: 0
   decimalPlaces: 2
+  stage1: 0.1
+  stage2: 0.05
+  stage3: 0.025
+  stage4: 0.0125
+  stage5: 0.00625
   enemyFull: 0
   keepReducingSpawnTimer: 1
   canSpawnEnemies: 1
@@ -398,7 +403,7 @@ MonoBehaviour:
   canSpawnTripleBulletPowerUp: 1
   enemyCounter: 0
   enemyKillCounter: 0
-  maxEnemies: 50
+  maxEnemies: 200
   spawnMagnetPowerUpNow: 0
   spawnTripleBulletPowerUpNow: 0
   scoreCountRounded: 
@@ -749,7 +754,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 28.458328}
+  m_AnchoredPosition: {x: 100, y: 28.458374}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &653541279
@@ -1065,7 +1070,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 420, y: 6.7916665}
+  m_AnchoredPosition: {x: 420, y: 6.791626}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &940082487
@@ -1252,7 +1257,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 280, y: 6.7916665}
+  m_AnchoredPosition: {x: 280, y: 6.791626}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1101485883
@@ -1841,7 +1846,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 48.45833}
+  m_AnchoredPosition: {x: 100, y: 48.458374}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1717855474
@@ -1921,7 +1926,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 8.458328}
+  m_AnchoredPosition: {x: 100, y: 8.458374}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1787011600

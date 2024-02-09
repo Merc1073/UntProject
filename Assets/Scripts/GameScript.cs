@@ -82,6 +82,13 @@ public class GameScript : MonoBehaviour
     public float scoreMultiplier;
     public int decimalPlaces;
 
+    [Header("Enemy Timer Stages")]
+    [SerializeField] float stage1;
+    [SerializeField] float stage2;
+    [SerializeField] float stage3;
+    [SerializeField] float stage4;
+    [SerializeField] float stage5;
+
     [Header("Booleans")]
     public bool enemyFull = false;
     public bool keepReducingSpawnTimer = false;
@@ -132,6 +139,11 @@ public class GameScript : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+
+        if(newEnemyTimer <= 0f)
+        {
+            newEnemyTimer = 0f;
         }
 
         scoreCount = coinCount * scoreMultiplier + addedEnemyScore;
@@ -242,7 +254,7 @@ public class GameScript : MonoBehaviour
                     {
                         if(newEnemyTimer > 5f)
                         {
-                            newEnemyTimer -= 0.1f * Time.deltaTime;
+                            newEnemyTimer -= stage1 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -256,7 +268,7 @@ public class GameScript : MonoBehaviour
                         
                         else if(newEnemyTimer > 2.5f)
                         {
-                            newEnemyTimer -= 0.05f * Time.deltaTime;
+                            newEnemyTimer -= stage2 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -270,7 +282,21 @@ public class GameScript : MonoBehaviour
 
                         else if(newEnemyTimer > 1.25f)
                         {
-                            newEnemyTimer -= 0.025f * Time.deltaTime;
+                            newEnemyTimer -= stage3 * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
+                        }
+
+                        else if (newEnemyTimer > 0.625f)
+                        {
+                            newEnemyTimer -= stage4 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -284,7 +310,7 @@ public class GameScript : MonoBehaviour
 
                         else
                         {
-                            newEnemyTimer -= 0.00125f * Time.deltaTime;
+                            newEnemyTimer -= stage5 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -305,10 +331,8 @@ public class GameScript : MonoBehaviour
 
                         if (enemyRespawnTimer <= 0)
                         {
-
                             SpawnEnemy();
                             enemyRespawnTimer = newEnemyTimer;
-
                         }
                     }
                 }
