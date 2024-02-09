@@ -30,19 +30,23 @@ public class TripleBulletPowerUp : MonoBehaviour
     private IEnumerator FadeIn()
     {
 
-        Color color = mesh.material.color;
-        float targetAlpha = 1f;
-
-        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        if(mesh)
         {
-            color.a = Mathf.Lerp(0f, targetAlpha, t / fadeDuration);
+            Color color = mesh.material.color;
+            float targetAlpha = 1f;
+
+            for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+            {
+                color.a = Mathf.Lerp(0f, targetAlpha, t / fadeDuration);
+                mesh.material.color = color;
+                yield return null;
+
+            }
+
+            color.a = targetAlpha;
             mesh.material.color = color;
-            yield return null;
-
         }
-
-        color.a = targetAlpha;
-        mesh.material.color = color;
+        
 
     }
 

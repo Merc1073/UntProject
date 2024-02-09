@@ -21,6 +21,7 @@ public class Coin : MonoBehaviour
     public float forceMultiplier;
     public float explosionForce;
     public float speed;
+    public float fireRateToIncrease;
 
     public float coinMagnetSpeed;
 
@@ -101,7 +102,7 @@ public class Coin : MonoBehaviour
                 particOnce = false;
 
                 playerScript.AddCoins(1);
-                bulletReticle.IncreaseFireRate(0.05f);
+                bulletReticle.IncreaseFireRate(fireRateToIncrease);
 
                 Destroy(mesh);
                 Invoke(nameof(DestroyObj), 0);

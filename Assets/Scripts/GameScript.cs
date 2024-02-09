@@ -88,8 +88,18 @@ public class GameScript : MonoBehaviour
     [SerializeField] float stage3;
     [SerializeField] float stage4;
     [SerializeField] float stage5;
+    [SerializeField] float stage6;
+
+    [Header("Other Variables")]
+    [SerializeField] float enemySpawnRange;
+    [SerializeField] float magnetSpawnRange;
+    [SerializeField] float tripleBulletSpawnRange;
+    [SerializeField] float invincibilitySpawnRange;
+
 
     [Header("Booleans")]
+    public bool isPlayerInvincible = false;
+
     public bool enemyFull = false;
     public bool keepReducingSpawnTimer = false;
 
@@ -101,6 +111,7 @@ public class GameScript : MonoBehaviour
     public int enemyKillCounter;
     public int maxEnemies;
 
+    public bool spawnEnemyNow = false;
     public bool spawnMagnetPowerUpNow = false;
     public bool spawnTripleBulletPowerUpNow = false;
 
@@ -167,6 +178,11 @@ public class GameScript : MonoBehaviour
         if (spawnTripleBulletPowerUpNow == true)
         {
             DebugSpawnTripleBulletPowerUp();
+        }
+
+        if(spawnEnemyNow == true)
+        {
+            DebugSpawnEnemy();
         }
 
         if(isMagnetPowerUpActive == true)
@@ -252,23 +268,10 @@ public class GameScript : MonoBehaviour
 
                     if (keepReducingSpawnTimer == true)
                     {
-                        if(newEnemyTimer > 5f)
+                        
+                        if(newEnemyTimer > 3.75f)
                         {
                             newEnemyTimer -= stage1 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
-
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
-
-                            if (enemyRespawnTimer <= 0)
-                            {
-                                SpawnEnemy();
-                                enemyRespawnTimer = newEnemyTimer;
-                            }
-                        }
-                        
-                        else if(newEnemyTimer > 3.75f)
-                        {
-                            newEnemyTimer -= stage2 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -282,7 +285,7 @@ public class GameScript : MonoBehaviour
 
                         else if(newEnemyTimer > 2.5f)
                         {
-                            newEnemyTimer -= stage3 * Time.deltaTime;
+                            newEnemyTimer -= stage2 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -296,7 +299,35 @@ public class GameScript : MonoBehaviour
 
                         else if (newEnemyTimer > 1.25f)
                         {
+                            newEnemyTimer -= stage3 * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
+                        }
+
+                        else if (newEnemyTimer > 0.625f)
+                        {
                             newEnemyTimer -= stage4 * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
+                        }
+
+                        else if (newEnemyTimer > 0.3125f)
+                        {
+                            newEnemyTimer -= stage5 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -310,7 +341,7 @@ public class GameScript : MonoBehaviour
 
                         else
                         {
-                            newEnemyTimer -= stage5 * Time.deltaTime;
+                            newEnemyTimer -= stage6 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
                             respawnSeconds = (int)(enemyRespawnTimer % 60);
@@ -340,10 +371,16 @@ public class GameScript : MonoBehaviour
         }
     } 
     
+    public void DebugSpawnEnemy()
+    {
+        Instantiate(Enemy, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+        enemyCounter++;
+        spawnEnemyNow = false;
+    }
 
     public void SpawnEnemy()
     {
-        enemySpawn = new Vector3(Random.Range(80, -80), 1, (Random.Range(80, -80)));
+        enemySpawn = new Vector3(Random.Range(enemySpawnRange, -enemySpawnRange), 1, (Random.Range(enemySpawnRange, -enemySpawnRange)));
         Instantiate(Enemy, enemySpawn + tranDif, Quaternion.Euler(0, 0, 0));
         enemyCounter++;
     }
@@ -376,7 +413,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnMagnetPowerUp()
     {
-        Instantiate(MagnetPowerUp, new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0));
+        Instantiate(MagnetPowerUp, new Vector3(Random.Range(-magnetSpawnRange, magnetSpawnRange), 0, Random.Range(-magnetSpawnRange, magnetSpawnRange)), Quaternion.Euler(0, 0, 0));
     }
 
     public void DebugSpawnTripleBulletPowerUp()
@@ -388,7 +425,7 @@ public class GameScript : MonoBehaviour
 
     public void SpawnTripleBulletPowerUp()
     {
-        Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0));
+        Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange), 0, Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange)), Quaternion.Euler(0, 0, 0));
     }
 
 }

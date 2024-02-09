@@ -20,9 +20,12 @@ public class EnemyBullet : MonoBehaviour
 
     MainPlayer player;
 
+    GameScript gameScript;
+
     private void Start()
     {
         player = FindObjectOfType<MainPlayer>();
+        gameScript = FindObjectOfType<GameScript>();
 
         StartCoroutine(Grow());
     }
@@ -73,7 +76,10 @@ public class EnemyBullet : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
 
-            player.DecreasePlayerHealth(1f);
+            if(gameScript.isPlayerInvincible == false)
+            {
+                player.DecreasePlayerHealth(1f);
+            }
 
             var em = particles.emission;
             var dur = particles.main.duration;

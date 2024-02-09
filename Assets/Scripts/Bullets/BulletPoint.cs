@@ -68,16 +68,19 @@ public class BulletPoint : MonoBehaviour
                 fireRateMultiplier = maxFireRate;
             }
 
-
-            if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
+            if(playerScript.canMove == true)
             {
-                FireNormalBullet();
-            }
+                if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
+                {
+                    FireNormalBullet();
+                }
 
-            if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == true)
-            {
-                FireTripleBullet();
+                if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == true)
+                {
+                    FireTripleBullet();
+                }
             }
+            
         }
     }
 

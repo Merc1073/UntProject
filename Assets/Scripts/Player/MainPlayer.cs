@@ -17,6 +17,7 @@ public class MainPlayer : MonoBehaviour
     public int coinCount;
 
     public bool particOnce = true;
+    public bool canMove = true;
 
     public ParticleSystem particles;
     public MeshRenderer mesh;
@@ -104,7 +105,10 @@ public class MainPlayer : MonoBehaviour
         //    }
         //}
 
-        rb.AddForce(new Vector3(moveHorizontal * forceMultiplier * Time.deltaTime, 0, moveVertical * forceMultiplier * Time.deltaTime));
+        if(canMove == true)
+        {
+            rb.AddForce(new Vector3(moveHorizontal * forceMultiplier * Time.deltaTime, 0, moveVertical * forceMultiplier * Time.deltaTime));
+        }
 
     }
 
