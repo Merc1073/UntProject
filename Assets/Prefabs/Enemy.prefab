@@ -5424,7 +5424,7 @@ MonoBehaviour:
   canvasTransform: {fileID: 4970000710892416787}
   growthDuration: 2
   fadeDuration: 2
-  forceMultiplier: 1000
+  forceMultiplier: 500
   currentCoinCounter: 0
   minCoins: 3
   maxCoins: 6

@@ -88,8 +88,8 @@ public class Bullet : MonoBehaviour
 
                 if (distanceTriggered == true)
                 {
-                    speed += magnetSpeed;
-                    transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed * Time.deltaTime);
+                    speed += magnetSpeed * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed);
                 }
             }
         }

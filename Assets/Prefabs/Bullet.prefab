@@ -5136,7 +5136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 30
-  magnetSpeed: 0.25
+  magnetSpeed: 1
   magnetDistance: 10
   particOnce: 1
   sizeIsMax: 0

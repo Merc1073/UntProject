@@ -21,6 +21,8 @@ public class MainPlayer : MonoBehaviour
     public ParticleSystem particles;
     public MeshRenderer mesh;
 
+    GameScript gameScript;
+
     AudioSource src;
     public AudioClip gameOverNoise;
 
@@ -37,11 +39,16 @@ public class MainPlayer : MonoBehaviour
         playerHealthBar = GetComponentInChildren<HealthBar>();
         aimReticle = FindObjectOfType<FollowMouse>();
         bulletReticle = FindObjectOfType<BulletPoint>();
+        gameScript = FindObjectOfType<GameScript>();
 
         src = FindObjectOfType<AudioSource>();
 
         currentHealth = maxHealth;
-        playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+
+        if(playerHealthBar)
+        {
+            playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+        }
 
     }
 
@@ -104,7 +111,11 @@ public class MainPlayer : MonoBehaviour
     public void DecreasePlayerHealth(float health)
     {
         currentHealth -= health;
-        playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+
+        if(playerHealthBar)
+        {
+            playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+        }
     }
 
     void DestroyObj()
@@ -115,6 +126,8 @@ public class MainPlayer : MonoBehaviour
     public void AddCoins(int coins)
     {
         coinCount += coins;
+        gameScript.scoreMultiplier += 0.1f;
+        gameScript.coinCount += coins;
     }
 
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour
@@ -30,7 +31,11 @@ public class GameScript : MonoBehaviour
     [SerializeField] Text respawnTimerText;
     [SerializeField] Text enemyCountText;
     [SerializeField] Text timerText;
-
+    [SerializeField] Text enemiesKilled;
+    [SerializeField] Text coinsCollected;
+    [SerializeField] Text totalScore;
+    [SerializeField] Text magnetText;
+    [SerializeField] Text tripleBulletText;
 
     [Header("Positions")]
     public Vector3 playerSpawn;
@@ -43,21 +48,39 @@ public class GameScript : MonoBehaviour
     public Vector3 magnetPowerUpSpawn;
     public Vector3 tripBulletPowerUpSpawn;
 
-    [Header("Number Variables")]
+    [Header("Clock Timer")]
     [SerializeField] float totalTime;
     [SerializeField] int seconds;
     [SerializeField] int respawnSeconds;
 
+    [Header("Powerups Respawn Timers")]
     [SerializeField] float originalTimerSpawnMagnetPowerUp;
     [SerializeField] float magnetRespawnTimer;
 
     [SerializeField] float originalTimerSpawnTripleBulletPowerUp;
     [SerializeField] float tripleBulletRespawnTimer;
 
+    [Header("Powerups Lasting Timers")]
+    [SerializeField] float magnetPowerUpTime;
+    [SerializeField] float originalMagnetPowerUpTime;
+
+    [SerializeField] float tripleBulletPowerUpTime;
+    [SerializeField] float originalTripleBulletPowerUpTime;
+
+    [Header("Enemy Respawn Timers")]
     public float enemyRespawnTimer;
-
-
     public float newEnemyTimer;
+
+    [Header("Enemy Variables")]
+    public float increaseInGlobalEnemyForceMultiplier;
+    public float globalEnemyForceMultiplier;
+
+    [Header("Coins and Score")]
+    public float coinCount;
+    public float scoreCount;
+    public float addedEnemyScore;
+    public float scoreMultiplier;
+    public int decimalPlaces;
 
     [Header("Booleans")]
     public bool enemyFull = false;
@@ -67,67 +90,97 @@ public class GameScript : MonoBehaviour
     public bool canSpawnMagnetPowerUp = false;
     public bool canSpawnTripleBulletPowerUp = false;
 
-
     public int enemyCounter;
+    public int enemyKillCounter;
     public int maxEnemies;
 
     public bool spawnMagnetPowerUpNow = false;
     public bool spawnTripleBulletPowerUpNow = false;
 
+    public string scoreCountRounded;
+    public string newEnemyTimerRounded;
+    public string magnetTimerRounded;
+    public string tripleBulletTimerRounded;
+
 
 
     void Start()
     {
-        Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
-        Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
-        Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
 
-        //Instantiate(MagnetPowerUp, magnetPowerUpSpawn, Quaternion.Euler(0, 0, 0));
-        //Instantiate(TripleBulletPowerUp, tripBulletPowerUpSpawn, Quaternion.Euler(0, 0, 0));
+        if(SceneManager.GetActiveScene().name == "Rapid Fire")
+        {
+            Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
+            Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
+            Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+        }
 
+        else
+        {
+            Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
+            Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+        }
 
         playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
+
 
     }
 
     void Update()
     {
 
-        if(spawnMagnetPowerUpNow == true)
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        scoreCount = coinCount * scoreMultiplier + addedEnemyScore;
+
+        scoreCountRounded = scoreCount.ToString("F" + decimalPlaces);
+        newEnemyTimerRounded = newEnemyTimer.ToString("F" + decimalPlaces);
+        magnetTimerRounded = magnetPowerUpTime.ToString("F" + decimalPlaces);
+        tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + decimalPlaces);
+
+
+        if (isGameModeRapidFire == true)
+        {
+            globalEnemyForceMultiplier += Time.deltaTime * increaseInGlobalEnemyForceMultiplier;
+        }
+
+        if (spawnMagnetPowerUpNow == true)
         {
             DebugSpawnMagnetPowerUp();
         }
 
-        if(spawnTripleBulletPowerUpNow == true)
+        if (spawnTripleBulletPowerUpNow == true)
         {
             DebugSpawnTripleBulletPowerUp();
         }
 
-
-        if(canSpawnMagnetPowerUp == true)
+        if(isMagnetPowerUpActive == true)
         {
-            magnetRespawnTimer -= Time.deltaTime;
+            magnetPowerUpTime -= Time.deltaTime;
 
-            if(magnetRespawnTimer <= 0) 
+            if(magnetPowerUpTime <= 0f)
             {
-                SpawnMagnetPowerUp();
-
-                magnetRespawnTimer = originalTimerSpawnMagnetPowerUp;
+                magnetPowerUpTime = 0f;
+                isMagnetPowerUpActive = false;
             }
+
         }
 
-        if(canSpawnTripleBulletPowerUp == true)
+        if (isTripleBulletPowerUpActive == true)
         {
-            tripleBulletRespawnTimer -= Time.deltaTime;
+            tripleBulletPowerUpTime -= Time.deltaTime;
 
-            if (tripleBulletRespawnTimer <= 0)
+            if (tripleBulletPowerUpTime <= 0f)
             {
-                SpawnTripleBulletPowerUp();
-
-                tripleBulletRespawnTimer = originalTimerSpawnTripleBulletPowerUp; 
+                tripleBulletPowerUpTime = 0f;
+                isTripleBulletPowerUpActive = false;
             }
+
         }
+
 
         if (playerScript != null)
         {
@@ -135,10 +188,39 @@ public class GameScript : MonoBehaviour
             totalTime += Time.deltaTime;
             seconds = (int)(totalTime);
 
-            fireRateText.text = "Fire Rate: " + bulletReticle.roundsPerSecond.ToString();
-            respawnTimerText.text = "Enemy Respawn in: " + respawnSeconds.ToString();
+            fireRateText.text = "Fire Rate: " + bulletReticle.roundsPerSecond.ToString() + " / Second";
+            respawnTimerText.text = "Enemy spawns every " + newEnemyTimerRounded + " Seconds";
             enemyCountText.text = "Total Enemies in arena: " + enemyCounter.ToString();
             timerText.text = "Timer: " + seconds.ToString();
+            enemiesKilled.text = "Enemies defeated: " + enemyKillCounter.ToString();
+            coinsCollected.text = "Total of Orbs Collected: " + coinCount.ToString();
+            totalScore.text = "Total Score: " + scoreCountRounded;
+            magnetText.text = "Magnet Timer: " + magnetTimerRounded;
+            tripleBulletText.text = "Triple Bullet Timer: " + tripleBulletTimerRounded;
+
+            if (canSpawnMagnetPowerUp == true)
+            {
+                magnetRespawnTimer -= Time.deltaTime;
+
+                if (magnetRespawnTimer <= 0)
+                {
+                    SpawnMagnetPowerUp();
+
+                    magnetRespawnTimer = originalTimerSpawnMagnetPowerUp;
+                }
+            }
+
+            if (canSpawnTripleBulletPowerUp == true)
+            {
+                tripleBulletRespawnTimer -= Time.deltaTime;
+
+                if (tripleBulletRespawnTimer <= 0)
+                {
+                    SpawnTripleBulletPowerUp();
+
+                    tripleBulletRespawnTimer = originalTimerSpawnTripleBulletPowerUp;
+                }
+            }
 
             if (canSpawnEnemies == true)
             {
@@ -155,17 +237,63 @@ public class GameScript : MonoBehaviour
 
                 if (enemyFull == false)
                 {
-                    if(keepReducingSpawnTimer == true)
+
+                    if (keepReducingSpawnTimer == true)
                     {
-                        newEnemyTimer -= 0.0001f;
-                        enemyRespawnTimer -= Time.deltaTime;
-
-                        respawnSeconds = (int)(enemyRespawnTimer % 60);
-
-                        if (enemyRespawnTimer <= 0)
+                        if(newEnemyTimer > 5f)
                         {
-                            SpawnEnemy();
-                            enemyRespawnTimer = newEnemyTimer;
+                            newEnemyTimer -= 0.1f * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
+                        }
+                        
+                        else if(newEnemyTimer > 2.5f)
+                        {
+                            newEnemyTimer -= 0.05f * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
+                        }
+
+                        else if(newEnemyTimer > 1.25f)
+                        {
+                            newEnemyTimer -= 0.025f * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
+                        }
+
+                        else
+                        {
+                            newEnemyTimer -= 0.00125f * Time.deltaTime;
+                            enemyRespawnTimer -= Time.deltaTime;
+
+                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+
+                            if (enemyRespawnTimer <= 0)
+                            {
+                                SpawnEnemy();
+                                enemyRespawnTimer = newEnemyTimer;
+                            }
                         }
                     }
 
@@ -177,15 +305,17 @@ public class GameScript : MonoBehaviour
 
                         if (enemyRespawnTimer <= 0)
                         {
+
                             SpawnEnemy();
                             enemyRespawnTimer = newEnemyTimer;
+
                         }
                     }
-                    
                 }
             }
         }
-    }
+    } 
+    
 
     public void SpawnEnemy()
     {
@@ -196,17 +326,20 @@ public class GameScript : MonoBehaviour
 
     public void ReduceEnemy()
     {
-        enemyCounter--;
+        addedEnemyScore += 50f;
+        enemyKillCounter++;
         enemyCounter--;
     }
 
     public void ActivateMagnetPowerUp()
     {
+        magnetPowerUpTime = originalMagnetPowerUpTime;
         isMagnetPowerUpActive = true;
     }
 
     public void ActivateTripleBulletPowerUp()
     {
+        tripleBulletPowerUpTime = originalTripleBulletPowerUpTime;
         isTripleBulletPowerUpActive = true;
     }
 

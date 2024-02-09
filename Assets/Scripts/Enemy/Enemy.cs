@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
 
 
     public float forceMultiplier;
+    public float totalForceMultiplier;
 
     public int currentCoinCounter;
     public int minCoins;
@@ -113,10 +114,13 @@ public class Enemy : MonoBehaviour
 
         if(player != null)
         {
+
+            totalForceMultiplier = forceMultiplier + gamescript.globalEnemyForceMultiplier;
+
             float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
             Vector3 directionToPlayer = transform.position - player.transform.position;
-            directionToPlayer = directionToPlayer.normalized * forceMultiplier;
+            directionToPlayer = directionToPlayer.normalized * (forceMultiplier + gamescript.globalEnemyForceMultiplier);
 
 
             rb.AddForce(-directionToPlayer * Time.deltaTime);

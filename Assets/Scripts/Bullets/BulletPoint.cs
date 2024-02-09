@@ -30,6 +30,7 @@ public class BulletPoint : MonoBehaviour
     public float fireRateMultiplier;
 
     public float roundsPerSecond;
+    public int decimalPlaces;
 
     public bool canFire = false;
 
@@ -51,6 +52,7 @@ public class BulletPoint : MonoBehaviour
     {
         if(playerObject != null)
         {
+
             transform.position = playerObject.transform.position + tranDif;
 
             fireRate = 1 / fireRateMultiplier;
@@ -59,7 +61,9 @@ public class BulletPoint : MonoBehaviour
 
             roundsPerSecond = fireRateMultiplier;
 
-            if(fireRateMultiplier > maxFireRate)
+            roundsPerSecond = Mathf.Round(roundsPerSecond * Mathf.Pow(10, decimalPlaces)) / Mathf.Pow(10, decimalPlaces);
+
+            if (fireRateMultiplier > maxFireRate)
             {
                 fireRateMultiplier = maxFireRate;
             }
