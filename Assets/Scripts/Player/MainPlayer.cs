@@ -22,12 +22,15 @@ public class MainPlayer : MonoBehaviour
     public ParticleSystem particles;
     public MeshRenderer mesh;
 
+    public Transform canvasTransform;
+
     GameScript gameScript;
 
     AudioSource src;
     public AudioClip gameOverNoise;
 
-    private HealthBar playerHealthBar;
+    private HealthBar playerHealthBar, magnetPowerBar, tripleBulletPowerBar;
+
     private FollowMouse aimReticle;
     private BulletPoint bulletReticle;
 
@@ -39,6 +42,9 @@ public class MainPlayer : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         playerHealthBar = GetComponentInChildren<HealthBar>();
+        magnetPowerBar = GetComponentInChildren<HealthBar>();
+        tripleBulletPowerBar = GetComponentInChildren<HealthBar>();
+
         aimReticle = FindObjectOfType<FollowMouse>();
         bulletReticle = FindObjectOfType<BulletPoint>();
         gameScript = FindObjectOfType<GameScript>();
@@ -123,6 +129,13 @@ public class MainPlayer : MonoBehaviour
             rb.AddForce(movement * forceMultiplier * Time.deltaTime);
         }
 
+    }
+
+    private void LateUpdate()
+    {
+        canvasTransform.position = transform.position + new Vector3(0, 4, 2);
+        canvasTransform.rotation = Quaternion.Euler(90, 0, 0);
+        //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
     public void DecreasePlayerHealth(float health)

@@ -758,6 +758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDrain: 0.2
+  lerpSpeed: 3
   image: {fileID: 2958113101625485518}
   gradient:
     serializedVersion: 2

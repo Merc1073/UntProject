@@ -206,15 +206,6 @@ public class GameScript : MonoBehaviour
             Application.Quit();
         }
 
-        //if(fader.fadeTimer < 1f)
-        //{
-        //    playerScript.canMove = false;
-        //}
-
-        //else
-        //{
-        //    playerScript.canMove = true;
-        //}
 
         if (SceneManager.GetActiveScene().name == "Rapid Fire" && hasSceneBeenLoaded == false)
         {
@@ -247,8 +238,8 @@ public class GameScript : MonoBehaviour
             enemiesKilled.gameObject.SetActive(true);
             coinsCollected.gameObject.SetActive(true);
             totalScore.gameObject.SetActive(true);
-            magnetText.gameObject.SetActive(true);
-            tripleBulletText.gameObject.SetActive(true);
+            //magnetText.gameObject.SetActive(true);
+            //tripleBulletText.gameObject.SetActive(true);
 
             keepReducingSpawnTimer = true;
 
@@ -271,6 +262,8 @@ public class GameScript : MonoBehaviour
         magnetTimerRounded = magnetPowerUpTime.ToString("F" + genericDecimalPlaces);
         tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + genericDecimalPlaces);
 
+        playerScript.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
+        playerScript.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
 
         if (isGameModeRapidFire == true)
         {

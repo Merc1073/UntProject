@@ -9,6 +9,7 @@ public class HealthBar : MonoBehaviour
     private float target = 1f;
 
     [SerializeField] private float timeToDrain = 0.25f;
+    [SerializeField] private float lerpSpeed;
 
     [SerializeField] private Image image;
     [SerializeField] private Gradient gradient;
@@ -20,6 +21,10 @@ public class HealthBar : MonoBehaviour
         CheckHealthbarGradientAmount();
     }
 
+    public void Update()
+    {
+        //lerpSpeed = lerpSpeed * Time.deltaTime;
+    }
 
     public void UpdateHealthBar(float maxHealth, float currentHealth)
     {
@@ -39,8 +44,8 @@ public class HealthBar : MonoBehaviour
         while(elapsedTime < timeToDrain)
         {
             elapsedTime += Time.deltaTime;
-
-            image.fillAmount = Mathf.Lerp(fillAmount, target, (elapsedTime / timeToDrain));
+            lerpSpeed += 3f * Time.deltaTime;
+            image.fillAmount = Mathf.Lerp(fillAmount, target, (elapsedTime / timeToDrain) * lerpSpeed);
 
             yield return null;
         }

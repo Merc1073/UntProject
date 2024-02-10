@@ -22,7 +22,6 @@ public class MagnetPowerUp : MonoBehaviour
 
     void Start()
     {
-
         soundPlay = GetComponentInParent<GenericPlaySound>();
 
         gameScript = FindObjectOfType<GameScript>();
@@ -44,8 +43,6 @@ public class MagnetPowerUp : MonoBehaviour
                 mesh.material.color = color;
                 yield return null;
             }
-            
-
         }
 
         if(mesh)
