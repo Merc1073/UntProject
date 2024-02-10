@@ -5078,12 +5078,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57ebd787a516629468342de8d241df35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  src: {fileID: 0}
-  coinSound: {fileID: 8300000, guid: 04cc858d61b53d34c81bb2e10ea99336, type: 3}
   particles: {fileID: 3886000585895940801}
   mesh: {fileID: 4420134450005041824}
   forceMultiplier: 1
-  explosionForce: 1000
+  explosionForce: 2000
   speed: 1
   fireRateToIncrease: 0.025
   coinMagnetSpeed: 2

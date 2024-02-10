@@ -35,6 +35,7 @@ public class MainPlayer : MonoBehaviour
 
     void Start()
     {
+
         rb = GetComponent<Rigidbody>();
 
         playerHealthBar = GetComponentInChildren<HealthBar>();

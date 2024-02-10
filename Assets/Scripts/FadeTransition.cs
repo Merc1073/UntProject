@@ -19,6 +19,11 @@ public class FadeTransition : MonoBehaviour
         player = FindObjectOfType<MainPlayer>();
         menu = FindObjectOfType<MainMenu>();
 
+        if(!player)
+        {
+            Debug.Log("Player not here?");
+        }
+
         player.canMove = true;
 
         StartCoroutine(FadeInTransition());

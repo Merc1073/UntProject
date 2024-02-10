@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.WSA;
+using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
 
 public class MainMenu : MonoBehaviour
@@ -15,6 +16,8 @@ public class MainMenu : MonoBehaviour
     Transform yesButton;
     Transform noButton;
     Transform backButton;
+
+    public Text tutorialText;
 
     public GameObject particleEffect;
 
@@ -34,7 +37,7 @@ public class MainMenu : MonoBehaviour
     //public ParticleSystem gameModesButtonParticle;
     //public ParticleSystem quitButtonParticle;
 
-    public GameObject player;
+    GameObject player;
     GameScript gameScript;
 
     public bool particOnce = true;
@@ -67,6 +70,10 @@ public class MainMenu : MonoBehaviour
         yesButton.gameObject.SetActive(false);
         noButton.gameObject.SetActive(false);
         backButton.gameObject.SetActive(false);
+
+        tutorialText.gameObject.SetActive(false);
+
+        player = GameObject.FindGameObjectWithTag("Player");
 
     }
 
@@ -119,6 +126,7 @@ public class MainMenu : MonoBehaviour
                 ActivateObject(yesButton.gameObject);
                 ActivateObject(noButton.gameObject);
                 ActivateObject(backButton.gameObject);
+                ActivateObject(tutorialText.gameObject);
 
                 DeactivateObject(startButton.gameObject);
                 DeactivateObject(gameModesButton.gameObject);
@@ -150,7 +158,7 @@ public class MainMenu : MonoBehaviour
                 startRapidFire = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
-                CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(particleEffect, yesButton.transform.position, Quaternion.Euler(Vector3.zero));
 
                 soundPlay.PlayStartSound();
 
@@ -168,7 +176,7 @@ public class MainMenu : MonoBehaviour
                 startRapidFire = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
-                CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(particleEffect, noButton.transform.position, Quaternion.Euler(Vector3.zero));
 
                 soundPlay.PlayStartSound();
 
@@ -189,6 +197,7 @@ public class MainMenu : MonoBehaviour
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
                 DeactivateObject(backButton.gameObject);
+                DeactivateObject(tutorialText.gameObject);
 
                 ActivateObject(startButton.gameObject);
                 ActivateObject(gameModesButton.gameObject);

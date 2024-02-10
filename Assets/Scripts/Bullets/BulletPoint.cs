@@ -39,6 +39,9 @@ public class BulletPoint : MonoBehaviour
 
     void Start()
     {
+
+        DontDestroyOnLoad(gameObject);
+
         playerObject = GameObject.FindGameObjectWithTag("Player");
         reticle = GameObject.FindGameObjectWithTag("Reticle");
 

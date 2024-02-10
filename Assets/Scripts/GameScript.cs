@@ -31,6 +31,8 @@ public class GameScript : MonoBehaviour
 
     public bool hasGrowingModeStarted = false;
 
+    public bool hasSceneBeenLoaded = false;
+
     [Header("Texts")]
     [SerializeField] Text fireRateText;
     [SerializeField] Text respawnTimerText;
@@ -43,7 +45,9 @@ public class GameScript : MonoBehaviour
     [SerializeField] Text tripleBulletText;
 
     [Header("Positions")]
-    public Vector3 playerSpawn;
+    public Vector3 playerMenuSpawn;
+    public Vector3 playerRapidFireSpawn;
+
     public Vector3 enemySpawn;
     public Vector3 tranDif;
 
@@ -92,22 +96,11 @@ public class GameScript : MonoBehaviour
     public int newEnemyDecimalPlaces;
 
     [Header("Enemy Timer Stages")]
-    [SerializeField] float stage1ToSet;
     [SerializeField] float stage1;
-
-    [SerializeField] float stage2ToSet;
     [SerializeField] float stage2;
-
-    [SerializeField] float stage3ToSet;
     [SerializeField] float stage3;
-
-    [SerializeField] float stage4ToSet;
     [SerializeField] float stage4;
-
-    [SerializeField] float stage5ToSet;
     [SerializeField] float stage5;
-
-    [SerializeField] float stage6ToSet;
     [SerializeField] float stage6;
 
     [Header("Other Variables")]
@@ -153,28 +146,33 @@ public class GameScript : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        if (SceneManager.GetActiveScene().name == "Rapid Fire")
-        {
-            //isCurrentSceneRapidFireMode = true;
+        //if (SceneManager.GetActiveScene().name == "Rapid Fire")
+        //{
+        //    //isCurrentSceneRapidFireMode = true;
 
-            Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
+        //    Debug.Log("It's working");
+
+        //    Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
+        //    Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
+        //    Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+
+        //    isGameModeRapidFire = true;
+
+        //    stage1 = stage1ToSet;
+        //    stage2 = stage2ToSet;
+        //    stage3 = stage3ToSet;
+        //    stage4 = stage4ToSet;
+        //    stage5 = stage5ToSet;
+        //    stage6 = stage6ToSet;
+
+        //}
+
+        //else
+        //{
+            Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
             Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
             Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
-
-            stage1 = 1f;
-            stage2 = stage2ToSet;
-            stage3 = stage3ToSet;
-            stage4 = stage4ToSet;
-            stage5 = stage5ToSet;
-            stage6 = stage6ToSet;
-
-        }
-
-        else
-        {
-            Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
-            Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
-        }
+        //}
 
         if(hasRapidFireModeStarted == false)
         {
@@ -189,11 +187,6 @@ public class GameScript : MonoBehaviour
             tripleBulletText.gameObject.SetActive(false);
         }
 
-        //if(isCurrentSceneRapidFireMode == true)
-        //{
-            
-        //}
-
         playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
 
@@ -207,6 +200,28 @@ public class GameScript : MonoBehaviour
             Application.Quit();
         }
 
+        if (SceneManager.GetActiveScene().name == "Rapid Fire" && hasSceneBeenLoaded == false)
+        {
+            isCurrentSceneRapidFireMode = true;
+
+            playerScript = FindObjectOfType<MainPlayer>();
+            bulletReticle = FindObjectOfType<BulletPoint>();
+
+            playerScript.transform.position = playerRapidFireSpawn;
+
+            isGameModeRapidFire = true;
+
+            //stage1 = stage1ToSet;
+            //stage2 = stage2ToSet;
+            //stage3 = stage3ToSet;
+            //stage4 = stage4ToSet;
+            //stage5 = stage5ToSet;
+            //stage6 = stage6ToSet;
+
+            hasSceneBeenLoaded = true;
+
+        }
+
         if (hasRapidFireModeStarted == true)
         {
             fireRateText.gameObject.SetActive(true);
@@ -218,6 +233,14 @@ public class GameScript : MonoBehaviour
             totalScore.gameObject.SetActive(true);
             magnetText.gameObject.SetActive(true);
             tripleBulletText.gameObject.SetActive(true);
+
+            keepReducingSpawnTimer = true;
+
+            canSpawnEnemies = true;
+            canSpawnMagnetPowerUp = true;
+            canSpawnTripleBulletPowerUp = true;
+
+
         }
 
         if (newEnemyTimer <= 0f)
