@@ -6,7 +6,16 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 
+    public ParticleSystem particles;
+    public MeshRenderer mesh;
+
+    GameScript gameScript;
+    GenericPlaySound soundPlay;
+
+    private TrailRenderer trailRenderer;
+
     public float bulletSpeed;
+    public float bulletDuration;
     float timer;
 
     float appearingSpeed;
@@ -15,6 +24,8 @@ public class Bullet : MonoBehaviour
 
     public float magnetDistance;
 
+    public float shrinkSpeed;
+
     public bool particOnce = true;
     public bool sizeIsMax = false;
     public bool distanceTriggered = false;
@@ -22,47 +33,40 @@ public class Bullet : MonoBehaviour
     [SerializeField] float growthDuration;
     [SerializeField] float fadeDuration;
 
-    public Vector3 originalTransformScale;
     public Vector3 targetGrowthScale;
 
-    public ParticleSystem particles;
-    public MeshRenderer mesh;
-
-    GameScript gameScript;
 
     private void Start()
     {
         gameScript = FindObjectOfType<GameScript>();
 
+        soundPlay = GetComponentInParent<GenericPlaySound>();
+
+        trailRenderer = GetComponent<TrailRenderer>();
+
+
         StartCoroutine(Grow());
-    }
-
-    private IEnumerator Grow()
-    {
-
-        Vector3 originalSize = originalTransformScale;
-
-        for (float t = 0; t < growthDuration; t += Time.deltaTime)
-        {
-            transform.localScale = Vector3.Lerp(originalSize, targetGrowthScale, t / growthDuration);
-            yield return null;
-        }
-
-        transform.localScale = targetGrowthScale;
-
     }
 
     void Update()
     {
 
+
         timer += Time.deltaTime;
 
-        if (timer >= 2f)
+
+        AdjustTrailWidth();
+
+
+        if(timer >= 4.0f)
+        {
+            StartCoroutine(ShrinkObject());
+        }
+
+        if (timer >= bulletDuration)
         {
             Destroy(this.gameObject);
         }
-
-        
 
         if (gameScript.isMagnetPowerUpActive == true)
         {
@@ -102,14 +106,67 @@ public class Bullet : MonoBehaviour
         
     }
 
+    void AdjustTrailWidth()
+    {
+        float averageScale = (transform.localScale.x + transform.localScale.y + transform.localScale.z) / 3f;
+
+        trailRenderer.widthMultiplier = averageScale;
+    }
+
+    private IEnumerator Grow()
+    {
+
+        Vector3 originalSize = Vector3.zero;
+
+        for (float t = 0; t < growthDuration; t += Time.deltaTime)
+        {
+            transform.localScale = Vector3.Lerp(originalSize, targetGrowthScale, t / growthDuration);
+            yield return null;
+        }
+
+        transform.localScale = targetGrowthScale;
+
+    }
+
+    IEnumerator ShrinkObject()
+    {
+        while (transform.localScale.x > 0 && transform.localScale.y > 0 && transform.localScale.z > 0)
+        {
+            Vector3 newScale = transform.localScale - new Vector3(shrinkSpeed, shrinkSpeed, shrinkSpeed) * Time.deltaTime;
+
+            newScale = Vector3.Max(newScale, Vector3.zero);
+
+            transform.localScale = newScale;
+
+            yield return null;
+        }
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
-        if((other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground"))
+        if(other.gameObject.tag == "Enemy")
         {
 
             var em = particles.emission;
-            var dur = particles.main.duration;
+
+            em.enabled = true;
+
+            transform.parent.position = transform.position;
+
+            soundPlay.canPlaySound = true;
+
+            particles.Play();
+
+            particOnce = false;
+
+            Destroy(mesh);
+            Invoke(nameof(DestroyObj), 0);
+        }
+
+        if(other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground")
+        {
+            var em = particles.emission;
 
             em.enabled = true;
 

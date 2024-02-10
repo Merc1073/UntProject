@@ -26,6 +26,9 @@ public class GameScript : MonoBehaviour
     public bool isGameModeRapidFire = false;
     public bool isGameModeGrowing = false;
 
+    public bool hasRapidFireModeStarted = false;
+    public bool hasGrowingModeStarted = false;
+
     [Header("Texts")]
     [SerializeField] Text fireRateText;
     [SerializeField] Text respawnTimerText;
@@ -80,7 +83,11 @@ public class GameScript : MonoBehaviour
     public float scoreCount;
     public float addedEnemyScore;
     public float scoreMultiplier;
-    public int decimalPlaces;
+
+    [Header("Decimal Places")]
+    public int genericDecimalPlaces;
+    public int scoreDecimalPlaces;
+    public int newEnemyDecimalPlaces;
 
     [Header("Enemy Timer Stages")]
     [SerializeField] float stage1;
@@ -96,36 +103,44 @@ public class GameScript : MonoBehaviour
     [SerializeField] float tripleBulletSpawnRange;
     [SerializeField] float invincibilitySpawnRange;
 
+    [Header("Gamemode Booleans")]
+    public bool skipTutorial = false;
 
-    [Header("Booleans")]
+    [Header("Player Booleans")]
     public bool isPlayerInvincible = false;
 
+    [Header("Enemy Booleans")]
     public bool enemyFull = false;
     public bool keepReducingSpawnTimer = false;
 
+    [Header("Spawn Booleans")]
     public bool canSpawnEnemies = false;
     public bool canSpawnMagnetPowerUp = false;
     public bool canSpawnTripleBulletPowerUp = false;
 
+    [Header("Enemy variables")]
     public int enemyCounter;
     public int enemyKillCounter;
     public int maxEnemies;
 
+    [Header("Debug spawn in objects")]
     public bool spawnEnemyNow = false;
     public bool spawnMagnetPowerUpNow = false;
     public bool spawnTripleBulletPowerUpNow = false;
 
-    public string scoreCountRounded;
-    public string newEnemyTimerRounded;
-    public string magnetTimerRounded;
-    public string tripleBulletTimerRounded;
+    string scoreCountRounded;
+    string newEnemyTimerRounded;
+    string magnetTimerRounded;
+    string tripleBulletTimerRounded;
 
 
 
     void Start()
     {
 
-        if(SceneManager.GetActiveScene().name == "Rapid Fire")
+        
+
+        if (SceneManager.GetActiveScene().name == "Rapid Fire")
         {
             Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
             Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
@@ -138,9 +153,21 @@ public class GameScript : MonoBehaviour
             Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
         }
 
+        if(hasRapidFireModeStarted == false)
+        {
+            fireRateText.gameObject.SetActive(false);
+            respawnTimerText.gameObject.SetActive(false);
+            enemyCountText.gameObject.SetActive(false);
+            timerText.gameObject.SetActive(false);
+            enemiesKilled.gameObject.SetActive(false);
+            coinsCollected.gameObject.SetActive(false);
+            totalScore.gameObject.SetActive(false);
+            magnetText.gameObject.SetActive(false);
+            tripleBulletText.gameObject.SetActive(false);
+        }
+
         playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
-
 
     }
 
@@ -152,17 +179,30 @@ public class GameScript : MonoBehaviour
             Application.Quit();
         }
 
-        if(newEnemyTimer <= 0f)
+        if (hasRapidFireModeStarted == true)
+        {
+            fireRateText.gameObject.SetActive(true);
+            respawnTimerText.gameObject.SetActive(true);
+            enemyCountText.gameObject.SetActive(true);
+            timerText.gameObject.SetActive(true);
+            enemiesKilled.gameObject.SetActive(true);
+            coinsCollected.gameObject.SetActive(true);
+            totalScore.gameObject.SetActive(true);
+            magnetText.gameObject.SetActive(true);
+            tripleBulletText.gameObject.SetActive(true);
+        }
+
+        if (newEnemyTimer <= 0f)
         {
             newEnemyTimer = 0f;
         }
 
         scoreCount = coinCount * scoreMultiplier + addedEnemyScore;
 
-        scoreCountRounded = scoreCount.ToString("F" + decimalPlaces);
-        newEnemyTimerRounded = newEnemyTimer.ToString("F" + decimalPlaces);
-        magnetTimerRounded = magnetPowerUpTime.ToString("F" + decimalPlaces);
-        tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + decimalPlaces);
+        scoreCountRounded = scoreCount.ToString("F" + scoreDecimalPlaces);
+        newEnemyTimerRounded = newEnemyTimer.ToString("F" + newEnemyDecimalPlaces);
+        magnetTimerRounded = magnetPowerUpTime.ToString("F" + genericDecimalPlaces);
+        tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + genericDecimalPlaces);
 
 
         if (isGameModeRapidFire == true)
@@ -210,8 +250,9 @@ public class GameScript : MonoBehaviour
         }
 
 
-        if (playerScript != null)
+        if (playerScript && hasRapidFireModeStarted == true)
         {
+
 
             totalTime += Time.deltaTime;
             seconds = (int)(totalTime);
@@ -369,6 +410,12 @@ public class GameScript : MonoBehaviour
                 }
             }
         }
+
+        //else
+        //{
+        //    Debug.Log("It's not working :/");
+        //}
+
     } 
     
     public void DebugSpawnEnemy()

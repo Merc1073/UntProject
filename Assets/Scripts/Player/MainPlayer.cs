@@ -59,6 +59,18 @@ public class MainPlayer : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
+        Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical).normalized;
+
+        if(transform.position.y > 1.0f)
+        {
+            transform.position += new Vector3(0, -0.1f, 0) * Time.deltaTime * 100;
+        }
+
+        //if (transform.position.y < 0.9f)
+        //{
+        //    transform.position += new Vector3(0, +0.1f, 0) * Time.deltaTime * 100;
+        //}
+
         if (currentHealth < 0)
         {
             currentHealth = 0;
@@ -107,7 +119,7 @@ public class MainPlayer : MonoBehaviour
 
         if(canMove == true)
         {
-            rb.AddForce(new Vector3(moveHorizontal * forceMultiplier * Time.deltaTime, 0, moveVertical * forceMultiplier * Time.deltaTime));
+            rb.AddForce(movement * forceMultiplier * Time.deltaTime);
         }
 
     }

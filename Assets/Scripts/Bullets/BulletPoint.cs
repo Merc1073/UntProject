@@ -45,7 +45,8 @@ public class BulletPoint : MonoBehaviour
         playerScript = FindObjectOfType<MainPlayer>();
         gameScript = FindObjectOfType<GameScript>();
 
-        src = FindObjectOfType<AudioSource>();
+        src = GetComponent<AudioSource>();
+
     }
 
     void Update()
@@ -68,6 +69,11 @@ public class BulletPoint : MonoBehaviour
                 fireRateMultiplier = maxFireRate;
             }
 
+            if(fireRateCooldown < 0f)
+            {
+                fireRateCooldown = 0f;
+            }
+
             if(playerScript.canMove == true)
             {
                 if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
@@ -86,7 +92,10 @@ public class BulletPoint : MonoBehaviour
 
     public void FireNormalBullet()
     {
-        src.volume = 1f;
+
+        src.clip = pewSound;
+        src.volume = 0.6f;
+        src.pitch = Random.Range(0.6f, 0.8f);
         src.PlayOneShot(pewSound);
 
         RaycastHit hit;
@@ -109,7 +118,10 @@ public class BulletPoint : MonoBehaviour
 
     public void FireTripleBullet()
     {
-        src.volume = 1f;
+
+        src.clip = pewSound;
+        src.volume = 0.6f;
+        src.pitch = Random.Range(1.0f, 1.2f);
         src.PlayOneShot(pewSound);
 
         RaycastHit hit;

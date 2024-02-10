@@ -15,8 +15,7 @@ public class Enemy : MonoBehaviour
 
     private HealthBar enemyHealthBar;
 
-    public AudioSource src;
-    public AudioClip explosionSound;
+    private EnemyPlaySound soundPlay;
 
     public ParticleSystem particles;
     public MeshRenderer mesh;
@@ -57,7 +56,7 @@ public class Enemy : MonoBehaviour
 
         gamescript = FindObjectOfType<GameScript>();
 
-        src = FindObjectOfType<AudioSource>();
+        soundPlay = GetComponentInParent<EnemyPlaySound>();
 
         enemyHealthBar = GetComponentInChildren<HealthBar>();
 
@@ -141,13 +140,10 @@ public class Enemy : MonoBehaviour
 
                 gamescript.ReduceEnemy();
 
-                src.pitch = 1;
-                //src.clip = explosionSound;
-                src.volume = 0.4f;
-                src.PlayOneShot(explosionSound);
+
+                soundPlay.canPlaySound = true;
 
                 var em = particles.emission;
-                var dur = particles.main.duration;
 
                 em.enabled = true;
 

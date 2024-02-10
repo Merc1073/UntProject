@@ -13,10 +13,15 @@ public class MainMenu : MonoBehaviour
 
     public GameObject particleEffect;
 
+    GenericPlaySound soundPlay;
+
     public bool startRapidFire = false;
     public bool startGrowth = false;
 
     public bool gameEnd = false;
+
+    public bool startButtonActivated = false;
+    public bool quitButtonActivated = false;
 
     private float timer;
 
@@ -40,6 +45,7 @@ public class MainMenu : MonoBehaviour
 
         gameScript = FindObjectOfType<GameScript>();
         sceneTransition = FindObjectOfType<FadeTransition>();
+        soundPlay = GetComponentInParent<GenericPlaySound>();
         
         startButton = transform.GetChild(0);
         gameModesButton = transform.GetChild(1);
@@ -70,16 +76,14 @@ public class MainMenu : MonoBehaviour
             startRapidFire = true;
             StartCoroutine(sceneTransition.FadeOutTransition());
 
-            //src.pitch = Random.Range(0.5f, 0.8f);
-            //src.volume = 0.2f;
-            //src.clip = coinSound;
-            //src.Play();
 
-            //startButton.gameObject.SetActive(false);
-
-            //StartButtonParticlePlay();
-
-            CreateParticleEffect(particleEffect, startButton.transform.position, Quaternion.Euler(Vector3.zero));
+            if(!startButtonActivated)
+            {
+                CreateParticleEffect(particleEffect, startButton.transform.position, Quaternion.Euler(Vector3.zero));
+                startButtonActivated = true;
+            }
+            
+            soundPlay.canPlaySound = true;
 
             DeactivateObject(startButton.gameObject);
             DeactivateObject(gameModesButton.gameObject);
@@ -89,7 +93,15 @@ public class MainMenu : MonoBehaviour
 
         if(quitDistanceToPlayer <= 2f)
         {
-            CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+            StartCoroutine(sceneTransition.FadeOutTransition());
+
+            if(!quitButtonActivated)
+            {
+                CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+                quitButtonActivated = true;
+            }
+
+            soundPlay.canPlaySound = true;
 
             DeactivateObject(startButton.gameObject);
             DeactivateObject(gameModesButton.gameObject);
@@ -97,16 +109,15 @@ public class MainMenu : MonoBehaviour
 
             gameEnd = true;
 
-            StartCoroutine(sceneTransition.FadeOutTransition());
-
-            //StartCoroutine(EndGame());
         }
 
     }
 
     public void CreateParticleEffect(GameObject particle, Vector3 position, Quaternion rotation)
     {
+
         Instantiate(particle, position, rotation);
+
     }
 
     //private IEnumerator EndGame()

@@ -12,8 +12,7 @@ public class Coin : MonoBehaviour
 
     Rigidbody rb;
 
-    public AudioSource src;
-    public AudioClip coinSound;
+    private GenericPlaySound soundPlay;
 
     public ParticleSystem particles;
     public MeshRenderer mesh;
@@ -41,8 +40,8 @@ public class Coin : MonoBehaviour
 
         rb.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
-        src = FindObjectOfType<AudioSource>();
-
+        soundPlay = GetComponentInParent<GenericPlaySound>();
+        
     }
 
     void Update()
@@ -85,10 +84,8 @@ public class Coin : MonoBehaviour
         {
             if (other.gameObject.tag == "Player" && particOnce)
             {
-                //src.pitch = Random.Range(0.5f, 0.8f);
-                src.volume = 0.2f;
-                src.clip = coinSound;
-                src.Play();
+
+                soundPlay.canPlaySound = true;
 
                 var em = particles.emission;
                 var dur = particles.main.duration;

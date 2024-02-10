@@ -7,8 +7,7 @@ using static UnityEngine.ParticleSystem;
 public class MagnetPowerUp : MonoBehaviour
 {
 
-    AudioSource src;
-    public AudioClip powerupPickupNoise;
+    private GenericPlaySound soundPlay;
 
     public ParticleSystem particles;
 
@@ -23,7 +22,8 @@ public class MagnetPowerUp : MonoBehaviour
 
     void Start()
     {
-        src = FindObjectOfType<AudioSource>();
+
+        soundPlay = GetComponentInParent<GenericPlaySound>();
 
         gameScript = FindObjectOfType<GameScript>();
 
@@ -38,14 +38,22 @@ public class MagnetPowerUp : MonoBehaviour
 
         for (float t = 0; t < fadeDuration; t += Time.deltaTime)
         {
-            color.a = Mathf.Lerp(0f, targetAlpha, t / fadeDuration);
-            mesh.material.color = color;
-            yield return null;
+            if(mesh)
+            {
+                color.a = Mathf.Lerp(0f, targetAlpha, t / fadeDuration);
+                mesh.material.color = color;
+                yield return null;
+            }
+            
 
         }
 
-        color.a = targetAlpha;
-        mesh.material.color = color;
+        if(mesh)
+        {
+            color.a = targetAlpha;
+            mesh.material.color = color;
+        }
+        
 
     }
 
@@ -56,13 +64,9 @@ public class MagnetPowerUp : MonoBehaviour
 
             gameScript.ActivateMagnetPowerUp();
 
-            src.pitch = 1;
-            //src.clip = explosionSound;
-            src.volume = 0.6f;
-            src.PlayOneShot(powerupPickupNoise);
+            soundPlay.canPlaySound = true;
 
             var em = particles.emission;
-            var dur = particles.main.duration;
 
             em.enabled = true;
 

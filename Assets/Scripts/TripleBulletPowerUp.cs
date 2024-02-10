@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TripleBulletPowerUp : MonoBehaviour
 {
-    AudioSource src;
-    public AudioClip powerupPickupNoise;
+
+    private GenericPlaySound soundPlay;
 
     public ParticleSystem particles;
 
@@ -20,7 +20,8 @@ public class TripleBulletPowerUp : MonoBehaviour
 
     void Start()
     {
-        src = FindObjectOfType<AudioSource>();
+
+        soundPlay = GetComponentInParent<GenericPlaySound>();
 
         gameScript = FindObjectOfType<GameScript>();
 
@@ -30,23 +31,24 @@ public class TripleBulletPowerUp : MonoBehaviour
     private IEnumerator FadeIn()
     {
 
-        if(mesh)
-        {
-            Color color = mesh.material.color;
-            float targetAlpha = 1f;
+        Color color = mesh.material.color;
+        float targetAlpha = 1f;
 
-            for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            if(mesh)
             {
                 color.a = Mathf.Lerp(0f, targetAlpha, t / fadeDuration);
                 mesh.material.color = color;
                 yield return null;
-
             }
+        }
 
+        if(mesh)
+        {
             color.a = targetAlpha;
             mesh.material.color = color;
         }
-        
 
     }
 
@@ -57,10 +59,7 @@ public class TripleBulletPowerUp : MonoBehaviour
 
             gameScript.ActivateTripleBulletPowerUp();
 
-            src.pitch = 1;
-            //src.clip = explosionSound;
-            src.volume = 0.6f;
-            src.PlayOneShot(powerupPickupNoise);
+            soundPlay.canPlaySound = true;
 
             var em = particles.emission;
             var dur = particles.main.duration;

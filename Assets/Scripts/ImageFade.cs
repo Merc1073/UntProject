@@ -9,8 +9,12 @@ public class ImageFade : MonoBehaviour
 
     //public Image[] imageToFade;
 
+    GameScript gameScript;
+
     public Image imageToFade1;
     public Image imageToFade2;
+
+    public Text textToFade1;
 
 
     public float fadeInDuration;
@@ -22,6 +26,8 @@ public class ImageFade : MonoBehaviour
         //    imageToFade[i].GetComponent<Image>();
         //}
 
+        gameScript = FindObjectOfType<GameScript>();
+
         if(imageToFade1 == null)
         {
             imageToFade1 = GetComponent<Image>();
@@ -32,12 +38,28 @@ public class ImageFade : MonoBehaviour
             imageToFade2 = GetComponent<Image>();
         }
 
-        StartCoroutine(FadeInImage1());
-        StartCoroutine(FadeInImage2());
+        if(gameScript.hasRapidFireModeStarted == false)
+        {
+            imageToFade1.gameObject.SetActive(false);
+            imageToFade2.gameObject.SetActive(false);
+            textToFade1.gameObject.SetActive(false);
+        }
+
+        //StartCoroutine(FadeInImage1());
+        //StartCoroutine(FadeInImage2());
+        //StartCoroutine(FadeInText1());
 
     }
 
-
+    private void Update()
+    {
+        if(gameScript.hasRapidFireModeStarted == true)
+        {
+            imageToFade1.gameObject.SetActive(true);
+            imageToFade2.gameObject.SetActive(true);
+            textToFade1.gameObject.SetActive(true);
+        }
+    }
     //private IEnumerator FadeInImage()
     //{
     //    for(int i = 0; i < imageToFade.Length; i++)
@@ -95,5 +117,21 @@ public class ImageFade : MonoBehaviour
         imageToFade2.color = color2;
     }
 
+    private IEnumerator FadeInText1()
+    {
+        Color color1 = textToFade1.color;
+        color1.a = 0f;
+        textToFade1.color = color1;
+
+        for (float t = 0; t < fadeInDuration; t += Time.deltaTime)
+        {
+            color1.a = Mathf.Lerp(0f, 1f, t / fadeInDuration);
+            textToFade1.color = color1;
+            yield return null;
+        }
+
+        color1.a = 1f;
+        textToFade1.color = color1;
+    }
 
 }
