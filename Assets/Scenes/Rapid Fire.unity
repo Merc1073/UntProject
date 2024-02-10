@@ -6100,6 +6100,7 @@ MonoBehaviour:
   Go: {fileID: 332204873}
   timer: 0
   timer2: 0
+  tutorialStartDelay: 3
 --- !u!1 &1069894589
 GameObject:
   m_ObjectHideFlags: 0
@@ -6861,6 +6862,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageToFade: {fileID: 1069894590}
+  fadeTimer: 0
+  fadeDelay: 1
   fadeInDuration: 2
   fadeOutDuration: 1
 --- !u!4 &1344912894

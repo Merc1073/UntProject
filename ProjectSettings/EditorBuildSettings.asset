@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Rapid Fire.unity
     guid: 6b6eaa01ec743ab409921c99f988eab6
+  - enabled: 1
+    path: Assets/Scenes/Growth.unity
+    guid: d961f47d695b0a54ca2190c2b9632dec
   m_configObjects: {}

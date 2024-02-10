@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.WSA;
 using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -15,9 +15,17 @@ public class MainMenu : MonoBehaviour
 
     Transform yesButton;
     Transform noButton;
-    Transform backButton;
+    Transform backButtonStart;
+
+    Transform rapidFireButton;
+    Transform growthButton;
+    Transform backButtonGameModes;
+
 
     public Text tutorialText;
+
+    public TMP_Text rapidFireText;
+    public TMP_Text growthText;
 
     public GameObject particleEffect;
 
@@ -26,12 +34,17 @@ public class MainMenu : MonoBehaviour
     public bool startRapidFire = false;
     public bool startGrowth = false;
 
+    public bool gameModeIsRapidFire = true;
+    public bool gameModeIsGrowth = false;
+
     public bool gameEnd = false;
 
     public bool startButtonActivated = false;
     public bool quitButtonActivated = false;
 
     private float timer;
+    public float generalDistanceFromPlayer;
+    public float PlayerCannotMoveForXSeconds;
 
     //public ParticleSystem startButtonParticle;
     //public ParticleSystem gameModesButtonParticle;
@@ -52,6 +65,10 @@ public class MainMenu : MonoBehaviour
     public float noDistanceToPlayer;
     public float backDistanceToPlayer;
 
+    public float rapidFireDistanceToPlayer;
+    public float growthDistanceToPlayer;
+    public float backGameModesDistanceToPlayer;
+
     void Start()
     {
 
@@ -65,13 +82,24 @@ public class MainMenu : MonoBehaviour
 
         yesButton = transform.GetChild(3);
         noButton = transform.GetChild(4);
-        backButton = transform.GetChild(5);
+        backButtonStart = transform.GetChild(5);
+
+        rapidFireButton = transform.GetChild(6);
+        growthButton = transform.GetChild(7);
+        backButtonGameModes = transform.GetChild(8);
 
         yesButton.gameObject.SetActive(false);
         noButton.gameObject.SetActive(false);
-        backButton.gameObject.SetActive(false);
+        backButtonStart.gameObject.SetActive(false);
+
+        rapidFireButton.gameObject.SetActive(false);
+        growthButton.gameObject.SetActive(false);
+        backButtonGameModes.gameObject.SetActive(false);
 
         tutorialText.gameObject.SetActive(false);
+
+        rapidFireText.gameObject.SetActive(false);
+        growthText.gameObject.SetActive(false);
 
         player = GameObject.FindGameObjectWithTag("Player");
 
@@ -80,7 +108,20 @@ public class MainMenu : MonoBehaviour
     void Update()
     {
 
-        if(startButton)
+
+        if (gameModeIsRapidFire == true)
+        {
+            rapidFireText.gameObject.SetActive(true);
+            growthText.gameObject.SetActive(false);
+        }
+
+        if (gameModeIsGrowth == true)
+        {
+            rapidFireText.gameObject.SetActive(false);
+            growthText.gameObject.SetActive(true);
+        }
+
+        if (startButton)
         {
             startDistanceToPlayer = Vector3.Distance(startButton.transform.position, player.transform.position);
         }
@@ -105,12 +146,28 @@ public class MainMenu : MonoBehaviour
             noDistanceToPlayer = Vector3.Distance(noButton.transform.position, player.transform.position);
         }
 
-        if(backButton)
+        if(backButtonStart)
         {
-            backDistanceToPlayer = Vector3.Distance(backButton.transform.position, player.transform.position);
+            backDistanceToPlayer = Vector3.Distance(backButtonStart.transform.position, player.transform.position);
         }
 
-        if(startButton.gameObject.activeSelf == true)
+        if(rapidFireButton)
+        {
+            rapidFireDistanceToPlayer = Vector3.Distance(rapidFireButton.transform.position, player.transform.position);
+        }
+
+        if (growthButton)
+        {
+            growthDistanceToPlayer = Vector3.Distance(growthButton.transform.position, player.transform.position);
+        }
+
+        if(backButtonGameModes)
+        {
+            backGameModesDistanceToPlayer = Vector3.Distance(backButtonGameModes.transform.position, player.transform.position);
+        }
+
+
+        if (startButton.gameObject.activeSelf == true)
         {
             if (startDistanceToPlayer <= 2f && particOnce)
             {
@@ -125,7 +182,7 @@ public class MainMenu : MonoBehaviour
 
                 ActivateObject(yesButton.gameObject);
                 ActivateObject(noButton.gameObject);
-                ActivateObject(backButton.gameObject);
+                ActivateObject(backButtonStart.gameObject);
                 ActivateObject(tutorialText.gameObject);
 
                 DeactivateObject(startButton.gameObject);
@@ -134,9 +191,27 @@ public class MainMenu : MonoBehaviour
             }
         }
         
+        if(gameModesButton.gameObject.activeSelf == true)
+        {
+            if(gameModeDistanceToPlayer <= generalDistanceFromPlayer)
+            {
+                CreateParticleEffect(particleEffect, gameModesButton.transform.position, Quaternion.Euler(Vector3.zero));
+
+                soundPlay.PlayOptionSelectSound();
+
+                ActivateObject(rapidFireButton.gameObject);
+                ActivateObject(growthButton.gameObject);
+                ActivateObject(backButtonGameModes.gameObject);
+
+                DeactivateObject(startButton.gameObject);
+                DeactivateObject(gameModesButton.gameObject);
+                DeactivateObject(quitButton.gameObject);
+            }
+        }
+
         if(quitButton.gameObject.activeSelf == true)
         {
-            if (quitDistanceToPlayer <= 2f)
+            if (quitDistanceToPlayer <= generalDistanceFromPlayer)
             {
                 gameEnd = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
@@ -153,9 +228,9 @@ public class MainMenu : MonoBehaviour
         
         if(yesButton.gameObject.activeSelf == true)
         {
-            if(yesDistanceToPlayer <= 2f)
+            if(yesDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                startRapidFire = true;
+                //startRapidFire = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
                 CreateParticleEffect(particleEffect, yesButton.transform.position, Quaternion.Euler(Vector3.zero));
@@ -164,16 +239,16 @@ public class MainMenu : MonoBehaviour
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
-                DeactivateObject(backButton.gameObject);
+                DeactivateObject(backButtonStart.gameObject);
             }
         }
 
         if(noButton.gameObject.activeSelf == true)
         {
-            if(noDistanceToPlayer <= 2f)
+            if(noDistanceToPlayer <= generalDistanceFromPlayer)
             {
                 gameScript.skipTutorial = true;
-                startRapidFire = true;
+                //startRapidFire = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
                 CreateParticleEffect(particleEffect, noButton.transform.position, Quaternion.Euler(Vector3.zero));
@@ -182,21 +257,21 @@ public class MainMenu : MonoBehaviour
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
-                DeactivateObject(backButton.gameObject);
+                DeactivateObject(backButtonStart.gameObject);
             }
         }
 
-        if(backButton.gameObject.activeSelf == true)
+        if(backButtonStart.gameObject.activeSelf == true)
         {
-            if (backDistanceToPlayer <= 2f)
+            if (backDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                CreateParticleEffect(particleEffect, backButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(particleEffect, backButtonStart.transform.position, Quaternion.Euler(Vector3.zero));
 
                 soundPlay.PlayOptionSelectSound();
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
-                DeactivateObject(backButton.gameObject);
+                DeactivateObject(backButtonStart.gameObject);
                 DeactivateObject(tutorialText.gameObject);
 
                 ActivateObject(startButton.gameObject);
@@ -205,7 +280,84 @@ public class MainMenu : MonoBehaviour
             }
         }
         
+        if(rapidFireButton.gameObject.activeSelf == true)
+        {
+            if(rapidFireDistanceToPlayer <= generalDistanceFromPlayer)
+            {
+                CreateParticleEffect(particleEffect, rapidFireButton.transform.position, Quaternion.Euler(Vector3.zero));
 
+                soundPlay.PlayOptionSelectSound();
+
+                gameModeIsRapidFire = true;
+                gameModeIsGrowth = false;
+
+                player.transform.position = gameScript.playerMenuSpawn;
+                StartCoroutine(NoPlayerMovement(PlayerCannotMoveForXSeconds));
+
+                DeactivateObject(rapidFireButton.gameObject);
+                DeactivateObject(growthButton.gameObject);
+                DeactivateObject(backButtonGameModes.gameObject);
+
+                ActivateObject(startButton.gameObject);
+                ActivateObject(gameModesButton.gameObject);
+                ActivateObject(quitButton.gameObject);
+            }
+        }
+
+        if(growthButton.gameObject.activeSelf == true)
+        {
+            if(growthDistanceToPlayer <= generalDistanceFromPlayer)
+            {
+                CreateParticleEffect(particleEffect, growthButton.transform.position, Quaternion.Euler(Vector3.zero));
+
+                soundPlay.PlayOptionSelectSound();
+
+                gameModeIsRapidFire = false;
+                gameModeIsGrowth = true;
+
+                player.transform.position = gameScript.playerMenuSpawn;
+                StartCoroutine(NoPlayerMovement(PlayerCannotMoveForXSeconds));
+
+                DeactivateObject(rapidFireButton.gameObject);
+                DeactivateObject(growthButton.gameObject);
+                DeactivateObject(backButtonGameModes.gameObject);
+
+                ActivateObject(startButton.gameObject);
+                ActivateObject(gameModesButton.gameObject);
+                ActivateObject(quitButton.gameObject);
+            }
+        }
+
+        if(backButtonGameModes.gameObject.activeSelf == true)
+        {
+            if(backGameModesDistanceToPlayer <= generalDistanceFromPlayer)
+            {
+                CreateParticleEffect(particleEffect, backButtonGameModes.transform.position, Quaternion.Euler(Vector3.zero));
+
+                soundPlay.PlayOptionSelectSound();
+
+                DeactivateObject(rapidFireButton.gameObject);
+                DeactivateObject(growthButton.gameObject);
+                DeactivateObject(backButtonGameModes.gameObject);
+
+                ActivateObject(startButton.gameObject);
+                ActivateObject(gameModesButton.gameObject);
+                ActivateObject(quitButton.gameObject);
+            }
+        }
+
+    }
+
+    private IEnumerator NoPlayerMovement(float duration)
+    {
+        float startTime = Time.time;
+
+        while(Time.time - startTime < duration)
+        {
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+            yield return null;
+        }
     }
 
     public void CreateParticleEffect(GameObject particle, Vector3 position, Quaternion rotation)

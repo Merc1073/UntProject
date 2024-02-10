@@ -88,7 +88,6 @@ public class Coin : MonoBehaviour
                 soundPlay.canPlaySound = true;
 
                 var em = particles.emission;
-                var dur = particles.main.duration;
 
                 em.enabled = true;
 

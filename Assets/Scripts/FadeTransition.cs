@@ -8,8 +8,15 @@ public class FadeTransition : MonoBehaviour
 {
 
     public Image imageToFade;
+
+    public float fadeTimer;
+
+    public float fadeDelay;
+
     public float fadeInDuration;
     public float fadeOutDuration;
+
+    bool hasFadedOnce = false;
 
     MainPlayer player;
     MainMenu menu;
@@ -19,15 +26,26 @@ public class FadeTransition : MonoBehaviour
         player = FindObjectOfType<MainPlayer>();
         menu = FindObjectOfType<MainMenu>();
 
-        if(!player)
+        player.canMove = false;
+
+        imageToFade.color = new Color(0f, 0f, 0f);
+
+        //StartCoroutine(FadeInTransition());
+    }
+
+    private void Update()
+    {
+        fadeTimer += Time.deltaTime;
+
+        if(fadeTimer >= fadeDelay && !hasFadedOnce)
         {
-            Debug.Log("Player not here?");
+            player.canMove = true;
+            StartCoroutine(FadeInTransition());
+            hasFadedOnce = true;
         }
 
-        player.canMove = true;
-
-        StartCoroutine(FadeInTransition());
     }
+
 
     public IEnumerator FadeInTransition()
     {
@@ -59,9 +77,14 @@ public class FadeTransition : MonoBehaviour
             yield return null;
         }
 
-        if(menu.startRapidFire == true)
+        if(menu.gameModeIsRapidFire == true)
         {
             SceneManager.LoadScene("Rapid Fire");
+        }
+
+        if(menu.gameModeIsGrowth == true)
+        {
+            SceneManager.LoadScene("Growth");
         }
 
         if(menu.gameEnd == true)

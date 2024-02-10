@@ -19,15 +19,21 @@ public class GameScript : MonoBehaviour
     private MainPlayer playerScript;
     private BulletPoint bulletReticle;
 
+    public FadeTransition fader;
+
     [Header("Special Booleans")]
-    public bool isMagnetPowerUpActive = false;
-    public bool isTripleBulletPowerUpActive = false;
+
+    //public bool menuGameModeRapidFire = false;
+    //public bool menuGameModeGrowth = false;
 
     public bool isGameModeRapidFire = false;
     public bool isGameModeGrowing = false;
 
     public bool hasRapidFireModeStarted = false;
     public bool isCurrentSceneRapidFireMode = false;
+
+    public bool isMagnetPowerUpActive = false;
+    public bool isTripleBulletPowerUpActive = false;
 
     public bool hasGrowingModeStarted = false;
 
@@ -199,6 +205,16 @@ public class GameScript : MonoBehaviour
         {
             Application.Quit();
         }
+
+        //if(fader.fadeTimer < 1f)
+        //{
+        //    playerScript.canMove = false;
+        //}
+
+        //else
+        //{
+        //    playerScript.canMove = true;
+        //}
 
         if (SceneManager.GetActiveScene().name == "Rapid Fire" && hasSceneBeenLoaded == false)
         {
