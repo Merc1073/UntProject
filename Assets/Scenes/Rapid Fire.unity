@@ -5391,7 +5391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 3093773531564783751, guid: 84812442a012d3f4697efa559a27603a, type: 3}
-  Enemy: {fileID: 195418191451930847, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
+  Enemy: {fileID: 6823708402512674163, guid: 3eddd4780530710479d9e4bdbdef14b7, type: 3}
   BulletPoint: {fileID: 183907940865509624, guid: dcd26e0e78d847144b7a4e8fc5d19091, type: 3}
   Reticle: {fileID: 6031976998836730790, guid: d5bba6900a6c4aa429a0f043f661dd38, type: 3}
   MagnetPowerUp: {fileID: 7512444815576764851, guid: ba75ac5667dde704494841fc1bc4ed93, type: 3}

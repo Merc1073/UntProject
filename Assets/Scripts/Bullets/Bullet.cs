@@ -58,7 +58,7 @@ public class Bullet : MonoBehaviour
         AdjustTrailWidth();
 
 
-        if(timer >= 4.0f)
+        if(timer >= bulletDuration - 1f)
         {
             StartCoroutine(ShrinkObject());
         }

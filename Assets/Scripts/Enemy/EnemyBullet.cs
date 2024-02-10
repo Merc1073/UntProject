@@ -25,7 +25,6 @@ public class EnemyBullet : MonoBehaviour
     [SerializeField] float growthDuration;
     [SerializeField] float fadeDuration;
 
-    public Vector3 originalTransformScale;
     public Vector3 targetGrowthScale;
 
     
@@ -35,6 +34,8 @@ public class EnemyBullet : MonoBehaviour
         player = FindObjectOfType<MainPlayer>();
         gameScript = FindObjectOfType<GameScript>();
         soundPlay = GetComponentInParent<GenericPlaySound>();
+
+        trailRenderer = GetComponent<TrailRenderer>();
 
         StartCoroutine(Grow());
     }
@@ -61,7 +62,7 @@ public class EnemyBullet : MonoBehaviour
 
         transform.position += transform.forward * bulletSpeed * Time.deltaTime;
 
-        if (timer >= 4.0f)
+        if (timer >= bulletDuration - 1f)
         {
             StartCoroutine(ShrinkObject());
         }
