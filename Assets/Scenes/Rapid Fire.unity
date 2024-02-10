@@ -5450,7 +5450,7 @@ MonoBehaviour:
   magnetSpawnRange: 100
   tripleBulletSpawnRange: 100
   invincibilitySpawnRange: 100
-  skipTutorial: 1
+  skipTutorial: 0
   isPlayerInvincible: 0
   enemyFull: 0
   keepReducingSpawnTimer: 1

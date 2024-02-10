@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.WSA;
 using static UnityEngine.ParticleSystem;
 
 public class MainMenu : MonoBehaviour
@@ -11,9 +12,13 @@ public class MainMenu : MonoBehaviour
     Transform gameModesButton;
     Transform quitButton;
 
+    Transform yesButton;
+    Transform noButton;
+    Transform backButton;
+
     public GameObject particleEffect;
 
-    GenericPlaySound soundPlay;
+    MenuPlaySound soundPlay;
 
     public bool startRapidFire = false;
     public bool startGrowth = false;
@@ -40,16 +45,29 @@ public class MainMenu : MonoBehaviour
     public float gameModeDistanceToPlayer;
     public float quitDistanceToPlayer;
 
+    public float yesDistanceToPlayer;
+    public float noDistanceToPlayer;
+    public float backDistanceToPlayer;
+
     void Start()
     {
 
         gameScript = FindObjectOfType<GameScript>();
         sceneTransition = FindObjectOfType<FadeTransition>();
-        soundPlay = GetComponentInParent<GenericPlaySound>();
+        soundPlay = GetComponentInParent<MenuPlaySound>();
         
         startButton = transform.GetChild(0);
         gameModesButton = transform.GetChild(1);
         quitButton = transform.GetChild(2);
+
+        yesButton = transform.GetChild(3);
+        noButton = transform.GetChild(4);
+        backButton = transform.GetChild(5);
+
+        yesButton.gameObject.SetActive(false);
+        noButton.gameObject.SetActive(false);
+        backButton.gameObject.SetActive(false);
+
     }
 
     void Update()
@@ -70,46 +88,114 @@ public class MainMenu : MonoBehaviour
             quitDistanceToPlayer = Vector3.Distance(quitButton.position, player.transform.position);
         }
 
-
-        if(startDistanceToPlayer <= 2f && particOnce)
+        if(yesButton)
         {
-            startRapidFire = true;
-            StartCoroutine(sceneTransition.FadeOutTransition());
+            yesDistanceToPlayer = Vector3.Distance(yesButton.transform.position, player.transform.position);
+        }
 
+        if(noButton)
+        {
+            noDistanceToPlayer = Vector3.Distance(noButton.transform.position, player.transform.position);
+        }
 
-            if(!startButtonActivated)
+        if(backButton)
+        {
+            backDistanceToPlayer = Vector3.Distance(backButton.transform.position, player.transform.position);
+        }
+
+        if(startButton.gameObject.activeSelf == true)
+        {
+            if (startDistanceToPlayer <= 2f && particOnce)
             {
+                //startRapidFire = true;
+                //StartCoroutine(sceneTransition.FadeOutTransition());
+
                 CreateParticleEffect(particleEffect, startButton.transform.position, Quaternion.Euler(Vector3.zero));
-                startButtonActivated = true;
+
+                soundPlay.PlayOptionSelectSound();
+                //soundPlay.canPlaySelectOptionSound = true;
+                //soundPlay.canPlayGameStart = true;
+
+                ActivateObject(yesButton.gameObject);
+                ActivateObject(noButton.gameObject);
+                ActivateObject(backButton.gameObject);
+
+                DeactivateObject(startButton.gameObject);
+                DeactivateObject(gameModesButton.gameObject);
+                DeactivateObject(quitButton.gameObject);
             }
-            
-            soundPlay.canPlaySound = true;
-
-            DeactivateObject(startButton.gameObject);
-            DeactivateObject(gameModesButton.gameObject);
-            DeactivateObject(quitButton.gameObject);
-
         }
-
-        if(quitDistanceToPlayer <= 2f)
+        
+        if(quitButton.gameObject.activeSelf == true)
         {
-            StartCoroutine(sceneTransition.FadeOutTransition());
-
-            if(!quitButtonActivated)
+            if (quitDistanceToPlayer <= 2f)
             {
+                gameEnd = true;
+                StartCoroutine(sceneTransition.FadeOutTransition());
+
                 CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
-                quitButtonActivated = true;
+
+                soundPlay.PlayStartSound();
+
+                DeactivateObject(startButton.gameObject);
+                DeactivateObject(gameModesButton.gameObject);
+                DeactivateObject(quitButton.gameObject);
             }
-
-            soundPlay.canPlaySound = true;
-
-            DeactivateObject(startButton.gameObject);
-            DeactivateObject(gameModesButton.gameObject);
-            DeactivateObject(quitButton.gameObject);
-
-            gameEnd = true;
-
         }
+        
+        if(yesButton.gameObject.activeSelf == true)
+        {
+            if(yesDistanceToPlayer <= 2f)
+            {
+                startRapidFire = true;
+                StartCoroutine(sceneTransition.FadeOutTransition());
+
+                CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+
+                soundPlay.PlayStartSound();
+
+                DeactivateObject(yesButton.gameObject);
+                DeactivateObject(noButton.gameObject);
+                DeactivateObject(backButton.gameObject);
+            }
+        }
+
+        if(noButton.gameObject.activeSelf == true)
+        {
+            if(noDistanceToPlayer <= 2f)
+            {
+                gameScript.skipTutorial = true;
+                startRapidFire = true;
+                StartCoroutine(sceneTransition.FadeOutTransition());
+
+                CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+
+                soundPlay.PlayStartSound();
+
+                DeactivateObject(yesButton.gameObject);
+                DeactivateObject(noButton.gameObject);
+                DeactivateObject(backButton.gameObject);
+            }
+        }
+
+        if(backButton.gameObject.activeSelf == true)
+        {
+            if (backDistanceToPlayer <= 2f)
+            {
+                CreateParticleEffect(particleEffect, backButton.transform.position, Quaternion.Euler(Vector3.zero));
+
+                soundPlay.PlayOptionSelectSound();
+
+                DeactivateObject(yesButton.gameObject);
+                DeactivateObject(noButton.gameObject);
+                DeactivateObject(backButton.gameObject);
+
+                ActivateObject(startButton.gameObject);
+                ActivateObject(gameModesButton.gameObject);
+                ActivateObject(quitButton.gameObject);
+            }
+        }
+        
 
     }
 
@@ -152,6 +238,11 @@ public class MainMenu : MonoBehaviour
     public void DeactivateObject(GameObject objectToDeactivate)
     {
         objectToDeactivate.SetActive(false);
+    }
+
+    public void ActivateObject(GameObject objectToActivate)
+    {
+        objectToActivate.SetActive(true);
     }
 
 }

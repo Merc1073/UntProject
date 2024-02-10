@@ -27,6 +27,8 @@ public class GameScript : MonoBehaviour
     public bool isGameModeGrowing = false;
 
     public bool hasRapidFireModeStarted = false;
+    public bool isCurrentSceneRapidFireMode = false;
+
     public bool hasGrowingModeStarted = false;
 
     [Header("Texts")]
@@ -90,11 +92,22 @@ public class GameScript : MonoBehaviour
     public int newEnemyDecimalPlaces;
 
     [Header("Enemy Timer Stages")]
+    [SerializeField] float stage1ToSet;
     [SerializeField] float stage1;
+
+    [SerializeField] float stage2ToSet;
     [SerializeField] float stage2;
+
+    [SerializeField] float stage3ToSet;
     [SerializeField] float stage3;
+
+    [SerializeField] float stage4ToSet;
     [SerializeField] float stage4;
+
+    [SerializeField] float stage5ToSet;
     [SerializeField] float stage5;
+
+    [SerializeField] float stage6ToSet;
     [SerializeField] float stage6;
 
     [Header("Other Variables")]
@@ -138,13 +151,23 @@ public class GameScript : MonoBehaviour
     void Start()
     {
 
-        
+        DontDestroyOnLoad(gameObject);
 
         if (SceneManager.GetActiveScene().name == "Rapid Fire")
         {
+            //isCurrentSceneRapidFireMode = true;
+
             Instantiate(Player, playerSpawn, Quaternion.Euler(0, 0, 0));
             Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
             Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+
+            stage1 = 1f;
+            stage2 = stage2ToSet;
+            stage3 = stage3ToSet;
+            stage4 = stage4ToSet;
+            stage5 = stage5ToSet;
+            stage6 = stage6ToSet;
+
         }
 
         else
@@ -165,6 +188,11 @@ public class GameScript : MonoBehaviour
             magnetText.gameObject.SetActive(false);
             tripleBulletText.gameObject.SetActive(false);
         }
+
+        //if(isCurrentSceneRapidFireMode == true)
+        //{
+            
+        //}
 
         playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();

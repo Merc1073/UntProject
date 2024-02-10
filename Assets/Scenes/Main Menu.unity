@@ -434,6 +434,7 @@ MonoBehaviour:
   isGameModeRapidFire: 0
   isGameModeGrowing: 0
   hasRapidFireModeStarted: 0
+  isCurrentSceneRapidFireMode: 0
   hasGrowingModeStarted: 0
   fireRateText: {fileID: 1787011600}
   respawnTimerText: {fileID: 653541279}
@@ -473,11 +474,17 @@ MonoBehaviour:
   genericDecimalPlaces: 0
   scoreDecimalPlaces: 0
   newEnemyDecimalPlaces: 0
+  stage1ToSet: 0.05
   stage1: 0
+  stage2ToSet: 0.025
   stage2: 0
+  stage3ToSet: 0.0125
   stage3: 0
+  stage4ToSet: 0.00625
   stage4: 0
+  stage5ToSet: 0.003125
   stage5: 0
+  stage6ToSet: 0.001575
   stage6: 0
   enemySpawnRange: 0
   magnetSpawnRange: 0
@@ -12063,7 +12070,7 @@ Transform:
   m_Children:
   - {fileID: 920905436}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1110026106
 GameObject:
@@ -23259,8 +23266,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1182176015}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 2085904497}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -23788,9 +23795,10 @@ Transform:
   - {fileID: 602171777}
   - {fileID: 326147912}
   - {fileID: 254716070}
-  - {fileID: 1288034380}
   - {fileID: 697123288}
   - {fileID: 1168541295}
+  - {fileID: 1288034380}
+  - {fileID: 1802120326}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23817,6 +23825,9 @@ MonoBehaviour:
   startDistanceToPlayer: 0
   gameModeDistanceToPlayer: 0
   quitDistanceToPlayer: 0
+  yesDistanceToPlayer: 0
+  noDistanceToPlayer: 0
+  backDistanceToPlayer: 0
 --- !u!82 &2085904499
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23922,12 +23933,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2085904496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b7fb0c353a8e22428ca27e3437aa12e, type: 3}
+  m_Script: {fileID: 11500000, guid: afe864955386be94cb7635e3ee987a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   src: {fileID: 2085904499}
-  soundEffect: {fileID: 8300000, guid: 6832df13415a7004bb38ace2447bcd1e, type: 3}
-  canPlaySound: 0
+  gameStartSound: {fileID: 8300000, guid: 6832df13415a7004bb38ace2447bcd1e, type: 3}
+  selectOptionSound: {fileID: 8300000, guid: 9eea7f4c9b3feb540bf1db13ea9e52d1, type: 3}
+  canPlayGameStartSound: 0
+  canPlaySelectOptionSound: 0
   hasSoundPlayed: 0
 --- !u!1 &2117135238
 GameObject:
