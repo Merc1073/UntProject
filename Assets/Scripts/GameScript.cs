@@ -322,7 +322,7 @@ public class GameScript : MonoBehaviour
             enemyCountText.text = "Total Enemies in arena: " + enemyCounter.ToString();
             timerText.text = "Timer: " + seconds.ToString();
             enemiesKilled.text = "Enemies defeated: " + enemyKillCounter.ToString();
-            coinsCollected.text = "Total of Orbs Collected: " + coinCount.ToString();
+            coinsCollected.text = "Orbs Collected: " + coinCount.ToString();
             totalScore.text = "Total Score: " + scoreCountRounded;
             magnetText.text = "Magnet Timer: " + magnetTimerRounded;
             tripleBulletText.text = "Triple Bullet Timer: " + tripleBulletTimerRounded;

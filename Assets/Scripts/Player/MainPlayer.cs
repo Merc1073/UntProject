@@ -22,7 +22,8 @@ public class MainPlayer : MonoBehaviour
     public ParticleSystem particles;
     public MeshRenderer mesh;
 
-    public Transform canvasTransform;
+    public Transform canvasTransform1;
+    public Transform canvasTransform2;
 
     GameScript gameScript;
 
@@ -133,8 +134,11 @@ public class MainPlayer : MonoBehaviour
 
     private void LateUpdate()
     {
-        canvasTransform.position = transform.position + new Vector3(0, 4, 2);
-        canvasTransform.rotation = Quaternion.Euler(90, 0, 0);
+        canvasTransform1.position = transform.position + new Vector3(0, 4, 4);
+        canvasTransform1.rotation = Quaternion.Euler(90, 0, 0);
+
+        canvasTransform2.position = transform.position + new Vector3(0, 4, 2);
+        canvasTransform2.rotation = Quaternion.Euler(90, 0, 0);
         //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
