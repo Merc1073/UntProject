@@ -5253,8 +5253,8 @@ MonoBehaviour:
   mesh: {fileID: 8644433119879450849}
   bulletSpeed: 30
   bulletDuration: 5
-  magnetSpeed: 1
-  magnetDistance: 10
+  magnetSpeed: 3
+  magnetDistance: 15
   shrinkSpeed: 1
   particOnce: 1
   sizeIsMax: 0
