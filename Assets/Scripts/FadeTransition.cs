@@ -26,7 +26,10 @@ public class FadeTransition : MonoBehaviour
         player = FindObjectOfType<MainPlayer>();
         menu = FindObjectOfType<MainMenu>();
 
-        player.canMove = false;
+        if(player)
+        {
+            player.canMove = false;
+        }
 
         imageToFade.color = new Color(0f, 0f, 0f);
 
@@ -39,7 +42,10 @@ public class FadeTransition : MonoBehaviour
 
         if(fadeTimer >= fadeDelay && !hasFadedOnce)
         {
-            player.canMove = true;
+            if(player)
+            {
+                player.canMove = true;
+            }
             StartCoroutine(FadeInTransition());
             hasFadedOnce = true;
         }

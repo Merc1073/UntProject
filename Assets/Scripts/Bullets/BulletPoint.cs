@@ -8,11 +8,11 @@ public class BulletPoint : MonoBehaviour
 {
 
 
-    private GameObject playerObject;
     public GameObject bullet;
     private GameObject reticle;
 
-    private MainPlayer playerScript;
+    Transform player;
+    //private MainPlayer playerScript;
 
     GameScript gameScript;
 
@@ -32,6 +32,7 @@ public class BulletPoint : MonoBehaviour
     public float roundsPerSecond;
     public int decimalPlaces;
 
+    public bool doesPlayerExist = false;
     public bool canFire = false;
 
     public Vector3 tranDif;
@@ -42,11 +43,14 @@ public class BulletPoint : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        //playerObject = GameObject.FindGameObjectWithTag("Player");
         reticle = GameObject.FindGameObjectWithTag("Reticle");
 
-        playerScript = FindObjectOfType<MainPlayer>();
+        //playerScript = FindObjectOfType<MainPlayer>();
         gameScript = FindObjectOfType<GameScript>();
+
+        //player = gameScript.GetComponent<Detection>().targetPlayer.GetComponent<MainPlayer>();
 
         src = GetComponent<AudioSource>();
 
@@ -54,10 +58,17 @@ public class BulletPoint : MonoBehaviour
 
     void Update()
     {
-        if(playerObject != null)
+
+        if (!player && !doesPlayerExist)
+        {
+            player = gameScript.GetComponent<Detection>().targetPlayer;
+            doesPlayerExist = true;
+        }
+
+        if (player)
         {
 
-            transform.position = playerObject.transform.position + tranDif;
+            transform.position = player.position + tranDif;
 
             fireRate = 1 / fireRateMultiplier;
 
@@ -77,7 +88,7 @@ public class BulletPoint : MonoBehaviour
                 fireRateCooldown = 0f;
             }
 
-            if(playerScript.canMove == true)
+            if(player.GetComponent<MainPlayer>().canMove == true)
             {
                 if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
                 {

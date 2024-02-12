@@ -44,13 +44,11 @@ public class Bullet : MonoBehaviour
 
         trailRenderer = GetComponent<TrailRenderer>();
 
-
         StartCoroutine(Grow());
     }
 
     void Update()
     {
-
 
         timer += Time.deltaTime;
 
@@ -73,9 +71,9 @@ public class Bullet : MonoBehaviour
 
             transform.position += transform.forward * bulletSpeed * Time.deltaTime;
 
-            if(gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy != null)
+            if(gameObject.transform.GetChild(0).GetComponent<Detection>().targetEnemy != null)
             {
-                Vector3 targetEnemy = gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy.transform.position;
+                Vector3 targetEnemy = gameObject.transform.GetChild(0).GetComponent<Detection>().targetEnemy.transform.position;
                 float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy);
 
 

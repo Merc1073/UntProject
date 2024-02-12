@@ -7,7 +7,7 @@ public class Coin : MonoBehaviour
 
     GameObject playerObject;
 
-    MainPlayer playerScript;
+    //MainPlayer playerScript;
     BulletPoint bulletReticle;
 
     Rigidbody rb;
@@ -35,7 +35,7 @@ public class Coin : MonoBehaviour
 
         playerObject = GameObject.FindGameObjectWithTag("Player");
 
-        playerScript = FindObjectOfType<MainPlayer>();
+        //playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
 
         rb.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
@@ -97,7 +97,7 @@ public class Coin : MonoBehaviour
 
                 particOnce = false;
 
-                playerScript.AddCoins(1);
+                playerObject.GetComponent<MainPlayer>().AddCoins(1);
                 bulletReticle.IncreaseFireRate(fireRateToIncrease);
 
                 Destroy(mesh);
