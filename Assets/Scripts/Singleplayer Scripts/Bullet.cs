@@ -1,14 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class MultiBullet : NetworkBehaviour
+public class Bullet : MonoBehaviour
 {
 
-    public MultiBulletPoint parent;
-
-    //public ParticleSystem particles;
     public GameObject particles;
     public MeshRenderer mesh;
 
@@ -47,6 +44,7 @@ public class MultiBullet : NetworkBehaviour
 
         trailRenderer = GetComponent<TrailRenderer>();
 
+
         StartCoroutine(Grow());
     }
 
@@ -60,52 +58,52 @@ public class MultiBullet : NetworkBehaviour
         AdjustTrailWidth();
 
 
-        //if (timer >= bulletDuration - 1f)
-        //{
-        //    StartCoroutine(ShrinkObject());
-        //}
+        if(timer >= bulletDuration - 1f)
+        {
+            StartCoroutine(ShrinkObject());
+        }
 
-        //if (timer >= bulletDuration)
-        //{
-        //    Destroy(this.gameObject);
-        //}
+        if (timer >= bulletDuration)
+        {
+            Destroy(this.gameObject);
+        }
 
-        //if (gameScript.isMagnetPowerUpActive == true)
-        //{
+        if (gameScript.isMagnetPowerUpActive == true)
+        {
 
-        //    transform.position += transform.forward * bulletSpeed * Time.deltaTime;
-
-        //    if (gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy != null)
-        //    {
-        //        Vector3 targetEnemy = gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy.transform.position;
-        //        float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy);
-
-
-        //        if (distanceToEnemy <= magnetDistance)
-        //        {
-        //            distanceTriggered = true;
-
-        //        }
-
-        //        else
-        //        {
-        //            distanceTriggered = false;
-        //        }
-
-        //        if (distanceTriggered == true)
-        //        {
-        //            speed += magnetSpeed * Time.deltaTime;
-        //            transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed);
-        //        }
-        //    }
-        //}
-
-        //else
-        //{
             transform.position += transform.forward * bulletSpeed * Time.deltaTime;
-        //}
+
+            if(gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy != null)
+            {
+                Vector3 targetEnemy = gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy.transform.position;
+                float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy);
 
 
+                if (distanceToEnemy <= magnetDistance)
+                {
+                    distanceTriggered = true;
+                    
+                }
+
+                else
+                {
+                    distanceTriggered = false;
+                }
+
+                if (distanceTriggered == true)
+                {
+                    speed += magnetSpeed * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed);
+                }
+            }
+        }
+
+        else
+        {
+            transform.position += transform.forward * bulletSpeed * Time.deltaTime;
+        }
+
+        
     }
 
     void AdjustTrailWidth()
@@ -147,9 +145,8 @@ public class MultiBullet : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if(other.gameObject.tag == "Enemy")
         {
-            if (!IsOwner) return;
 
             //var em = particles.emission;
 
@@ -166,31 +163,32 @@ public class MultiBullet : NetworkBehaviour
             //Destroy(mesh);
             //Invoke(nameof(DestroyObj), 0);
 
-            parent.DestroyBulletServerRpc();
+            Instantiate(particles, transform.position, Quaternion.identity);
+
+            Destroy(gameObject);
+
         }
 
-        if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground")
+        if(other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground")
         {
-            if (!IsOwner) return;
-            //    var em = particles.emission;
+            //var em = particles.emission;
 
-            //    em.enabled = true;
+            //em.enabled = true;
 
-            //    transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            //    particles.Play();
+            //particles.Play();
 
-            //    particOnce = false;
+            //particOnce = false;
 
-            //    Destroy(mesh);
-            //    Invoke(nameof(DestroyObj), 0);
-            parent.DestroyBulletServerRpc();
+            //Destroy(mesh);
+            //Invoke(nameof(DestroyObj), 0);
+
+            Instantiate(particles, transform.position, Quaternion.identity);
+
+            Destroy(gameObject);
         }
 
     }
 
-    void DestroyObj()
-    {
-        Destroy(gameObject);
-    }
 }

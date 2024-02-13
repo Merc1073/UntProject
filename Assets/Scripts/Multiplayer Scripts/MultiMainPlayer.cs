@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MultiMainPlayer : NetworkBehaviour
 {
+    //public Camera playerCam;
+
     public Vector3 tranDif;
 
     public LayerMask groundMask;
@@ -24,6 +26,7 @@ public class MultiMainPlayer : NetworkBehaviour
 
     public Transform canvasTransform1;
     public Transform canvasTransform2;
+    public Transform canvasTransform3;
 
     GameScript gameScript;
 
@@ -39,6 +42,12 @@ public class MultiMainPlayer : NetworkBehaviour
 
     void Start()
     {
+        //playerCam = Camera.main;
+
+        //if(IsOwner)
+        //{
+        //    playerCam.enabled = true;
+        //}
 
         rb = GetComponent<Rigidbody>();
 
@@ -141,12 +150,15 @@ public class MultiMainPlayer : NetworkBehaviour
 
         canvasTransform2.position = transform.position + new Vector3(0, 4, 2);
         canvasTransform2.rotation = Quaternion.Euler(90, 0, 0);
+
+        canvasTransform3.position = transform.position + new Vector3(0, 4, -2);
+        canvasTransform3.rotation = Quaternion.Euler(90, 0, 0);
         //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
     public override void OnNetworkSpawn()
     {
-        transform.position = new Vector3(0, 1, -10);
+        UpdatePositionServerRpc();
     }
 
     public void DecreasePlayerHealth(float health)
@@ -170,4 +182,11 @@ public class MultiMainPlayer : NetworkBehaviour
         gameScript.scoreMultiplier += 0.1f;
         gameScript.coinCount += coins;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdatePositionServerRpc()
+    {
+        transform.position = new Vector3(0, 1, -10);
+    }
+
 }
