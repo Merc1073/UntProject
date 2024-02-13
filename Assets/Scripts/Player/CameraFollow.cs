@@ -5,36 +5,38 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
 
-    GameScript gameScript;
-    Transform player;
+    private GameObject player;
+    private GameObject multiPlayer;
 
     public float smoothSpeed;
     public Vector3 offset;
 
-    public bool doesPlayerExist = false;
+    bool ranOnce = false;
 
     private void Start()
     {
-        gameScript = FindObjectOfType<GameScript>();
-
-        player = gameScript.GetComponent<Detection>().targetPlayer;
-    }
-
-    private void Update()
-    {
-        if (!player && !doesPlayerExist)
-        {
-            player = gameScript.GetComponent<Detection>().targetPlayer;
-            doesPlayerExist = true;
-        }
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void FixedUpdate()
     {
-
-        if(player)
+        if(!player && !ranOnce)
         {
-            Vector3 desiredPosition = player.position + offset;
+            multiPlayer = GameObject.FindGameObjectWithTag("MultiPlayer");
+            ranOnce = true;
+        }
+
+        if (player)
+        {
+            Vector3 desiredPosition = player.transform.position + offset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+
+            transform.position = smoothedPosition;
+        }  
+
+        else if(multiPlayer != null)
+        {
+            Vector3 desiredPosition = multiPlayer.transform.position + offset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
             transform.position = smoothedPosition;

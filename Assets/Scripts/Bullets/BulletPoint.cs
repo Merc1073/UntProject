@@ -7,11 +7,14 @@ using UnityEngine;
 public class BulletPoint : MonoBehaviour
 {
 
+    [SerializeField]
+    private GameObject bullet;
 
-    public GameObject bullet;
+    [SerializeField]
     private GameObject reticle;
 
-    Transform player;
+    [SerializeField]
+    private GameObject player;
     //private MainPlayer playerScript;
 
     GameScript gameScript;
@@ -32,7 +35,6 @@ public class BulletPoint : MonoBehaviour
     public float roundsPerSecond;
     public int decimalPlaces;
 
-    public bool doesPlayerExist = false;
     public bool canFire = false;
 
     public Vector3 tranDif;
@@ -41,16 +43,10 @@ public class BulletPoint : MonoBehaviour
     void Start()
     {
 
-        DontDestroyOnLoad(gameObject);
-
-
-        //playerObject = GameObject.FindGameObjectWithTag("Player");
-        reticle = GameObject.FindGameObjectWithTag("Reticle");
+        //DontDestroyOnLoad(gameObject);
 
         //playerScript = FindObjectOfType<MainPlayer>();
         gameScript = FindObjectOfType<GameScript>();
-
-        //player = gameScript.GetComponent<Detection>().targetPlayer.GetComponent<MainPlayer>();
 
         src = GetComponent<AudioSource>();
 
@@ -59,49 +55,40 @@ public class BulletPoint : MonoBehaviour
     void Update()
     {
 
-        if (!player && !doesPlayerExist)
+        transform.position = player.transform.position + tranDif;
+
+        fireRate = 1 / fireRateMultiplier;
+
+        fireRateCooldown -= Time.deltaTime;
+
+        roundsPerSecond = fireRateMultiplier;
+
+        roundsPerSecond = Mathf.Round(roundsPerSecond * Mathf.Pow(10, decimalPlaces)) / Mathf.Pow(10, decimalPlaces);
+
+        if (fireRateMultiplier > maxFireRate)
         {
-            player = gameScript.GetComponent<Detection>().targetPlayer;
-            doesPlayerExist = true;
+            fireRateMultiplier = maxFireRate;
         }
 
-        if (player)
+        if(fireRateCooldown < 0f)
         {
+            fireRateCooldown = 0f;
+        }
 
-            transform.position = player.position + tranDif;
-
-            fireRate = 1 / fireRateMultiplier;
-
-            fireRateCooldown -= Time.deltaTime;
-
-            roundsPerSecond = fireRateMultiplier;
-
-            roundsPerSecond = Mathf.Round(roundsPerSecond * Mathf.Pow(10, decimalPlaces)) / Mathf.Pow(10, decimalPlaces);
-
-            if (fireRateMultiplier > maxFireRate)
+        //if (player.GetComponent<MainPlayer>().canMove == true)
+        //{
+            if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
             {
-                fireRateMultiplier = maxFireRate;
+                FireNormalBullet();
             }
 
-            if(fireRateCooldown < 0f)
+            if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == true)
             {
-                fireRateCooldown = 0f;
+                FireTripleBullet();
             }
-
-            if(player.GetComponent<MainPlayer>().canMove == true)
-            {
-                if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == false)
-                {
-                    FireNormalBullet();
-                }
-
-                if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && gameScript.isTripleBulletPowerUpActive == true)
-                {
-                    FireTripleBullet();
-                }
-            }
+        //}
             
-        }
+        
     }
 
     public void FireNormalBullet()

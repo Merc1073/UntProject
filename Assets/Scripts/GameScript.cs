@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,14 +10,14 @@ public class GameScript : MonoBehaviour
     [Header("Game Objects")]
     public GameObject Player;
     public GameObject Enemy;
-    public GameObject BulletPoint;
-    public GameObject Reticle;
+    //public GameObject BulletPoint;
+    //public GameObject Reticle;
 
     public GameObject MagnetPowerUp;
     public GameObject TripleBulletPowerUp;
 
-    Transform player;
-    //private MainPlayer playerScript;
+    private MainPlayer playerScript;
+    private MultiMainPlayer multiPlayerScript;
     private BulletPoint bulletReticle;
 
     public FadeTransition fader;
@@ -122,7 +121,6 @@ public class GameScript : MonoBehaviour
 
     [Header("Player Booleans")]
     public bool isPlayerInvincible = false;
-    public bool doesPlayerExist = false;
 
     [Header("Enemy Booleans")]
     public bool enemyFull = false;
@@ -178,12 +176,9 @@ public class GameScript : MonoBehaviour
 
         //else
         //{
-        //Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
-
-        //NetworkManager.Singleton.StartHost();
-        Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
-        Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
-        Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+            Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
+            //Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
+            //Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
         //}
 
         if(hasRapidFireModeStarted == false)
@@ -199,24 +194,17 @@ public class GameScript : MonoBehaviour
             tripleBulletText.gameObject.SetActive(false);
         }
 
-        player = GetComponent<Detection>().targetPlayer;
-        //playerScript = FindObjectOfType<MainPlayer>();
+        playerScript = FindObjectOfType<MainPlayer>();
         bulletReticle = FindObjectOfType<BulletPoint>();
 
     }
 
-
     void Update()
     {
 
-        Debug.Log(player);
-
-        if(!player && !doesPlayerExist)
+        if(!playerScript)
         {
-            player = GetComponent<Detection>().targetPlayer;
-            player.position = playerMenuSpawn;
-            Debug.Log("finished running.");
-            doesPlayerExist = true;
+            multiPlayerScript = FindObjectOfType<MultiMainPlayer>();
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -224,14 +212,25 @@ public class GameScript : MonoBehaviour
             Application.Quit();
         }
 
+
         if (SceneManager.GetActiveScene().name == "Rapid Fire" && hasSceneBeenLoaded == false)
         {
             isCurrentSceneRapidFireMode = true;
 
-            //playerScript = FindObjectOfType<MainPlayer>();
-            bulletReticle = FindObjectOfType<BulletPoint>();
+            if(playerScript)
+            {
+                playerScript = FindObjectOfType<MainPlayer>();
+            }
 
-            player.position = playerRapidFireSpawn;
+            if(bulletReticle)
+            {
+                bulletReticle = FindObjectOfType<BulletPoint>();
+            }
+
+            if(playerScript) 
+            { 
+                playerScript.transform.position = playerRapidFireSpawn;
+            }
 
             isGameModeRapidFire = true;
 
@@ -279,12 +278,12 @@ public class GameScript : MonoBehaviour
         magnetTimerRounded = magnetPowerUpTime.ToString("F" + genericDecimalPlaces);
         tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + genericDecimalPlaces);
 
-        if(player)
+        if(playerScript)
         {
-            player.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
-            player.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
+            playerScript.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
+            playerScript.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
         }
-
+        
 
         if (isGameModeRapidFire == true)
         {
@@ -331,7 +330,7 @@ public class GameScript : MonoBehaviour
         }
 
 
-        if (player && hasRapidFireModeStarted == true)
+        if (playerScript && hasRapidFireModeStarted == true)
         {
 
 

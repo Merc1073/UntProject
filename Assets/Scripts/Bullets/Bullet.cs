@@ -6,7 +6,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 
-    public ParticleSystem particles;
+    public GameObject particles;
     public MeshRenderer mesh;
 
     GameScript gameScript;
@@ -44,11 +44,13 @@ public class Bullet : MonoBehaviour
 
         trailRenderer = GetComponent<TrailRenderer>();
 
+
         StartCoroutine(Grow());
     }
 
     void Update()
     {
+
 
         timer += Time.deltaTime;
 
@@ -71,9 +73,9 @@ public class Bullet : MonoBehaviour
 
             transform.position += transform.forward * bulletSpeed * Time.deltaTime;
 
-            if(gameObject.transform.GetChild(0).GetComponent<Detection>().targetEnemy != null)
+            if(gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy != null)
             {
-                Vector3 targetEnemy = gameObject.transform.GetChild(0).GetComponent<Detection>().targetEnemy.transform.position;
+                Vector3 targetEnemy = gameObject.transform.GetChild(0).GetComponent<EnemyDetection>().targetEnemy.transform.position;
                 float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy);
 
 
@@ -146,36 +148,45 @@ public class Bullet : MonoBehaviour
         if(other.gameObject.tag == "Enemy")
         {
 
-            var em = particles.emission;
+            //var em = particles.emission;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            soundPlay.canPlaySound = true;
+            //soundPlay.canPlaySound = true;
 
-            particles.Play();
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
 
-            Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            //Destroy(mesh);
+            //Invoke(nameof(DestroyObj), 0);
+
+            Instantiate(particles, transform.position, Quaternion.identity);
+
+            DestroyObj();
+
         }
 
         if(other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground")
         {
-            var em = particles.emission;
+            //var em = particles.emission;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            particles.Play();
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
 
-            Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            //Destroy(mesh);
+            //Invoke(nameof(DestroyObj), 0);
+
+            Instantiate(particles, transform.position, Quaternion.identity);
+
+            DestroyObj();
         }
 
     }

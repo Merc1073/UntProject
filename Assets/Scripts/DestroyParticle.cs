@@ -6,6 +6,7 @@ public class DestroyParticle : MonoBehaviour
 {
 
     [SerializeField] private float timer;
+    [SerializeField] private float timeUntilDestroyed;
 
     void Update()
     {
@@ -13,7 +14,7 @@ public class DestroyParticle : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            if(timer >= 3)
+            if(timer >= timeUntilDestroyed)
             {
                 Destroy(this.gameObject);
             }
