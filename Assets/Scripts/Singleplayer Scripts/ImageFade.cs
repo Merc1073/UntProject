@@ -40,8 +40,8 @@ public class ImageFade : MonoBehaviour
 
         if(gameScript.hasRapidFireModeStarted == false)
         {
-            imageToFade1.gameObject.SetActive(false);
-            imageToFade2.gameObject.SetActive(false);
+            imageToFade1.gameObject.SetActive(true);
+            imageToFade2.gameObject.SetActive(true);
             //textToFade1.gameObject.SetActive(false);
         }
 

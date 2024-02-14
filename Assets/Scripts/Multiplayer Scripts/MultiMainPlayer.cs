@@ -13,8 +13,10 @@ public class MultiMainPlayer : NetworkBehaviour
 
     public float forceMultiplier;
 
-    public float currentHealth;
-    public float maxHealth;
+    //public NetworkVariable<float> currentHealth = new NetworkVariable<float>();
+    //public NetworkVariable<float> maxHealth = new NetworkVariable<float>();
+    //public float currentHealth;
+    //public float maxHealth;
 
     public int coinCount;
 
@@ -61,12 +63,12 @@ public class MultiMainPlayer : NetworkBehaviour
 
         src = FindObjectOfType<AudioSource>();
 
-        currentHealth = maxHealth;
+        //currentHealth = maxHealth;
 
-        if (playerHealthBar)
-        {
-            playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
-        }
+        //if (playerHealthBar)
+        //{
+        //    playerHealthBar.UpdateHealthBar(maxHealth.Value, currentHealth.Value);
+        //}
 
     }
 
@@ -90,35 +92,35 @@ public class MultiMainPlayer : NetworkBehaviour
         //    transform.position += new Vector3(0, +0.1f, 0) * Time.deltaTime * 100;
         //}
 
-        if (currentHealth < 0)
-        {
-            currentHealth = 0;
-        }
+        //if (currentHealth.Value < 0f)
+        //{
+        //    currentHealth.Value = 0;
+        //}
 
-        if (currentHealth == 0)
-        {
+        //if (currentHealth.Value == 0)
+        //{
 
-            src.pitch = 1;
-            src.volume = 0.5f;
-            src.PlayOneShot(gameOverNoise);
+        //    src.pitch = 1;
+        //    src.volume = 0.5f;
+        //    src.PlayOneShot(gameOverNoise);
 
-            var em = particles.emission;
-            var dur = particles.main.duration;
+        //    var em = particles.emission;
+        //    var dur = particles.main.duration;
 
-            em.enabled = true;
+        //    em.enabled = true;
 
-            transform.parent.position = transform.position;
+        //    transform.parent.position = transform.position;
 
-            particles.Play();
+        //    particles.Play();
 
-            particOnce = false;
+        //    particOnce = false;
 
-            aimReticle.DestroyObj();
-            bulletReticle.DestroyObj();
+        //    aimReticle.DestroyObj();
+        //    bulletReticle.DestroyObj();
 
-            Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
-        }
+        //    Destroy(mesh);
+        //    Invoke(nameof(DestroyObj), 0);
+        //}
 
         //if(Input.GetMouseButton(0))
         //{
@@ -141,6 +143,13 @@ public class MultiMainPlayer : NetworkBehaviour
             rb.AddForce(movement * forceMultiplier * Time.deltaTime);
         }
 
+        //if (!IsServer) return;
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
+            Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
+        }
+
     }
 
     private void LateUpdate()
@@ -156,20 +165,32 @@ public class MultiMainPlayer : NetworkBehaviour
         //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!IsServer) return;
+        if(other.GetComponent<MultiBullet>() && GetComponentInParent<NetworkObject>().OwnerClientId != other.GetComponent<NetworkObject>().OwnerClientId)
+        {
+            GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
+            Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
+        //currentHealth.Value = 5f;
+        //maxHealth.Value = 5f;
         UpdatePositionServerRpc();
     }
 
-    public void DecreasePlayerHealth(float health)
-    {
-        currentHealth -= health;
+    //public void DecreasePlayerHealth(NetworkVariable<float> health)
+    //{
+    //    currentHealth.Value -= health;
 
-        if (playerHealthBar)
-        {
-            playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
-        }
-    }
+    //    if (playerHealthBar)
+    //    {
+    //        playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
+    //    }
+    //}
 
     void DestroyObj()
     {

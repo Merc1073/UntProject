@@ -158,7 +158,7 @@ public class MultiBulletPoint : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void CreateBulletServerRpc()
+    private void CreateBulletServerRpc(ServerRpcParams serverRpcParams = default)
     {
         rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
         float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
@@ -168,7 +168,7 @@ public class MultiBulletPoint : NetworkBehaviour
         spawnedMultiBullets.Add(clone);
 
         clone.GetComponent<MultiBullet>().parent = this;
-        clone.GetComponent<NetworkObject>().Spawn();
+        clone.GetComponent<NetworkObject>().SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
 
     }
 

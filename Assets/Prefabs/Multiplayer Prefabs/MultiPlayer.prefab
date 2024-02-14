@@ -1144,8 +1144,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   forceMultiplier: 5000
-  currentHealth: 5
-  maxHealth: 5
   coinCount: 0
   particOnce: 1
   canMove: 1
@@ -1382,7 +1380,6 @@ GameObject:
   - component: {fileID: 5306525125550700856}
   - component: {fileID: 4062989051204939818}
   - component: {fileID: 5050512747546849041}
-  - component: {fileID: 344488239380778994}
   m_Layer: 7
   m_Name: Healthbar
   m_TagString: Untagged
@@ -1448,51 +1445,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &344488239380778994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5977182446424461854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b513985cd9be16146b4f892ef33e28c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDrain: 0.2
-  lerpSpeed: 0
-  image: {fileID: 5050512747546849041}
-  gradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 0.9796243, g: 1, b: 0, a: 1}
-    key2: {r: 0.07311499, g: 1, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 23901
-    ctime1: 51079
-    ctime2: 57247
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
 --- !u!1 &7049540289209111876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,10 +1456,12 @@ GameObject:
   - component: {fileID: 8719077302911370490}
   - component: {fileID: 4773304015331072071}
   - component: {fileID: 1326809387513840510}
+  - component: {fileID: 1769796913594267566}
+  - component: {fileID: 397823361808318107}
   - component: {fileID: 2288319281034214194}
   - component: {fileID: 6589943001465612580}
-  - component: {fileID: 1769796913594267566}
   - component: {fileID: 6755980723751647030}
+  - component: {fileID: 3946295468280507562}
   m_Layer: 0
   m_Name: MultiPlayer
   m_TagString: MasterMultiPlayer
@@ -6387,6 +6341,40 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1769796913594267566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049540289209111876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 279578192
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &397823361808318107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049540289209111876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda836e1eb9d7c04a8af4ecc6d26caf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthPoint:
+    m_InternalValue: 0
 --- !u!114 &2288319281034214194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6413,26 +6401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f328c3b72b062546b06c486ab7f9647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1769796913594267566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7049540289209111876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 279578192
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &6755980723751647030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6463,6 +6431,19 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 0
   SlerpPosition: 1
+--- !u!114 &3946295468280507562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049540289209111876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ab2ed3276ca433418c232537b71ce99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthUI: {fileID: 5050512747546849041}
 --- !u!1 &7504176347258625783
 GameObject:
   m_ObjectHideFlags: 0
