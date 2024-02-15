@@ -11,7 +11,7 @@ public class FollowMouse : MonoBehaviour
 
     void Start()
     {
-        //DontDestroyOnLoad(gameObject);
+
     }
 
     void Update()

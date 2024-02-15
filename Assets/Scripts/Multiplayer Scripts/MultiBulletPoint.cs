@@ -15,6 +15,9 @@ public class MultiBulletPoint : NetworkBehaviour
     [SerializeField]
     private GameObject player;
 
+    [SerializeField]
+    private Camera cameraPlayer;
+
     //Camera customCamera;
     //private MainPlayer playerScript;
 
@@ -59,6 +62,12 @@ public class MultiBulletPoint : NetworkBehaviour
         src = GetComponent<AudioSource>();
 
     }
+
+    //public override void OnNetworkSpawn()
+    //{
+
+    //    base.OnNetworkSpawn();
+    //}
 
     void Update()
     {
@@ -114,7 +123,7 @@ public class MultiBulletPoint : NetworkBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+        if (Physics.Raycast(cameraPlayer.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
         {
             
             CreateBulletServerRpc();
@@ -136,7 +145,7 @@ public class MultiBulletPoint : NetworkBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
+        if (Physics.Raycast(cameraPlayer.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
         {
             Quaternion rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
 
@@ -158,7 +167,7 @@ public class MultiBulletPoint : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void CreateBulletServerRpc(ServerRpcParams serverRpcParams = default)
+    private void CreateBulletServerRpc(/*ServerRpcParams serverRpcParams = default*/)
     {
         rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
         float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
@@ -168,7 +177,8 @@ public class MultiBulletPoint : NetworkBehaviour
         spawnedMultiBullets.Add(clone);
 
         clone.GetComponent<MultiBullet>().parent = this;
-        clone.GetComponent<NetworkObject>().SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        clone.GetComponent<NetworkObject>().Spawn();
+        //clone.GetComponent<NetworkObject>().SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
 
     }
 
@@ -181,10 +191,10 @@ public class MultiBulletPoint : NetworkBehaviour
         Destroy(toDestroy);
     }
 
-    public void DestroyObj()
-    {
-        Destroy(gameObject);
-    }
+    //public void DestroyObj()
+    //{
+    //    Destroy(gameObject);
+    //}
 
     public void IncreaseFireRate(float addedFireRate)
     {

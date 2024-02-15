@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.Netcode;
 
-public class GameScript : MonoBehaviour
+public class MultiGameScript : NetworkBehaviour
 {
-
     [Header("Game Objects")]
     public GameObject Player;
     public GameObject Enemy;
@@ -175,12 +175,12 @@ public class GameScript : MonoBehaviour
 
         //else
         //{
-            Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
-            //Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
-            //Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
+        Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
+        //Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
+        //Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
         //}
 
-        if(hasRapidFireModeStarted == false)
+        if (hasRapidFireModeStarted == false)
         {
             fireRateText.gameObject.SetActive(false);
             respawnTimerText.gameObject.SetActive(false);
@@ -206,7 +206,7 @@ public class GameScript : MonoBehaviour
         //    multiPlayerScript = FindObjectOfType<MultiMainPlayer>();
         //}
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
@@ -216,18 +216,18 @@ public class GameScript : MonoBehaviour
         {
             isCurrentSceneRapidFireMode = true;
 
-            if(playerScript)
+            if (playerScript)
             {
                 playerScript = FindObjectOfType<MainPlayer>();
             }
 
-            if(bulletReticle)
+            if (bulletReticle)
             {
                 bulletReticle = FindObjectOfType<BulletPoint>();
             }
 
-            if(playerScript) 
-            { 
+            if (playerScript)
+            {
                 playerScript.transform.position = playerRapidFireSpawn;
             }
 
@@ -277,12 +277,12 @@ public class GameScript : MonoBehaviour
         magnetTimerRounded = magnetPowerUpTime.ToString("F" + genericDecimalPlaces);
         tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + genericDecimalPlaces);
 
-        if(playerScript)
+        if (playerScript)
         {
             playerScript.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
             playerScript.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
         }
-        
+
 
         if (isGameModeRapidFire == true)
         {
@@ -299,16 +299,16 @@ public class GameScript : MonoBehaviour
             DebugSpawnTripleBulletPowerUp();
         }
 
-        if(spawnEnemyNow == true)
+        if (spawnEnemyNow == true)
         {
             DebugSpawnEnemy();
         }
 
-        if(isMagnetPowerUpActive == true)
+        if (isMagnetPowerUpActive == true)
         {
             magnetPowerUpTime -= Time.deltaTime;
 
-            if(magnetPowerUpTime <= 0f)
+            if (magnetPowerUpTime <= 0f)
             {
                 magnetPowerUpTime = 0f;
                 isMagnetPowerUpActive = false;
@@ -388,8 +388,8 @@ public class GameScript : MonoBehaviour
 
                     if (keepReducingSpawnTimer == true)
                     {
-                        
-                        if(newEnemyTimer > 3.75f)
+
+                        if (newEnemyTimer > 3.75f)
                         {
                             newEnemyTimer -= stage1 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
@@ -403,7 +403,7 @@ public class GameScript : MonoBehaviour
                             }
                         }
 
-                        else if(newEnemyTimer > 2.5f)
+                        else if (newEnemyTimer > 2.5f)
                         {
                             newEnemyTimer -= stage2 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
@@ -495,8 +495,8 @@ public class GameScript : MonoBehaviour
         //    Debug.Log("It's not working :/");
         //}
 
-    } 
-    
+    }
+
     public void DebugSpawnEnemy()
     {
         Instantiate(Enemy, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
@@ -553,5 +553,4 @@ public class GameScript : MonoBehaviour
     {
         Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange), 0, Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange)), Quaternion.Euler(0, 0, 0));
     }
-
 }

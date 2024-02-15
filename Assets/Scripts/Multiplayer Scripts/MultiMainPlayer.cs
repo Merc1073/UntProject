@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MultiMainPlayer : NetworkBehaviour
 {
-    //public Camera playerCam;
+    
 
     public Vector3 tranDif;
 
@@ -44,12 +44,8 @@ public class MultiMainPlayer : NetworkBehaviour
 
     void Start()
     {
-        //playerCam = Camera.main;
 
-        //if(IsOwner)
-        //{
-        //    playerCam.enabled = true;
-        //}
+
 
         rb = GetComponent<Rigidbody>();
 
@@ -97,30 +93,11 @@ public class MultiMainPlayer : NetworkBehaviour
         //    currentHealth.Value = 0;
         //}
 
-        //if (currentHealth.Value == 0)
-        //{
-
-        //    src.pitch = 1;
-        //    src.volume = 0.5f;
-        //    src.PlayOneShot(gameOverNoise);
-
-        //    var em = particles.emission;
-        //    var dur = particles.main.duration;
-
-        //    em.enabled = true;
-
-        //    transform.parent.position = transform.position;
-
-        //    particles.Play();
-
-        //    particOnce = false;
-
-        //    aimReticle.DestroyObj();
-        //    bulletReticle.DestroyObj();
-
-        //    Destroy(mesh);
-        //    Invoke(nameof(DestroyObj), 0);
-        //}
+        if (GetComponentInParent<MultiHealthState>().HealthPoint.Value <= 0f)
+        {
+            //if(!IsOwner) return;
+            DeactivatePlayerServerRpc();
+        }
 
         //if(Input.GetMouseButton(0))
         //{
@@ -165,15 +142,19 @@ public class MultiMainPlayer : NetworkBehaviour
         //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!IsServer) return;
-        if(other.GetComponent<MultiBullet>() && GetComponentInParent<NetworkObject>().OwnerClientId != other.GetComponent<NetworkObject>().OwnerClientId)
-        {
-            GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
-            Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (!IsServer) return;
+    //    if(other.GetComponent<MultiBullet>()/* && GetComponentInParent<NetworkObject>().OwnerClientId != other.GetComponent<NetworkObject>().OwnerClientId*/)
+    //    {
+    //        //GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
+    //        //Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
+
+    //        other.GetComponent<MultiBullet>().CreateParticlesServerRpc();
+    //        other.GetComponent<MultiBullet>().GetComponent<NetworkObject>().Despawn();
+    //        Destroy(other.GetComponent<MultiBullet>().gameObject);
+    //    }
+    //}
 
     public override void OnNetworkSpawn()
     {
@@ -208,6 +189,12 @@ public class MultiMainPlayer : NetworkBehaviour
     private void UpdatePositionServerRpc()
     {
         transform.position = new Vector3(0, 1, -10);
+    }
+
+    [ServerRpc]
+    private void DeactivatePlayerServerRpc()
+    {
+        transform.parent.gameObject.SetActive(false);
     }
 
 }

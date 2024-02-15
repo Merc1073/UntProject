@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class MultiCameraFollow : MonoBehaviour
+public class MultiCameraFollow : NetworkBehaviour
 {
     [SerializeField]
     private GameObject multiPlayer;
@@ -14,7 +15,13 @@ public class MultiCameraFollow : MonoBehaviour
 
     private void Start()
     {
+        transform.position = new Vector3(0, 60f, 0);
+    }
 
+    public override void OnNetworkSpawn()
+    {
+        gameObject.SetActive(IsOwner);
+        base.OnNetworkSpawn();
     }
 
     private void FixedUpdate()

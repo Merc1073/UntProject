@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NetworkManagerUI : MonoBehaviour
@@ -19,7 +20,12 @@ public class NetworkManagerUI : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.O))
         {
             NetworkManager.Singleton.StartHost();
-            Destroy(player.gameObject);
+            if(player)
+            {
+                Destroy(player.gameObject);
+            }
+
+            SceneManager.LoadScene("Multi Main Menu");
         }
 
         if(Input.GetKeyDown(KeyCode.P))

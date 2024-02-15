@@ -60,15 +60,16 @@ public class MultiBullet : NetworkBehaviour
         AdjustTrailWidth();
 
 
-        //if (timer >= bulletDuration - 1f)
-        //{
-        //    StartCoroutine(ShrinkObject());
-        //}
+        if (timer >= bulletDuration - 0.25f)
+        {
+            StartCoroutine(ShrinkObject());
+        }
 
-        //if (timer >= bulletDuration)
-        //{
-        //    Destroy(this.gameObject);
-        //}
+        if (timer >= bulletDuration)
+        {
+            if (!IsOwner) return;
+            parent.DestroyBulletServerRpc();
+        }
 
         //if (gameScript.isMagnetPowerUpActive == true)
         //{
@@ -102,7 +103,7 @@ public class MultiBullet : NetworkBehaviour
 
         //else
         //{
-            transform.position += transform.forward * bulletSpeed * Time.deltaTime;
+        transform.position += transform.forward * bulletSpeed * Time.deltaTime;
         //}
 
 
@@ -165,8 +166,8 @@ public class MultiBullet : NetworkBehaviour
 
     }
 
-    [ServerRpc]
-    private void CreateParticlesServerRpc()
+    [ServerRpc(RequireOwnership = false)]
+    public void CreateParticlesServerRpc()
     {
         GameObject hitParticle = Instantiate(particles, transform.position, Quaternion.identity);
         hitParticle.GetComponent<NetworkObject>().Spawn();
