@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyBullet : MonoBehaviour
 {
 
     MainPlayer player;
     GameScript gameScript;
-    GenericPlaySound soundPlay;
+    //GenericPlaySound soundPlay;
+
+    public GameObject particles1;
+    public GameObject particles2;
 
     private TrailRenderer trailRenderer;
 
@@ -19,7 +23,7 @@ public class EnemyBullet : MonoBehaviour
 
     public bool particOnce = true;
 
-    public ParticleSystem particles;
+    //public ParticleSystem particles;
     public MeshRenderer mesh;
 
     [SerializeField] float growthDuration;
@@ -33,7 +37,7 @@ public class EnemyBullet : MonoBehaviour
     {
         player = FindObjectOfType<MainPlayer>();
         gameScript = FindObjectOfType<GameScript>();
-        soundPlay = GetComponentInParent<GenericPlaySound>();
+        //soundPlay = GetComponentInParent<GenericPlaySound>();
 
         trailRenderer = GetComponent<TrailRenderer>();
 
@@ -121,43 +125,43 @@ public class EnemyBullet : MonoBehaviour
                 player.DecreasePlayerHealth(1f);
             }
 
-            var em = particles.emission;
-            var dur = particles.main.duration;
+            //var em = particles.emission;
+            //var dur = particles.main.duration;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            soundPlay.canPlaySound = true;
-            particles.Play();
+            //soundPlay.canPlaySound = true;
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
+
+            Instantiate(particles1, transform.position, Quaternion.identity);
 
             Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            Destroy(gameObject);
         }
 
         if ((other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground") && particOnce)
         {
 
-            var em = particles.emission;
-            var dur = particles.main.duration;
+            //var em = particles.emission;
+            //var dur = particles.main.duration;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            particles.Play();
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
+
+            Instantiate(particles2, transform.position, Quaternion.identity);
 
             Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            Destroy(gameObject);
         }
     }
 
-    void DestroyObj()
-    {
-        Destroy(gameObject);
-    }
 }

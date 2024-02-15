@@ -65,7 +65,7 @@ public class TutorialRapidFire : MonoBehaviour
 
     private void Update()
     {
-
+        if (!gameScript) return;
         if(!gameScript.skipTutorial)
         {
             timer += Time.deltaTime;

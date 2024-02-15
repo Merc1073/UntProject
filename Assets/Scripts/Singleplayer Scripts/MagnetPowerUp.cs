@@ -7,9 +7,11 @@ using static UnityEngine.ParticleSystem;
 public class MagnetPowerUp : MonoBehaviour
 {
 
-    private GenericPlaySound soundPlay;
+    //private GenericPlaySound soundPlay;
 
-    public ParticleSystem particles;
+    //public ParticleSystem particles;
+
+    public GameObject particles;
 
     public MeshRenderer mesh;
 
@@ -22,7 +24,7 @@ public class MagnetPowerUp : MonoBehaviour
 
     void Start()
     {
-        soundPlay = GetComponentInParent<GenericPlaySound>();
+        //soundPlay = GetComponentInParent<GenericPlaySound>();
 
         gameScript = FindObjectOfType<GameScript>();
 
@@ -61,26 +63,23 @@ public class MagnetPowerUp : MonoBehaviour
 
             gameScript.ActivateMagnetPowerUp();
 
-            soundPlay.canPlaySound = true;
+            //soundPlay.canPlaySound = true;
 
-            var em = particles.emission;
+            //var em = particles.emission;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            particles.Play();
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
+
+            Instantiate(particles, transform.position, Quaternion.identity);
 
             Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            Destroy(gameObject);
         }
-    }
-
-    void DestroyObj()
-    {
-        Destroy(gameObject);
     }
 
 }

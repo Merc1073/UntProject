@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class Enemy : MonoBehaviour
 {
 
     GameObject player;
     Rigidbody rb;
+
+    public GameObject particles;
 
     public GameObject coin;
 
@@ -17,7 +20,7 @@ public class Enemy : MonoBehaviour
 
     private EnemyPlaySound soundPlay;
 
-    public ParticleSystem particles;
+    //public ParticleSystem particles;
     public MeshRenderer mesh;
 
     public Transform canvasTransform;
@@ -137,24 +140,23 @@ public class Enemy : MonoBehaviour
                     clone = Instantiate(coin, transform.position + coinPosition, Quaternion.Euler(0, Random.Range(0, 360), 0));
                     currentCoinCounter--;
                 }
-
                 gamescript.ReduceEnemy();
 
+                Instantiate(particles, transform.position, Quaternion.identity);
+                //soundPlay.canPlaySound = true;
 
-                soundPlay.canPlaySound = true;
+                //var em = particles.emission;
 
-                var em = particles.emission;
+                //em.enabled = true;
 
-                em.enabled = true;
+                //transform.parent.position = transform.position;
 
-                transform.parent.position = transform.position;
+                //particles.Play();
 
-                particles.Play();
-
-                particOnce = false;
+                //particOnce = false;
 
                 Destroy(mesh);
-                Invoke(nameof(DestroyObj), 0);
+                Destroy(gameObject);
 
             }
         }
@@ -176,7 +178,7 @@ public class Enemy : MonoBehaviour
             Vector3 directionToPlayer = transform.position - player.transform.position;
             directionToPlayer = directionToPlayer.normalized * forceMultiplier;
 
-            if (other.gameObject.tag == "Bullet")
+            if (other.gameObject.CompareTag("Bullet"))
             {
                 currentHealth -= 1;
 
@@ -189,11 +191,6 @@ public class Enemy : MonoBehaviour
             }
         }
       
-    }
-
-    void DestroyObj()
-    {
-        Destroy(gameObject);
     }
 
 }

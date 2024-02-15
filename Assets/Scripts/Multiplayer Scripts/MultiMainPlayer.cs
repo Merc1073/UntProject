@@ -13,6 +13,7 @@ public class MultiMainPlayer : NetworkBehaviour
 
     public float forceMultiplier;
 
+    public AudioListener audioListener;
     //public NetworkVariable<float> currentHealth = new NetworkVariable<float>();
     //public NetworkVariable<float> maxHealth = new NetworkVariable<float>();
     //public float currentHealth;
@@ -72,6 +73,8 @@ public class MultiMainPlayer : NetworkBehaviour
     {
 
         if (!IsOwner) return;
+
+        audioListener.transform.position = transform.position;
 
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");

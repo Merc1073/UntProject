@@ -10,11 +10,13 @@ public class Coin : MonoBehaviour
     MainPlayer playerScript;
     BulletPoint bulletReticle;
 
+    public GameObject particles;
+
     Rigidbody rb;
 
-    private GenericPlaySound soundPlay;
+    //private GenericPlaySound soundPlay;
 
-    public ParticleSystem particles;
+    //public ParticleSystem particles;
     public MeshRenderer mesh;
 
     public float forceMultiplier;
@@ -40,7 +42,7 @@ public class Coin : MonoBehaviour
 
         rb.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
-        soundPlay = GetComponentInParent<GenericPlaySound>();
+        //soundPlay = GetComponentInParent<GenericPlaySound>();
         
     }
 
@@ -82,35 +84,32 @@ public class Coin : MonoBehaviour
     {
         if(playerObject != null)
         {
-            if (other.gameObject.tag == "Player" && particOnce)
+            if (other.gameObject.CompareTag("Player") && particOnce)
             {
 
-                soundPlay.canPlaySound = true;
+                //soundPlay.canPlaySound = true;
 
-                var em = particles.emission;
+                //var em = particles.emission;
 
-                em.enabled = true;
+                //em.enabled = true;
 
-                transform.parent.position = transform.position;
+                //transform.parent.position = transform.position;
 
-                particles.Play();
+                //particles.Play();
 
-                particOnce = false;
+                //particOnce = false;
 
                 playerScript.AddCoins(1);
                 bulletReticle.IncreaseFireRate(fireRateToIncrease);
 
+                Instantiate(particles, transform.position, Quaternion.identity);
+
                 Destroy(mesh);
-                Invoke(nameof(DestroyObj), 0);
+                Destroy(gameObject);
 
             }
         }
         
-    }
-
-    void DestroyObj()
-    {
-        Destroy(gameObject);
     }
 
 }

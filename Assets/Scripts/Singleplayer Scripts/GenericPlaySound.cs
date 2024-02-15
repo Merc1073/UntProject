@@ -18,11 +18,11 @@ public class GenericPlaySound : MonoBehaviour
 
     void Update()
     {
-        if(canPlaySound == true && hasSoundPlayed == false)
-        {
-            src.volume = 0.4f;
-            src.PlayOneShot(soundEffect);
-            hasSoundPlayed = true;
-        }
+        //if(canPlaySound == true && hasSoundPlayed == false)
+        //{
+        //    src.volume = 0.4f;
+        //    src.PlayOneShot(soundEffect);
+        //    hasSoundPlayed = true;
+        //}
     }
 }

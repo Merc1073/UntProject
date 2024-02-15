@@ -5,9 +5,11 @@ using UnityEngine;
 public class TripleBulletPowerUp : MonoBehaviour
 {
 
-    private GenericPlaySound soundPlay;
+    //private GenericPlaySound soundPlay;
 
-    public ParticleSystem particles;
+    //public ParticleSystem particles;
+
+    public GameObject particles;
 
     public MeshRenderer mesh;
 
@@ -21,7 +23,7 @@ public class TripleBulletPowerUp : MonoBehaviour
     void Start()
     {
 
-        soundPlay = GetComponentInParent<GenericPlaySound>();
+        //soundPlay = GetComponentInParent<GenericPlaySound>();
 
         gameScript = FindObjectOfType<GameScript>();
 
@@ -59,26 +61,24 @@ public class TripleBulletPowerUp : MonoBehaviour
 
             gameScript.ActivateTripleBulletPowerUp();
 
-            soundPlay.canPlaySound = true;
+            //soundPlay.canPlaySound = true;
 
-            var em = particles.emission;
-            var dur = particles.main.duration;
+            //var em = particles.emission;
+            //var dur = particles.main.duration;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            particles.Play();
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
+
+            Instantiate(particles, transform.position, Quaternion.identity);
 
             Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            Destroy(gameObject);
         }
     }
 
-    void DestroyObj()
-    {
-        Destroy(gameObject);
-    }
 }

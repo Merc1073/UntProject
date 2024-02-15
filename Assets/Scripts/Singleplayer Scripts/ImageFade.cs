@@ -38,6 +38,7 @@ public class ImageFade : MonoBehaviour
             imageToFade2 = GetComponent<Image>();
         }
 
+        if (!gameScript) return;
         if(gameScript.hasRapidFireModeStarted == false)
         {
             imageToFade1.gameObject.SetActive(true);
@@ -53,6 +54,7 @@ public class ImageFade : MonoBehaviour
 
     private void Update()
     {
+        if (!gameScript) return;
         if(gameScript.hasRapidFireModeStarted == true)
         {
             imageToFade1.gameObject.SetActive(true);

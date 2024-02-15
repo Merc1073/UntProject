@@ -19,7 +19,7 @@ public class MultiGameScript : NetworkBehaviour
     private MainPlayer playerScript;
     private BulletPoint bulletReticle;
 
-    public FadeTransition fader;
+    //public FadeTransition fader;
 
     [Header("Special Booleans")]
 
@@ -175,7 +175,7 @@ public class MultiGameScript : NetworkBehaviour
 
         //else
         //{
-        Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
+        //Instantiate(Player, playerMenuSpawn, Quaternion.Euler(0, 0, 0));
         //Instantiate(BulletPoint, bulletPointSpawn, Quaternion.Euler(0, 0, 0));
         //Instantiate(Reticle, reticlePointSpawn, Quaternion.Euler(0, 0, 0));
         //}

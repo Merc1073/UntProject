@@ -27,7 +27,8 @@ public class MainMenu : MonoBehaviour
     public TMP_Text rapidFireText;
     public TMP_Text growthText;
 
-    public GameObject particleEffect;
+    public GameObject menuSelectParticle;
+    public GameObject gameStartParticle;
 
     MenuPlaySound soundPlay;
 
@@ -174,9 +175,9 @@ public class MainMenu : MonoBehaviour
                 //startRapidFire = true;
                 //StartCoroutine(sceneTransition.FadeOutTransition());
 
-                CreateParticleEffect(particleEffect, startButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(menuSelectParticle, startButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayOptionSelectSound();
+                //soundPlay.PlayOptionSelectSound();
                 //soundPlay.canPlaySelectOptionSound = true;
                 //soundPlay.canPlayGameStart = true;
 
@@ -195,9 +196,9 @@ public class MainMenu : MonoBehaviour
         {
             if(gameModeDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                CreateParticleEffect(particleEffect, gameModesButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(menuSelectParticle, gameModesButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayOptionSelectSound();
+                //soundPlay.PlayOptionSelectSound();
 
                 ActivateObject(rapidFireButton.gameObject);
                 ActivateObject(growthButton.gameObject);
@@ -216,9 +217,9 @@ public class MainMenu : MonoBehaviour
                 gameEnd = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
-                CreateParticleEffect(particleEffect, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(gameStartParticle, quitButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayStartSound();
+                //soundPlay.PlayStartSound();
 
                 DeactivateObject(startButton.gameObject);
                 DeactivateObject(gameModesButton.gameObject);
@@ -233,9 +234,9 @@ public class MainMenu : MonoBehaviour
                 //startRapidFire = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
-                CreateParticleEffect(particleEffect, yesButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(gameStartParticle, yesButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayStartSound();
+                //soundPlay.PlayStartSound();
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
@@ -251,9 +252,9 @@ public class MainMenu : MonoBehaviour
                 //startRapidFire = true;
                 StartCoroutine(sceneTransition.FadeOutTransition());
 
-                CreateParticleEffect(particleEffect, noButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(gameStartParticle, noButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayStartSound();
+                //soundPlay.PlayStartSound();
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
@@ -265,9 +266,9 @@ public class MainMenu : MonoBehaviour
         {
             if (backDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                CreateParticleEffect(particleEffect, backButtonStart.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(menuSelectParticle, backButtonStart.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayOptionSelectSound();
+                //soundPlay.PlayOptionSelectSound();
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);
@@ -284,9 +285,9 @@ public class MainMenu : MonoBehaviour
         {
             if(rapidFireDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                CreateParticleEffect(particleEffect, rapidFireButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(menuSelectParticle, rapidFireButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayOptionSelectSound();
+                //soundPlay.PlayOptionSelectSound();
 
                 gameModeIsRapidFire = true;
                 gameModeIsGrowth = false;
@@ -308,9 +309,9 @@ public class MainMenu : MonoBehaviour
         {
             if(growthDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                CreateParticleEffect(particleEffect, growthButton.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(menuSelectParticle, growthButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayOptionSelectSound();
+                //soundPlay.PlayOptionSelectSound();
 
                 gameModeIsRapidFire = false;
                 gameModeIsGrowth = true;
@@ -332,9 +333,9 @@ public class MainMenu : MonoBehaviour
         {
             if(backGameModesDistanceToPlayer <= generalDistanceFromPlayer)
             {
-                CreateParticleEffect(particleEffect, backButtonGameModes.transform.position, Quaternion.Euler(Vector3.zero));
+                CreateParticleEffect(menuSelectParticle, backButtonGameModes.transform.position, Quaternion.Euler(Vector3.zero));
 
-                soundPlay.PlayOptionSelectSound();
+                //soundPlay.PlayOptionSelectSound();
 
                 DeactivateObject(rapidFireButton.gameObject);
                 DeactivateObject(growthButton.gameObject);
