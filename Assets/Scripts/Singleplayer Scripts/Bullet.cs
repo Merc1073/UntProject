@@ -6,11 +6,13 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 
-    public GameObject particles;
+    public GameObject particles1;
+    public GameObject particles2;
+
     public MeshRenderer mesh;
 
     GameScript gameScript;
-    GenericPlaySound soundPlay;
+    //GenericPlaySound soundPlay;
 
     private TrailRenderer trailRenderer;
 
@@ -40,7 +42,7 @@ public class Bullet : MonoBehaviour
     {
         gameScript = FindObjectOfType<GameScript>();
 
-        soundPlay = GetComponentInParent<GenericPlaySound>();
+        //soundPlay = GetComponentInParent<GenericPlaySound>();
 
         trailRenderer = GetComponent<TrailRenderer>();
 
@@ -145,7 +147,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Enemy")
+        if(other.gameObject.CompareTag("Enemy"))
         {
 
             //var em = particles.emission;
@@ -163,13 +165,13 @@ public class Bullet : MonoBehaviour
             //Destroy(mesh);
             //Invoke(nameof(DestroyObj), 0);
 
-            Instantiate(particles, transform.position, Quaternion.identity);
+            Instantiate(particles1, transform.position, Quaternion.identity);
 
             Destroy(gameObject);
 
         }
 
-        if(other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground")
+        if(other.gameObject.CompareTag("Wall") || other.gameObject.tag == "Ground")
         {
             //var em = particles.emission;
 
@@ -184,7 +186,7 @@ public class Bullet : MonoBehaviour
             //Destroy(mesh);
             //Invoke(nameof(DestroyObj), 0);
 
-            Instantiate(particles, transform.position, Quaternion.identity);
+            Instantiate(particles2, transform.position, Quaternion.identity);
 
             Destroy(gameObject);
         }

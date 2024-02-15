@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1950044723249901610}
   - component: {fileID: 6227521372966923905}
   - component: {fileID: 241987198963478669}
-  - component: {fileID: 6364264469309664595}
   - component: {fileID: 1488348178865641784}
   m_Layer: 0
   m_Name: BulletParticle
@@ -4846,22 +4845,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: 0
   timeUntilDestroyed: 2
---- !u!114 &6364264469309664595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8972455378288872597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b7fb0c353a8e22428ca27e3437aa12e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  src: {fileID: 0}
-  soundEffect: {fileID: 8300000, guid: 62f11ed5fa913574698583830d6d5e41, type: 3}
-  canPlaySound: 0
-  hasSoundPlayed: 0
 --- !u!82 &1488348178865641784
 AudioSource:
   m_ObjectHideFlags: 0

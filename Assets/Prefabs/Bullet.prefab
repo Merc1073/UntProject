@@ -386,7 +386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1288bcf98b98ac3489fa0609c0cc3d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particles: {fileID: 8972455378288872597, guid: 9d77baec13b9be643a015bc2185ca583, type: 3}
+  particles1: {fileID: 8972455378288872597, guid: 9d77baec13b9be643a015bc2185ca583, type: 3}
+  particles2: {fileID: 8972455378288872597, guid: 59176253dec433c4f9d4e202fc2c8afc, type: 3}
   mesh: {fileID: 266708988611756206}
   bulletSpeed: 30
   bulletDuration: 5

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class MainPlayer : MonoBehaviour
 {
@@ -19,7 +20,10 @@ public class MainPlayer : MonoBehaviour
     public bool particOnce = true;
     public bool canMove = true;
 
-    public ParticleSystem particles;
+    //public ParticleSystem particles;
+
+    public GameObject particles;
+
     public MeshRenderer mesh;
 
     public Transform canvasTransform1;
@@ -27,8 +31,8 @@ public class MainPlayer : MonoBehaviour
 
     GameScript gameScript;
 
-    AudioSource src;
-    public AudioClip gameOverNoise;
+    //AudioSource src;
+    //public AudioClip gameOverNoise;
 
     private HealthBar playerHealthBar, magnetPowerBar, tripleBulletPowerBar;
 
@@ -50,7 +54,7 @@ public class MainPlayer : MonoBehaviour
         bulletReticle = FindObjectOfType<BulletPoint>();
         gameScript = FindObjectOfType<GameScript>();
 
-        src = FindObjectOfType<AudioSource>();
+        //src = FindObjectOfType<AudioSource>();
 
         currentHealth = maxHealth;
 
@@ -87,26 +91,28 @@ public class MainPlayer : MonoBehaviour
         if(currentHealth == 0)
         {
 
-            src.pitch = 1;
-            src.volume = 0.5f;
-            src.PlayOneShot(gameOverNoise);
+            //src.pitch = 1;
+            //src.volume = 0.5f;
+            //src.PlayOneShot(gameOverNoise);
 
-            var em = particles.emission;
-            var dur = particles.main.duration;
+            //var em = particles.emission;
+            //var dur = particles.main.duration;
 
-            em.enabled = true;
+            //em.enabled = true;
 
-            transform.parent.position = transform.position;
+            //transform.parent.position = transform.position;
 
-            particles.Play();
+            //particles.Play();
 
-            particOnce = false;
+            //particOnce = false;
+
+            Instantiate(particles, transform.position, Quaternion.identity);
 
             aimReticle.DestroyObj();
             bulletReticle.DestroyObj();
 
             Destroy(mesh);
-            Invoke(nameof(DestroyObj), 0);
+            Destroy(gameObject);
         }
 
         //if(Input.GetMouseButton(0))
@@ -150,11 +156,6 @@ public class MainPlayer : MonoBehaviour
         {
             playerHealthBar.UpdateHealthBar(maxHealth, currentHealth);
         }
-    }
-
-    void DestroyObj()
-    {
-        Destroy(gameObject);
     }
 
     public void AddCoins(int coins)
