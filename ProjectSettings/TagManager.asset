@@ -12,6 +12,11 @@ TagManager:
   - AudioStuff
   - EnemyBullet
   - Ground
+  - MasterSinglePlayer
+  - MasterMultiPlayer
+  - MultiBullet
+  - MultiPlayer
+  - MultiEnemy
   layers:
   - Default
   - TransparentFX
