@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using System.Runtime.CompilerServices;
 
 public class MultiGameScript : NetworkBehaviour
 {
@@ -18,7 +19,7 @@ public class MultiGameScript : NetworkBehaviour
     public GameObject MagnetPowerUp;
     public GameObject TripleBulletPowerUp;
 
-    private MultiMainPlayer playerScript;
+    private GameObject mainPlayer;
     //private BulletPoint bulletReticle;
 
     //public FadeTransition fader;
@@ -28,6 +29,7 @@ public class MultiGameScript : NetworkBehaviour
     //public bool menuGameModeRapidFire = false;
     //public bool menuGameModeGrowth = false;
 
+    public bool isMainPlayerFound = false;
     public bool networkSpawned = false;
 
     public bool isGameModeRapidFire = false;
@@ -96,12 +98,15 @@ public class MultiGameScript : NetworkBehaviour
 
     [Header("Coins and Score")]
     public float coinCount;
-    public float scoreCount;
-    public float addedEnemyScore;
-
-    public NetworkVariable<float> scoreMultiplier = new();
-
+    //public float scoreCount;
     //public float scoreMultiplier;
+    //public float addedEnemyScore;
+
+    public NetworkVariable<float> scoreCount = new();
+    public NetworkVariable<float> scoreMultiplier = new();
+    public NetworkVariable<float> addedEnemyScore = new();
+    public NetworkVariable<float> totalFinalScore = new();
+
 
     [Header("Decimal Places")]
     public int genericDecimalPlaces;
@@ -154,11 +159,10 @@ public class MultiGameScript : NetworkBehaviour
     string tripleBulletTimerRounded;
 
 
-
-    void Start()
+    private void Awake()
     {
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         //if (SceneManager.GetActiveScene().name == "Rapid Fire")
         //{
@@ -201,32 +205,38 @@ public class MultiGameScript : NetworkBehaviour
             tripleBulletText.gameObject.SetActive(false);
         }
 
-        playerScript = FindObjectOfType<MultiMainPlayer>();
+
+
+        //playerScript = FindObjectOfType<MultiMainPlayer>();
         //bulletReticle = FindObjectOfType<BulletPoint>();
 
         //if (!IsServer) return;
 
-        GetComponent<NetworkObject>().Spawn();        
+        GetComponent<NetworkObject>().Spawn();
 
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        scoreCount.Value = 0f;
         scoreMultiplier.Value = 1f;
+        addedEnemyScore.Value = 0f;
     }
 
     void Update()
     {
 
-
-
-        //if(!playerScript)
-        //{
-        //    multiPlayerScript = FindObjectOfType<MultiMainPlayer>();
-        //}
+        if (!mainPlayer && !isMainPlayerFound)
+        {
+            mainPlayer = GetComponent<MultiPlayerCount>().allPlayers[0];
+            Debug.Log(mainPlayer);
+            isMainPlayerFound = true;
+        }
 
         //Debug.Log(scoreMultiplier.Value);
+
+        Debug.Log(mainPlayer.GetComponent<MultiMainPlayer>().playerScore.Value);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -238,19 +248,19 @@ public class MultiGameScript : NetworkBehaviour
         {
             isCurrentSceneRapidFireMode = true;
 
-            if (playerScript)
-            {
-                playerScript = FindObjectOfType<MultiMainPlayer>();
-            }
+            //if (playerScript)
+            //{
+            //    playerScript = FindObjectOfType<MultiMainPlayer>();
+            //}
 
             //if (bulletReticle)
             //{
             //    bulletReticle = FindObjectOfType<BulletPoint>();
             //}
 
-            if (playerScript)
+            if (mainPlayer)
             {
-                playerScript.transform.position = playerRapidFireSpawn;
+                mainPlayer.transform.position = playerRapidFireSpawn;
             }
 
             isGameModeRapidFire = true;
@@ -292,18 +302,24 @@ public class MultiGameScript : NetworkBehaviour
             newEnemyTimer = 0f;
         }
 
-        scoreCount = coinCount * scoreMultiplier.Value + addedEnemyScore;
+        //for(int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
+        //{
+        //    totalFinalScore.Value += GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().playerScore.Value;
+        //}
 
-        scoreCountRounded = scoreCount.ToString("F" + scoreDecimalPlaces);
+        scoreCount.Value = coinCount * scoreMultiplier.Value + addedEnemyScore.Value;
+
+        scoreCountRounded = scoreCount.Value.ToString("F" + scoreDecimalPlaces);
         newEnemyTimerRounded = newEnemyTimer.ToString("F" + newEnemyDecimalPlaces);
         magnetTimerRounded = magnetPowerUpTime.ToString("F" + genericDecimalPlaces);
         tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + genericDecimalPlaces);
 
-        if (playerScript)
-        {
-            playerScript.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
-            playerScript.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
-        }
+
+        //if (mainPlayer)
+        //{
+        //    mainPlayer.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
+        //    mainPlayer.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
+        //}
 
 
         if (isGameModeRapidFire == true)
@@ -357,7 +373,7 @@ public class MultiGameScript : NetworkBehaviour
         }
 
 
-        if (playerScript && hasRapidFireModeStarted == true)
+        if (mainPlayer && hasRapidFireModeStarted == true)
         {
 
 
@@ -392,7 +408,7 @@ public class MultiGameScript : NetworkBehaviour
 
                 if (tripleBulletRespawnTimer <= 0)
                 {
-                    SpawnTripleBulletPowerUp();
+                    SpawnTripleBulletPowerUpServerRpc();
 
                     tripleBulletRespawnTimer = originalTimerSpawnTripleBulletPowerUp;
                 }
@@ -537,10 +553,6 @@ public class MultiGameScript : NetworkBehaviour
     [ServerRpc]
     public void SpawnEnemyServerRpc()
     {
-        //enemySpawn = new Vector3(Random.Range(enemySpawnRange, -enemySpawnRange), 1, (Random.Range(enemySpawnRange, -enemySpawnRange)));
-        //Instantiate(Enemy, enemySpawn + tranDif, Quaternion.Euler(0, 0, 0));
-        //enemyCounter++;
-
         enemySpawn = new Vector3(Random.Range(enemySpawnRange, -enemySpawnRange), 1, (Random.Range(enemySpawnRange, -enemySpawnRange)));
         GameObject normalEnemy = Instantiate(Enemy, enemySpawn + tranDif, Quaternion.Euler(0, 0, 0));
         normalEnemy.GetComponent<NetworkObject>().Spawn();
@@ -557,7 +569,7 @@ public class MultiGameScript : NetworkBehaviour
 
     public void ReduceEnemy()
     {
-        addedEnemyScore += 50f;
+        addedEnemyScore.Value += 50f;
         enemyKillCounter++;
         enemyCounter--;
     }
@@ -586,7 +598,6 @@ public class MultiGameScript : NetworkBehaviour
     [ServerRpc]
     public void SpawnMagnetPowerUpServerRpc()
     {
-        //Instantiate(MagnetPowerUp, new Vector3(Random.Range(-magnetSpawnRange, magnetSpawnRange), 0, Random.Range(-magnetSpawnRange, magnetSpawnRange)), Quaternion.Euler(0, 0, 0));
         GameObject magnet = Instantiate(MagnetPowerUp, new Vector3(Random.Range(-magnetSpawnRange, magnetSpawnRange), 0, Random.Range(-magnetSpawnRange, magnetSpawnRange)), Quaternion.Euler(0, 0, 0));
         magnet.GetComponent<NetworkObject>().Spawn();
     }
@@ -600,8 +611,19 @@ public class MultiGameScript : NetworkBehaviour
         spawnTripleBulletPowerUpNow = false;
     }
 
-    public void SpawnTripleBulletPowerUp()
+    [ServerRpc]
+    public void SpawnTripleBulletPowerUpServerRpc()
     {
-        //Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange), 0, Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange)), Quaternion.Euler(0, 0, 0));
+        GameObject triple = Instantiate(TripleBulletPowerUp, new Vector3(Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange), 0, Random.Range(-tripleBulletSpawnRange, tripleBulletSpawnRange)), Quaternion.Euler(0, 0, 0));
+        triple.GetComponent<NetworkObject>().Spawn();
+    }
+
+    [ServerRpc]
+    public void UpdateScoreMultiplierServerRpc(float scoreToIncrease)
+    {
+        if(!IsOwner) return;
+
+        scoreMultiplier.Value += scoreToIncrease;
+        Debug.Log(scoreMultiplier.Value);
     }
 }

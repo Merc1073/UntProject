@@ -15,4 +15,11 @@ public class MultiHealthState : NetworkBehaviour
         HealthPoint.Value = 5f;
     }
 
+
+    [ClientRpc]
+    public void DecreaseHealthClientRpc(float valueToDecrease)
+    {
+        HealthPoint.Value -= valueToDecrease;
+    }
+
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2863168310531944374}
   - component: {fileID: 3620351678909432017}
   - component: {fileID: 6911009344712375563}
-  - component: {fileID: 153228741182444633}
+  - component: {fileID: 8186736182718351404}
   m_Layer: 7
   m_Name: EnemyBulletPoint
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &153228741182444633
+--- !u!114 &8186736182718351404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,15 +93,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1231853362132265064}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4559bf54103d874689475e1aef526b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 29edba0c117f77e4994c1d9bd9fe3fa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0
   fireRateCooldown: 3
   rotateVelocity: 0
   rotateSpeedMovement: 0
-  enemyBullet: {fileID: 7053865573202566494, guid: 81d66ab0c1603c340b8888b7737deed5, type: 3}
+  playerDetection: {fileID: 6018641989665894078}
+  enemyBullet: {fileID: 7053865573202566494, guid: 423f93373e3e81345a8ff69e0eb21a78, type: 3}
   canFire: 0
+  spawnedEnemyBullets: []
 --- !u!1 &1300167053728103266
 GameObject:
   m_ObjectHideFlags: 0

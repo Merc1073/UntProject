@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class MultiMainPlayer : NetworkBehaviour
 {
@@ -13,13 +14,19 @@ public class MultiMainPlayer : NetworkBehaviour
 
     public float forceMultiplier;
 
+    public NetworkVariable<int> coinCount = new();
+    public NetworkVariable<float> playerScore = new();
+    public NetworkVariable<int> playerScoreMultiplier = new();
+
+
+
     public AudioListener audioListener;
     //public NetworkVariable<float> currentHealth = new NetworkVariable<float>();
     //public NetworkVariable<float> maxHealth = new NetworkVariable<float>();
     //public float currentHealth;
     //public float maxHealth;
 
-    public int coinCount;
+   // public int coinCount;
 
     public bool particOnce = true;
     public bool canMove = true;
@@ -32,7 +39,7 @@ public class MultiMainPlayer : NetworkBehaviour
     public Transform canvasTransform2;
     public Transform canvasTransform3;
 
-    MultiGameScript multiGameScript;
+    //MultiGameScript multiGameScript;
     public GameObject multiBulletPoint;
 
     AudioSource src;
@@ -78,24 +85,37 @@ public class MultiMainPlayer : NetworkBehaviour
 
     }
 
+    public override void OnNetworkSpawn()
+    {
+        //currentHealth.Value = 5f;
+        //maxHealth.Value = 5f;
+
+        if (!IsOwner) return;
+
+        //multiGameScript = FindObjectOfType<MultiGameScript>();
+        UpdatePositionServerRpc();
+    }
+
     void Update()
     {
 
         if (!IsOwner) return;
 
+        //Debug.Log(playerScore.Value + " " + OwnerClientId);
+        //Debug.Log(hasFoundGameScript);
 
-        Debug.Log(hasFoundGameScript);
+        //if (!multiGameScript && !hasFoundGameScript)
+        //{
+        //    multiGameScript = FindObjectOfType<MultiGameScript>();
+        //    hasFoundGameScript = true;
+        //}
 
-        if(!multiGameScript && !hasFoundGameScript)
-        {
-            multiGameScript = FindObjectOfType<MultiGameScript>();
-            hasFoundGameScript = true;
-        }
+        //if (multiGameScript)
+        //{
+        //    Debug.Log(multiGameScript.scoreMultiplier.Value);
+        //}
 
-        if(multiGameScript)
-        {
-            Debug.Log(multiGameScript.scoreMultiplier.Value);
-        }
+        
 
         audioListener.transform.position = transform.position;
 
@@ -182,12 +202,6 @@ public class MultiMainPlayer : NetworkBehaviour
     //    }
     //}
 
-    public override void OnNetworkSpawn()
-    {
-        //currentHealth.Value = 5f;
-        //maxHealth.Value = 5f;
-        UpdatePositionServerRpc();
-    }
 
     //public void DecreasePlayerHealth(NetworkVariable<float> health)
     //{
@@ -199,12 +213,25 @@ public class MultiMainPlayer : NetworkBehaviour
     //    }
     //}
 
-    [ServerRpc(RequireOwnership = false)]
-    public void AddCoinsServerRpc(int coins)
+    [ClientRpc]
+    public void AddCoinsToPlayerClientRpc()
     {
-        coinCount += coins;
-        multiGameScript.scoreMultiplier.Value += 0.1f;
-        multiGameScript.coinCount += coins;
+
+        if (!IsOwner) return;
+
+        coinCount.Value += 1;
+        playerScoreMultiplier.Value += 1;
+
+        playerScore.Value = coinCount.Value * playerScoreMultiplier.Value;
+
+        UpdatePlayerScoreClientRpc(playerScore.Value);
+
+        //multiGameScript = FindObjectOfType<MultiGameScript>();
+        //multiGameScript.UpdateScoreMultiplierServerRpc(1f);
+        //multiGameScript.coinCount += coins;
+
+        //Debug.Log(multiGameScript.scoreMultiplier.Value);
+
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -217,6 +244,16 @@ public class MultiMainPlayer : NetworkBehaviour
     private void DeactivatePlayerServerRpc()
     {
         transform.parent.gameObject.SetActive(false);
+    }
+
+    [ClientRpc]
+    private void UpdatePlayerScoreClientRpc(float newScore)
+    {
+        //if (!IsOwner) return;
+
+        playerScore.Value = newScore;
+
+        //Debug.Log(newScore + " " + OwnerClientId);
     }
 
 }

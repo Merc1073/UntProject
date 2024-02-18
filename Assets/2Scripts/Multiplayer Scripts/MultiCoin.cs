@@ -102,10 +102,13 @@ public class MultiCoin : NetworkBehaviour
 
             //playerScript.AddCoins(1);
             //bulletReticle.IncreaseFireRate(fireRateToIncrease);
+
             if (!IsOwner) return;
 
-            other.GetComponent<MultiMainPlayer>().AddCoinsServerRpc(1);
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().IncreaseFireRate(fireRateToIncrease);
+            other.GetComponent<MultiMainPlayer>().AddCoinsToPlayerClientRpc();
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().FireRateIncreaseClientRpc(fireRateToIncrease);
+
+            //Debug.Log(other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().fireRateMultiplier);
 
             CreateParticlesServerRpc();
 
@@ -129,5 +132,11 @@ public class MultiCoin : NetworkBehaviour
         GameObject coinParticle = Instantiate(particles, transform.position, Quaternion.identity);
         coinParticle.GetComponent<NetworkObject>().Spawn();
     }
+
+    //[ClientRpc]
+    //private void FireRateIncreasedClientRpc(Collider whoHit)
+    //{
+    //    whoHit.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().IncreaseFireRate(fireRateToIncrease);
+    //}
 
 }

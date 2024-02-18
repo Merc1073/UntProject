@@ -117,8 +117,6 @@ public class MultiEnemy : NetworkBehaviour
         if (playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer != null)
         {
 
-            Debug.Log(currentHealth);
-
             totalForceMultiplier = forceMultiplier + multiGameScript.globalEnemyForceMultiplier;
 
             Vector3 playerObject = playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.transform.position;

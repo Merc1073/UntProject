@@ -16,17 +16,20 @@ public class MultiBulletPoint : NetworkBehaviour
     private GameObject player;
 
     [SerializeField]
+    private GameObject bulletNoise;
+
+    [SerializeField]
     private Camera cameraPlayer;
 
     //Camera customCamera;
     //private MainPlayer playerScript;
 
-    GameScript gameScript;
+    //GameScript gameScript;
 
     public LayerMask groundMask;
 
-    public AudioSource src;
-    public AudioClip pewSound;
+    //public AudioSource src;
+    //public AudioClip pewSound;
 
     public float rotateVelocity;
     public float rotateSpeedMovement;
@@ -43,6 +46,7 @@ public class MultiBulletPoint : NetworkBehaviour
 
     public bool isMagnetPowerUpActive = false;
     public bool isTripleBulletPowerUpActive = false;
+
     public bool canFire = false;
 
     public Vector3 tranDif;
@@ -59,9 +63,9 @@ public class MultiBulletPoint : NetworkBehaviour
         //reticle = GameObject.FindGameObjectWithTag("Reticle");
 
         //playerScript = FindObjectOfType<MainPlayer>();
-        gameScript = FindObjectOfType<GameScript>();
+        //gameScript = FindObjectOfType<GameScript>();
 
-        src = GetComponent<AudioSource>();
+        //src = GetComponent<AudioSource>();
 
     }
 
@@ -116,10 +120,7 @@ public class MultiBulletPoint : NetworkBehaviour
     private void FireNormalBullet()
     {
 
-        src.clip = pewSound;
-        src.volume = 0.6f;
-        src.pitch = Random.Range(0.6f, 0.8f);
-        src.PlayOneShot(pewSound);
+        CreateBulletNoiseServerRpc();
 
         RaycastHit hit;
 
@@ -136,10 +137,7 @@ public class MultiBulletPoint : NetworkBehaviour
     private void FireTripleBullet()
     {
 
-        src.clip = pewSound;
-        src.volume = 0.6f;
-        src.pitch = Random.Range(1.0f, 1.2f);
-        src.PlayOneShot(pewSound);
+        CreateBulletNoiseServerRpc();
 
         RaycastHit hit;
 
@@ -156,6 +154,8 @@ public class MultiBulletPoint : NetworkBehaviour
     [ServerRpc]
     private void CreateBulletServerRpc(/*ServerRpcParams serverRpcParams = default*/)
     {
+        //if (!IsClient) return;
+
         rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
         float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
         transform.eulerAngles = new Vector3(0, rotationY, 0);
@@ -178,6 +178,8 @@ public class MultiBulletPoint : NetworkBehaviour
     [ServerRpc]
     private void CreateTripleBulletServerRpc(/*ServerRpcParams serverRpcParams = default*/)
     {
+        //if (!IsClient) return;
+
         rotationToLookAt = Quaternion.LookRotation(reticle.transform.position - transform.position);
         float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
         transform.eulerAngles = new Vector3(0, rotationY, 0);
@@ -220,13 +222,52 @@ public class MultiBulletPoint : NetworkBehaviour
     public void DestroyBulletServerRpc()
     {
         GameObject toDestroy = spawnedMultiBullets[0];
-        toDestroy.GetComponent<NetworkObject>().Despawn();
-        spawnedMultiBullets.Remove(toDestroy);
-        Destroy(toDestroy);
+
+        if(toDestroy)
+        {
+            toDestroy.GetComponent<NetworkObject>().Despawn();
+            spawnedMultiBullets.Remove(toDestroy);
+            Destroy(toDestroy);
+        }
     }
 
-    public void IncreaseFireRate(float addedFireRate)
+    //public void IncreaseFireRate(float addedFireRate)
+    //{
+    //    fireRateMultiplier += addedFireRate;
+    //}
+
+    [ClientRpc]
+    public void FireRateIncreaseClientRpc(float addedFireRate)
     {
         fireRateMultiplier += addedFireRate;
+    }
+
+    [ClientRpc]
+    public void ActivateMagnetBoolClientRpc()
+    {
+        isMagnetPowerUpActive = true;
+    }
+
+    [ClientRpc]
+    public void ActivateTripleBoolClientRpc()
+    {
+        isTripleBulletPowerUpActive = true;
+    }
+
+    [ServerRpc]
+    private void CreateBulletNoiseServerRpc()
+    {
+        GameObject bullet = Instantiate(bulletNoise, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+
+        if(isTripleBulletPowerUpActive)
+        {
+            bullet.GetComponent<MultiRandomPitch>().isTripleBulletActive = true;
+            bullet.GetComponent<NetworkObject>().Spawn();
+        }
+
+        else
+        {
+            bullet.GetComponent<NetworkObject>().Spawn();
+        }
     }
 }

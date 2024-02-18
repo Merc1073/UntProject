@@ -106,7 +106,7 @@ public class MultiMainMenu : NetworkBehaviour
 
         //if (!IsServer) return;
 
-        GetComponent<NetworkObject>().Spawn();
+        GetComponent<NetworkObject>().SpawnWithOwnership(clientId: 0);
         GetComponent<NetworkObject>().DestroyWithScene = true;
 
     }

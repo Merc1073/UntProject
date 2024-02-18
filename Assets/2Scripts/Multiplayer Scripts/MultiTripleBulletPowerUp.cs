@@ -58,23 +58,9 @@ public class MultiTripleBulletPowerUp : NetworkBehaviour
     {
         if (other.GetComponent<MultiMainPlayer>())
         {
+            if (!IsClient) return;
 
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isTripleBulletPowerUpActive = true;
-
-            //gameScript.ActivateTripleBulletPowerUp();
-
-            //soundPlay.canPlaySound = true;
-
-            //var em = particles.emission;
-            //var dur = particles.main.duration;
-
-            //em.enabled = true;
-
-            //transform.parent.position = transform.position;
-
-            //particles.Play();
-
-            //particOnce = false;
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().ActivateTripleBoolClientRpc();
 
             CreateParticlesServerRpc();
 

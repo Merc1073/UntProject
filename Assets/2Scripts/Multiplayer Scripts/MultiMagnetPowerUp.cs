@@ -51,14 +51,15 @@ public class MultiMagnetPowerUp : NetworkBehaviour
             mesh.material.color = color;
         }
 
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<MultiMainPlayer>())
         {
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isTripleBulletPowerUpActive = true;
+            if (!IsClient) return;
+
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().ActivateMagnetBoolClientRpc();
 
             CreateParticlesServerRpc();
 

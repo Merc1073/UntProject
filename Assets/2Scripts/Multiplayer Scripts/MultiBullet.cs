@@ -33,6 +33,9 @@ public class MultiBullet : NetworkBehaviour
 
     public bool isMagnetPowerUpActive = false;
 
+    public bool despawnInstructionSent = false;
+    public bool spawnInstructionSent = false;
+
     public bool particOnce = true;
     public bool sizeIsMax = false;
     public bool distanceTriggered = false;
@@ -57,12 +60,9 @@ public class MultiBullet : NetworkBehaviour
     void Update()
     {
 
-
         timer += Time.deltaTime;
 
-
         AdjustTrailWidth();
-
 
         if (timer >= bulletDuration - 0.25f)
         {
@@ -159,15 +159,25 @@ public class MultiBullet : NetworkBehaviour
             if (!IsOwner) return;
 
             CreateParticlesServerRpc();
-            parent.DestroyBulletServerRpc();
+
+            if(!despawnInstructionSent)
+            {
+                parent.DestroyBulletServerRpc();
+                despawnInstructionSent = true;
+            }
         }
 
-        if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Ground")
+        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Ground"))
         {
             if (!IsOwner) return;
 
             CreateParticlesServerRpc();
-            parent.DestroyBulletServerRpc();
+
+            if (!despawnInstructionSent)
+            {
+                parent.DestroyBulletServerRpc();
+                despawnInstructionSent = true;
+            }
         }
 
     }
