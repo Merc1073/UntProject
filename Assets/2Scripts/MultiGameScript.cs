@@ -236,7 +236,7 @@ public class MultiGameScript : NetworkBehaviour
 
         //Debug.Log(scoreMultiplier.Value);
 
-        Debug.Log(mainPlayer.GetComponent<MultiMainPlayer>().playerScore.Value);
+        //Debug.Log(mainPlayer.GetComponent<MultiMainPlayer>().playerScore.Value);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

@@ -58,9 +58,9 @@ public class MultiTripleBulletPowerUp : NetworkBehaviour
     {
         if (other.GetComponent<MultiMainPlayer>())
         {
-            if (!IsClient) return;
 
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().ActivateTripleBoolClientRpc();
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isTriplePowerUpActive.Value = true;
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().hasTripleTriggered.Value = true;
 
             CreateParticlesServerRpc();
 

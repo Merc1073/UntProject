@@ -5628,6 +5628,8 @@ MonoBehaviour:
   player: {fileID: 4693263769945157930}
   bulletNoise: {fileID: 4843336463963981155, guid: bc81da5b7e9a48844be13c97909602fd, type: 3}
   cameraPlayer: {fileID: 1529978177302420773}
+  magnetPowerBar: {fileID: 8538078451926899413}
+  triplePowerBar: {fileID: 7433213829849923289}
   groundMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -5640,8 +5642,22 @@ MonoBehaviour:
   fireRateMultiplier: 1.5
   roundsPerSecond: 0
   decimalPlaces: 2
-  isMagnetPowerUpActive: 0
-  isTripleBulletPowerUpActive: 0
+  originalMagnetPowerUpTime:
+    m_InternalValue: 0
+  magnetPowerUpTime:
+    m_InternalValue: 0
+  originalTriplePowerUpTime:
+    m_InternalValue: 0
+  triplePowerUpTime:
+    m_InternalValue: 0
+  isMagnetPowerUpActive:
+    m_InternalValue: 0
+  hasMagnetTriggered:
+    m_InternalValue: 0
+  isTriplePowerUpActive:
+    m_InternalValue: 0
+  hasTripleTriggered:
+    m_InternalValue: 0
   canFire: 0
   tranDif: {x: 0, y: 0, z: 0}
   spawnedMultiBullets: []
@@ -5944,8 +5960,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   forceMultiplier: 5000
+  coinCount:
+    m_InternalValue: 0
+  playerScore:
+    m_InternalValue: 0
+  playerScoreMultiplier:
+    m_InternalValue: 0
   audioListener: {fileID: 6646984557942772010}
-  coinCount: 0
   particOnce: 1
   canMove: 1
   hasFoundGameScript: 0
@@ -6442,7 +6463,7 @@ GameObject:
   - component: {fileID: 9138559007060242380}
   - component: {fileID: 1293833854716288775}
   - component: {fileID: 82530146290789301}
-  - component: {fileID: 6775149157572800879}
+  - component: {fileID: 6172575297090530078}
   m_Layer: 8
   m_Name: TripleBulletBar
   m_TagString: Untagged
@@ -6508,7 +6529,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6775149157572800879
+--- !u!114 &6172575297090530078
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6517,7 +6538,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7433213829849923289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab16dc5de846cc1469d4b39184cb29d6, type: 3}
+  m_Script: {fileID: 11500000, guid: e36e48b5d76758946aa8e564b1144590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 82530146290789301}
@@ -6645,7 +6666,7 @@ GameObject:
   - component: {fileID: 278125761969450134}
   - component: {fileID: 2625451065673272722}
   - component: {fileID: 4709070643373108197}
-  - component: {fileID: 979098096577901886}
+  - component: {fileID: 1925769891282408547}
   m_Layer: 8
   m_Name: MagnetBar
   m_TagString: Untagged
@@ -6711,7 +6732,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &979098096577901886
+--- !u!114 &1925769891282408547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6720,7 +6741,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8538078451926899413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 712e7e0ef065b2b459f0b2afb619cc2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 1187d0c26b267444cb476b493257b7d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 4709070643373108197}

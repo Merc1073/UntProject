@@ -101,7 +101,7 @@ MonoBehaviour:
   rotateVelocity: 0
   rotateSpeedMovement: 0
   playerDetection: {fileID: 6018641989665894078}
-  enemyBullet: {fileID: 7053865573202566494, guid: 423f93373e3e81345a8ff69e0eb21a78, type: 3}
+  enemyBullet: {fileID: 8487292676344991059, guid: 423f93373e3e81345a8ff69e0eb21a78, type: 3}
   canFire: 0
   spawnedEnemyBullets: []
 --- !u!1 &1300167053728103266

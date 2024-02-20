@@ -193,6 +193,7 @@ public class MultiMainMenu : NetworkBehaviour
                 DeactivateObject(startButton.gameObject);
                 DeactivateObject(gameModesButton.gameObject);
                 DeactivateObject(quitButton.gameObject);
+
             }
         }
 

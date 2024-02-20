@@ -14,9 +14,9 @@ public class MultiMainPlayer : NetworkBehaviour
 
     public float forceMultiplier;
 
-    public NetworkVariable<int> coinCount = new();
-    public NetworkVariable<float> playerScore = new();
-    public NetworkVariable<int> playerScoreMultiplier = new();
+    public NetworkVariable<int> coinCount = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<float> playerScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<int> playerScoreMultiplier = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
 
 
@@ -217,7 +217,7 @@ public class MultiMainPlayer : NetworkBehaviour
     public void AddCoinsToPlayerClientRpc()
     {
 
-        if (!IsOwner) return;
+        //if (!IsOwner) return;
 
         coinCount.Value += 1;
         playerScoreMultiplier.Value += 1;
@@ -253,7 +253,7 @@ public class MultiMainPlayer : NetworkBehaviour
 
         playerScore.Value = newScore;
 
-        //Debug.Log(newScore + " " + OwnerClientId);
+        Debug.Log(newScore + " " + OwnerClientId);
     }
 
 }

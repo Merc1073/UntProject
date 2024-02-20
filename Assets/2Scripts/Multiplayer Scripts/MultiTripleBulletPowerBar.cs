@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine.UI;
 using UnityEngine;
 
-public class MultiTripleBulletPowerBar : MonoBehaviour
+public class MultiTripleBulletPowerBar : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private Image image;
+    [SerializeField] private Gradient gradient;
+
+    [ClientRpc]
+    public void UpdateTripleBarClientRpc(float maxPower, float currentPower)
     {
-        
+
+        image.fillAmount = currentPower / maxPower;
+
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,6 +21,15 @@ public class MultiBulletPoint : NetworkBehaviour
 
     [SerializeField]
     private Camera cameraPlayer;
+
+    [SerializeField]
+    private GameObject magnetPowerBar;
+
+    [SerializeField]
+    private GameObject triplePowerBar;
+
+    //[SerializeField]
+    //private GameObject tripleBulletPowerBar;
 
     //Camera customCamera;
     //private MainPlayer playerScript;
@@ -44,8 +54,26 @@ public class MultiBulletPoint : NetworkBehaviour
     public float roundsPerSecond;
     public int decimalPlaces;
 
-    public bool isMagnetPowerUpActive = false;
-    public bool isTripleBulletPowerUpActive = false;
+    //public float originalMagnetPowerUpTime;
+    //public float magnetPowerUpTime;
+
+    public NetworkVariable<float> originalMagnetPowerUpTime = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<float> magnetPowerUpTime = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    public NetworkVariable<float> originalTriplePowerUpTime = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<float> triplePowerUpTime = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    //public bool isMagnetPowerUpActive = false;
+    //public bool hasMagnetTriggered = false;
+
+    public NetworkVariable<bool> isMagnetPowerUpActive = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<bool> hasMagnetTriggered = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    public NetworkVariable<bool> isTriplePowerUpActive = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<bool> hasTripleTriggered = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+
+    //public bool isTripleBulletPowerUpActive = false;
 
     public bool canFire = false;
 
@@ -69,15 +97,28 @@ public class MultiBulletPoint : NetworkBehaviour
 
     }
 
-    //public override void OnNetworkSpawn()
-    //{
+    public override void OnNetworkSpawn()
+    {
+        originalMagnetPowerUpTime.Value = 5f;
+        magnetPowerUpTime.Value = 0f;
 
-    //    base.OnNetworkSpawn();
-    //}
+        originalTriplePowerUpTime.Value = 5f;
+        triplePowerUpTime.Value = 0f;
+
+        isMagnetPowerUpActive.Value = false;
+        hasMagnetTriggered.Value = false;
+
+        isTriplePowerUpActive.Value = false;
+        hasTripleTriggered.Value = false;
+
+        base.OnNetworkSpawn();
+    }
 
     void Update()
     {
         if (!IsOwner) return;
+
+        //Debug.Log(isMagnetPowerUpActive);
 
         transform.position = player.transform.position + tranDif;
 
@@ -104,14 +145,61 @@ public class MultiBulletPoint : NetworkBehaviour
 
         //if (!IsOwner) return;
 
-        if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && isTripleBulletPowerUpActive == false)
+        if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && isTriplePowerUpActive.Value == false)
         {
             FireNormalBullet();
         }
 
-        if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && isTripleBulletPowerUpActive == true)
+        if (Input.GetMouseButton(0) && fireRateCooldown <= 0 && isTriplePowerUpActive.Value == true)
         {
             FireTripleBullet();
+        }
+
+
+
+        UpdateMagnetUIServerRpc();
+        UpdateTripleUIServerRpc();
+
+
+
+        if (hasMagnetTriggered.Value)
+        {
+            magnetPowerUpTime.Value = originalMagnetPowerUpTime.Value;
+            hasMagnetTriggered.Value = false;
+        }
+
+        if (isMagnetPowerUpActive.Value)
+        {
+
+            magnetPowerUpTime.Value -= Time.deltaTime;
+
+            if (magnetPowerUpTime.Value <= 0f)
+            {
+                magnetPowerUpTime.Value = 0f;
+                isMagnetPowerUpActive.Value = false;
+            }
+
+        }
+
+
+
+        if(hasTripleTriggered.Value)
+        {
+            triplePowerUpTime.Value = originalTriplePowerUpTime.Value;
+            hasTripleTriggered.Value = false;
+        }
+
+        if(isTriplePowerUpActive.Value)
+        {
+
+            triplePowerUpTime.Value -= Time.deltaTime;
+
+            if(triplePowerUpTime.Value <= 0f)
+            {
+                triplePowerUpTime.Value = 0f;
+                isTriplePowerUpActive.Value = false;
+            }
+
         }
 
     }
@@ -151,7 +239,7 @@ public class MultiBulletPoint : NetworkBehaviour
         canFire = false;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void CreateBulletServerRpc(/*ServerRpcParams serverRpcParams = default*/)
     {
         //if (!IsClient) return;
@@ -162,7 +250,7 @@ public class MultiBulletPoint : NetworkBehaviour
 
         GameObject clone = Instantiate(bullet, transform.position, rotationToLookAt);
 
-        if(isMagnetPowerUpActive)
+        if (isMagnetPowerUpActive.Value)
         {
             clone.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
         }
@@ -195,13 +283,12 @@ public class MultiBulletPoint : NetworkBehaviour
         clone3.transform.Rotate(0, -10, 0);
 
 
-        if (isMagnetPowerUpActive)
+        if (isMagnetPowerUpActive.Value)
         {
             clone1.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
             clone2.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
             clone3.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
         }
-
 
         spawnedMultiBullets.Add(clone1);
         spawnedMultiBullets.Add(clone2);
@@ -223,13 +310,15 @@ public class MultiBulletPoint : NetworkBehaviour
     {
         GameObject toDestroy = spawnedMultiBullets[0];
 
-        if(toDestroy)
+        if (toDestroy)
         {
             toDestroy.GetComponent<NetworkObject>().Despawn();
             spawnedMultiBullets.Remove(toDestroy);
             Destroy(toDestroy);
         }
+
     }
+
 
     //public void IncreaseFireRate(float addedFireRate)
     //{
@@ -242,24 +331,36 @@ public class MultiBulletPoint : NetworkBehaviour
         fireRateMultiplier += addedFireRate;
     }
 
-    [ClientRpc]
-    public void ActivateMagnetBoolClientRpc()
-    {
-        isMagnetPowerUpActive = true;
-    }
+    //[ClientRpc]
+    //public void ActivateMagnetBoolClientRpc()
+    //{
+    //    isMagnetPowerUpActive = true;
+    //}
 
-    [ClientRpc]
-    public void ActivateTripleBoolClientRpc()
-    {
-        isTripleBulletPowerUpActive = true;
-    }
+    //[ClientRpc]
+    //public void ActivateMagnetTriggerBoolClientRpc()
+    //{
+    //    hasMagnetTriggered = true;
+    //}
+
+    //[ClientRpc]
+    //private void DisableMagnetBoolClientRpc()
+    //{
+    //    isMagnetPowerUpActive = false;
+    //}
+
+    //[ClientRpc]
+    //public void ActivateTripleBoolClientRpc()
+    //{
+    //    isTriplePowerUpActive.Value = true;
+    //}
 
     [ServerRpc]
     private void CreateBulletNoiseServerRpc()
     {
         GameObject bullet = Instantiate(bulletNoise, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
 
-        if(isTripleBulletPowerUpActive)
+        if (isTriplePowerUpActive.Value)
         {
             bullet.GetComponent<MultiRandomPitch>().isTripleBulletActive = true;
             bullet.GetComponent<NetworkObject>().Spawn();
@@ -269,5 +370,73 @@ public class MultiBulletPoint : NetworkBehaviour
         {
             bullet.GetComponent<NetworkObject>().Spawn();
         }
+
     }
+
+    [ServerRpc]
+    private void UpdateMagnetUIServerRpc()
+    {
+        magnetPowerBar.GetComponent<MultiMagnetPowerBar>().UpdateMagnetBarClientRpc(originalMagnetPowerUpTime.Value, magnetPowerUpTime.Value);
+    }
+
+    [ServerRpc]
+    private void UpdateTripleUIServerRpc()
+    {
+        triplePowerBar.GetComponent<MultiTripleBulletPowerBar>().UpdateTripleBarClientRpc(originalTriplePowerUpTime.Value, triplePowerUpTime.Value);
+    }
+
+    //[ServerRpc]
+    //private void UpdateMagnetVariablesServerRpc()
+    //{
+
+    //    if (!IsOwner) return;
+
+    //    magnetPowerUpTime -= Time.deltaTime;
+
+    //    if (magnetPowerUpTime <= 0f)
+    //    {
+    //        magnetPowerUpTime = 0f;
+    //        isMagnetPowerUpActive = false;
+    //    }
+
+    //}
+    
+    //[ServerRpc]
+    //private void UpdateMagnetTriggerServerRpc()
+    //{
+    //    magnetPowerUpTime = originalMagnetPowerUpTime;
+    //    hasMagnetTriggered = false;
+    //}
+
+    //[ServerRpc]
+    //private void UpdateMagnetStuffServerRpc()
+    //{
+
+    //    UpdateMagnetStuffClientRpc();
+
+    //}
+
+    //[ClientRpc]
+    //private void UpdateMagnetStuffClientRpc()
+    //{
+
+    //    if (hasMagnetTriggered)
+    //    {
+    //        magnetPowerUpTime = originalMagnetPowerUpTime;
+    //        hasMagnetTriggered = false;
+    //    }
+
+    //    if (isMagnetPowerUpActive)
+    //    {
+
+    //        magnetPowerUpTime -= Time.deltaTime;
+
+    //        if (magnetPowerUpTime <= 0f)
+    //        {
+    //            magnetPowerUpTime = 0f;
+    //            isMagnetPowerUpActive = false;
+    //        }
+
+    //    }
+    //}
 }
