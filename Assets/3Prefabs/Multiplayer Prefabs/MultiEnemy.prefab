@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0
-  fireRateCooldown: 999
+  fireRateCooldown: 3
   rotateVelocity: 0
   rotateSpeedMovement: 0
   playerDetection: {fileID: 5851488075887214052}

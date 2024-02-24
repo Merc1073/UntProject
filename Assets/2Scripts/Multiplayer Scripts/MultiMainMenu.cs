@@ -26,6 +26,8 @@ public class MultiMainMenu : NetworkBehaviour
     public TMP_Text rapidFireText;
     public TMP_Text growthText;
 
+    public TMP_Text roomCode;
+
     public GameObject particleEffect1;
     public GameObject particleEffect2;
 
@@ -117,6 +119,8 @@ public class MultiMainMenu : NetworkBehaviour
 
     void Update()
     {
+
+        roomCode.text = "Code: " + RelayManager.Instance.joinCodeText;
 
         if (gameModeIsRapidFire == true)
         {

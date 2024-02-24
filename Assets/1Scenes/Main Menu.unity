@@ -361,7 +361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &92494591
 Transform:
   m_ObjectHideFlags: 0
@@ -29872,6 +29872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   environment: production
+  joinCodeText: 
   maxNumberOfConnections: 10
 --- !u!1 &1250679420
 GameObject:
@@ -36247,7 +36248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1631539212
 Transform:
   m_ObjectHideFlags: 0

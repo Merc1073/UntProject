@@ -15,6 +15,8 @@ public class RelayManager : DilmerGames.Core.Singletons.Singleton<RelayManager>
     [SerializeField]
     private string environment = "production";
 
+    public string joinCodeText;
+
     [SerializeField]
     private int maxNumberOfConnections = 10;
 
@@ -55,6 +57,7 @@ public class RelayManager : DilmerGames.Core.Singletons.Singleton<RelayManager>
 
         //Logger.Instance.LogInfo($"Relay Server Generated Join Code: {relayHostData.JoinCode}");
         Debug.Log($"Relay Server Generated Join Code: {relayHostData.JoinCode}");
+        joinCodeText = relayHostData.JoinCode;
 
         return relayHostData;
     }

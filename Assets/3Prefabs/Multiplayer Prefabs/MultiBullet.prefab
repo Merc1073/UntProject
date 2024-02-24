@@ -248,8 +248,8 @@ MonoBehaviour:
   particles: {fileID: 4843336463963981155, guid: 731569542eeaeab49b5dcf49ef8239a3, type: 3}
   mesh: {fileID: 9123294631809258596}
   enemyDetection: {fileID: 1030056848952071590}
-  bulletSpeed: 20
-  bulletDuration: 3
+  bulletSpeed: 45
+  bulletDuration: 1
   magnetSpeed: 3
   magnetDistance: 15
   shrinkSpeed: 1

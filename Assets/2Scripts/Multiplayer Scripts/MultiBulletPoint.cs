@@ -170,14 +170,8 @@ public class MultiBulletPoint : NetworkBehaviour
             FireTripleBullet();
         }
 
-
-
         UpdateMagnetUIServerRpc();
         UpdateTripleUIServerRpc();
-
-
-
-        
 
     }
 

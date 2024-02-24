@@ -202,8 +202,9 @@ public class MultiEnemy : NetworkBehaviour
                     {
                         player.GetComponent<MultiMainPlayer>().UpdateEnemyScoreServerRpc(50f);
                         player.GetComponent<MultiMainPlayer>().UpdateScoreServerRpc();
+                        player.GetComponent<MultiMainPlayer>().UpdateEnemiesDefeatedServerRpc(1);
                         isDead = true;
-                        Debug.Log("player found, score added.");
+                        //Debug.Log("player found, score added.");
                         break;
                     }
                 }

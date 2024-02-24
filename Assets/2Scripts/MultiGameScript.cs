@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
-using UnityEditor.PackageManager;
 
 public class MultiGameScript : NetworkBehaviour
 {
@@ -104,6 +103,7 @@ public class MultiGameScript : NetworkBehaviour
     [Header("Enemy Respawn Timers")]
     public float enemyRespawnTimer;
     public float newEnemyTimer;
+    public float enemyTimerMultiplier;
 
     [Header("Enemy Variables")]
     public float increaseInGlobalEnemyForceMultiplier;
@@ -398,7 +398,8 @@ public class MultiGameScript : NetworkBehaviour
         if (hasRapidFireModeStarted && !AreAllPlayersDead())
         {
 
-            globalEnemyForceMultiplier += Time.deltaTime * increaseInGlobalEnemyForceMultiplier;
+            globalEnemyForceMultiplier += Time.deltaTime * increaseInGlobalEnemyForceMultiplier * GetComponent<MultiPlayerCount>().allPlayers.Count;
+            enemyTimerMultiplier = GetComponent<MultiPlayerCount>().allPlayers.Count;
 
             UpdateFinalScoreServerRpc();
 
@@ -483,8 +484,8 @@ public class MultiGameScript : NetworkBehaviour
 
                         if (newEnemyTimer > 3.75f)
                         {
-                            newEnemyTimer -= stage1 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
+                            newEnemyTimer -= stage1 * Time.deltaTime * enemyTimerMultiplier;
+                            enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                             //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
@@ -497,8 +498,8 @@ public class MultiGameScript : NetworkBehaviour
 
                         else if (newEnemyTimer > 2.5f)
                         {
-                            newEnemyTimer -= stage2 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
+                            newEnemyTimer -= stage2 * Time.deltaTime * enemyTimerMultiplier;
+                            enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                             //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
@@ -511,8 +512,8 @@ public class MultiGameScript : NetworkBehaviour
 
                         else if (newEnemyTimer > 1.25f)
                         {
-                            newEnemyTimer -= stage3 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
+                            newEnemyTimer -= stage3 * Time.deltaTime * enemyTimerMultiplier;
+                            enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                             //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
@@ -525,8 +526,8 @@ public class MultiGameScript : NetworkBehaviour
 
                         else if (newEnemyTimer > 0.625f)
                         {
-                            newEnemyTimer -= stage4 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
+                            newEnemyTimer -= stage4 * Time.deltaTime * enemyTimerMultiplier;
+                            enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                             //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
@@ -539,8 +540,8 @@ public class MultiGameScript : NetworkBehaviour
 
                         else if (newEnemyTimer > 0.3125f)
                         {
-                            newEnemyTimer -= stage5 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
+                            newEnemyTimer -= stage5 * Time.deltaTime * enemyTimerMultiplier;
+                            enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                             //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
@@ -553,8 +554,8 @@ public class MultiGameScript : NetworkBehaviour
 
                         else
                         {
-                            newEnemyTimer -= stage6 * Time.deltaTime;
-                            enemyRespawnTimer -= Time.deltaTime;
+                            newEnemyTimer -= stage6 * Time.deltaTime * enemyTimerMultiplier;
+                            enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                             //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
@@ -568,7 +569,7 @@ public class MultiGameScript : NetworkBehaviour
 
                     else
                     {
-                        enemyRespawnTimer -= Time.deltaTime;
+                        enemyRespawnTimer -= Time.deltaTime * enemyTimerMultiplier;
 
                         //respawnSeconds = (int)(enemyRespawnTimer % 60);
 

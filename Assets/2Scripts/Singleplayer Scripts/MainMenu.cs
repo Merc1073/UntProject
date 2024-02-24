@@ -107,8 +107,8 @@ public class MainMenu : MonoBehaviour
         growthButton.gameObject.SetActive(false);
         backButtonGameModes.gameObject.SetActive(false);
 
-        startHostButton.gameObject.SetActive(true);
-        startClientButton.gameObject.SetActive(true);
+        //startHostButton.gameObject.SetActive(true);
+        //startClientButton.gameObject.SetActive(true);
 
         tutorialText.gameObject.SetActive(false);
 
@@ -119,7 +119,7 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    async void Update()
+    void Update()
     {
 
 
@@ -370,25 +370,25 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        if (startHostButton.gameObject.activeSelf == true)
-        {
-            if (startHostDistanceToPlayer <= generalDistanceFromPlayer)
-            {
-                CreateParticleEffect(gameStartParticle, startHostButton.transform.position, Quaternion.Euler(Vector3.zero));
+        //if (startHostButton.gameObject.activeSelf == true)
+        //{
+        //    if (startHostDistanceToPlayer <= generalDistanceFromPlayer)
+        //    {
+        //        CreateParticleEffect(gameStartParticle, startHostButton.transform.position, Quaternion.Euler(Vector3.zero));
 
-                if (RelayManager.Instance.IsRelayEnabled)
-                    await RelayManager.Instance.SetupRelay();
+        //        if (RelayManager.Instance.IsRelayEnabled)
+        //            await RelayManager.Instance.SetupRelay();
 
-                NetworkManager.Singleton.StartHost();
+        //        NetworkManager.Singleton.StartHost();
 
-                if (player)
-                {
-                    Destroy(player.gameObject);
-                }
+        //        if (player)
+        //        {
+        //            Destroy(player.gameObject);
+        //        }
 
-                SceneManager.LoadScene("Multi Main Menu");
-            }
-        }
+        //        SceneManager.LoadScene("Multi Main Menu");
+        //    }
+        //}
 
     }
 

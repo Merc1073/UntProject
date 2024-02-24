@@ -1462,7 +1462,7 @@ MonoBehaviour:
   rotateSpeedMovement: 0
   rotationToLookAt: {x: 0, y: 0, z: 0, w: 0}
   fireRate: 0
-  maxFireRate: 25
+  maxFireRate: 10
   fireRateCooldown: 0
   fireRateMultiplier:
     m_InternalValue: 0
@@ -1881,6 +1881,8 @@ MonoBehaviour:
     m_InternalValue: 0
   playerScore:
     m_InternalValue: 0
+  enemyScore:
+    m_InternalValue: 0
   playerScoreMultiplier:
     m_InternalValue: 0
   totalPlayerScore:
@@ -2025,6 +2027,8 @@ MonoBehaviour:
   enemyCounter:
     m_InternalValue: 0
   rapidTimer:
+    m_InternalValue: 0
+  enemiesDefeated:
     m_InternalValue: 0
   audioListener: {fileID: 6646984557942772010}
   isAlive:

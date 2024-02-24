@@ -7,7 +7,6 @@ using UnityEngine.SocialPlatforms.Impl;
 using Unity.Collections;
 using UnityEditor;
 using UnityEngine.SceneManagement;
-using UnityEditor.PackageManager;
 
 public class MultiMainPlayer : NetworkBehaviour
 {
@@ -45,6 +44,7 @@ public class MultiMainPlayer : NetworkBehaviour
     public NetworkVariable<FixedString128Bytes> newEnemyTimerRounded = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> enemyCounter = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> rapidTimer = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> enemiesDefeated = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public AudioListener audioListener;
 
@@ -143,12 +143,13 @@ public class MultiMainPlayer : NetworkBehaviour
 
         if (IsLocalPlayer && multiGameScript.hasRapidFireModeStarted)
         {
-            Debug.Log("works");
+            //Debug.Log("works");
             RapidFireUICanvas.SetActive(true);
             fireRateText.text = "Fire Rate: " + multiBulletPoint.GetComponent<MultiBulletPoint>().roundsPerSecond.ToString() + " / Second";
             enemyRespawnText.text = "Enemy spawns every " + newEnemyTimerRounded.Value + " Seconds";
             enemyCountText.text = "Total Enemies in arena: " + enemyCounter.Value.ToString();
             timerText.text = "Time Elapsed: " + rapidTimer.Value.ToString();
+            enemiesDefeatedText.text = "Enemies defeated: " + enemiesDefeated.Value.ToString();
             orbsCollectedText.text = "Orbs Collected: " + coinCount.Value.ToString();
             playerScoreText.text = "Your score: " + playerScore.Value.ToString();
             totalScoreText.text = "Total Score: " + totalPlayerScore.Value;
@@ -215,11 +216,6 @@ public class MultiMainPlayer : NetworkBehaviour
             rb.AddForce(movement * forceMultiplier * Time.deltaTime);
         }
 
-    }
-
-    private void FixedUpdate()
-    {
-        
     }
 
     private void LateUpdate()
@@ -365,6 +361,12 @@ public class MultiMainPlayer : NetworkBehaviour
     public void UpdateEnemyScoreServerRpc(float addedScore)
     {
         enemyScore.Value += addedScore;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdateEnemiesDefeatedServerRpc(int addedEnemiesDefeated)
+    {
+        enemiesDefeated.Value += addedEnemiesDefeated;
     }
 
     //[ServerRpc]

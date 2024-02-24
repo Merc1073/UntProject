@@ -60,6 +60,18 @@ public class MultiBullet : NetworkBehaviour
     void Update()
     {
 
+
+        if(transform.position.y > 1.01f)
+        {
+            transform.position += new Vector3(0, -0.1f, 0);
+        }
+
+        if(transform.position.y < 0.99f)
+        {
+            transform.position += new Vector3(0, 0.1f, 0);
+        }
+
+
         foreach(GameObject player in GetComponentInChildren<MultiPlayerCount>().allPlayers)
         {
             if(player.GetComponent<MultiMainPlayer>().GetComponentInParent<NetworkObject>().OwnerClientId == GetComponent<NetworkObject>().OwnerClientId)
