@@ -25,10 +25,8 @@ public class MultiEnemy : NetworkBehaviour
 
     public Transform canvasTransform;
 
-
     [SerializeField] float growthDuration;
     [SerializeField] float fadeDuration;
-
 
     public float forceMultiplier;
     public float totalForceMultiplier;
@@ -111,11 +109,51 @@ public class MultiEnemy : NetworkBehaviour
 
     }
 
+    private void OnDrawGizmos()
+    {
+        if(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer)
+        {
+            Vector3 playerObject = playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.transform.position;
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, playerObject);
+        }
+    }
+
     void Update()
     {
 
+        if (currentHealth <= 0)
+        {
+
+            currentCoinCounter = Random.Range(minCoins, maxCoins);
+
+            while (currentCoinCounter != 0)
+            {
+
+                SpawnCoinServerRpc();
+
+                currentCoinCounter--;
+            }
+
+
+            multiGameScript.ReduceEnemy();
+
+            CreateParticlesServerRpc();
+
+            DespawnEnemyServerRpc();
+
+        }
+
         if (playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer != null)
         {
+
+            if(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.GetComponent<MultiMainPlayer>().isAlive.Value == false)
+            {
+                playerDetection.GetComponent<MultiPlayerDetection>().player.Remove(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer);
+                playerDetection.GetComponent<MultiPlayerDetection>().playerObject.Remove(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.gameObject);
+                Debug.Log("player removed");
+            }
 
             totalForceMultiplier = forceMultiplier + multiGameScript.globalEnemyForceMultiplier;
 
@@ -127,31 +165,9 @@ public class MultiEnemy : NetworkBehaviour
             directionToPlayer = directionToPlayer.normalized * (forceMultiplier + multiGameScript.globalEnemyForceMultiplier);
 
             rb.AddForce(-directionToPlayer * Time.deltaTime);
-
-
-            if (currentHealth <= 0)
-            {
-
-                currentCoinCounter = Random.Range(minCoins, maxCoins);
-
-                while (currentCoinCounter != 0)
-                {
-
-                    SpawnCoinServerRpc();
-
-                    currentCoinCounter--;
-                }
-
-
-                multiGameScript.ReduceEnemy();
-
-                CreateParticlesServerRpc();
-
-                DespawnEnemyServerRpc();
-
-            }
+            
+ 
         }
-
 
     }
 
@@ -198,6 +214,8 @@ public class MultiEnemy : NetworkBehaviour
 
         Destroy(mesh);
         Destroy(gameObject);
+
+        multiGameScript.GetComponent<MultiEnemyCount>().allEnemies.Remove(gameObject);
     }
 
 }

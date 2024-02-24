@@ -106,7 +106,11 @@ public class MultiMainMenu : NetworkBehaviour
 
         //if (!IsServer) return;
 
-        GetComponent<NetworkObject>().SpawnWithOwnership(clientId: 0);
+        if(!GetComponent<NetworkObject>().IsSpawned)
+        {
+            GetComponent<NetworkObject>().SpawnWithOwnership(clientId: 0);
+        }
+
         GetComponent<NetworkObject>().DestroyWithScene = true;
 
     }
@@ -235,10 +239,13 @@ public class MultiMainMenu : NetworkBehaviour
             if (yesDistanceToPlayer <= generalDistanceFromPlayer)
             {
                 //startRapidFire = true;
-                StartCoroutine(sceneTransition.FadeOutTransition());
+                //StartCoroutine(sceneTransition.FadeOutTransition());
+                multiGameScript.skipTutorial = false;
+                startRapidFire = true;
 
 
                 CreateParticle4ServerRpc();
+                NetworkManager.SceneManager.LoadScene("Multi Rapid Fire", LoadSceneMode.Single);
 
                 DeactivateObject(yesButton.gameObject);
                 DeactivateObject(noButton.gameObject);

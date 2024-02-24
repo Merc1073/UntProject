@@ -6,8 +6,7 @@ using Unity.Netcode;
 public class MultiHealthState : NetworkBehaviour
 {
 
-    [HideInInspector]
-    public NetworkVariable<float> HealthPoint = new();
+    public NetworkVariable<float> HealthPoint = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public override void OnNetworkSpawn()
     {
@@ -16,8 +15,8 @@ public class MultiHealthState : NetworkBehaviour
     }
 
 
-    [ClientRpc]
-    public void DecreaseHealthClientRpc(float valueToDecrease)
+    [ServerRpc(RequireOwnership = false)]
+    public void DecreaseHealthServerRpc(float valueToDecrease)
     {
         HealthPoint.Value -= valueToDecrease;
     }

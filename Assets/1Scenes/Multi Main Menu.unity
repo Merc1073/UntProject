@@ -385,7 +385,7 @@ Transform:
   - {fileID: 1338819078}
   - {fileID: 1888690845}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &711823301
 MonoBehaviour:
@@ -665,7 +665,7 @@ Transform:
   m_Children:
   - {fileID: 920905436}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1029892428
 MonoBehaviour:
@@ -820,103 +820,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239752256}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1241932500
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1241932503}
-  - component: {fileID: 1241932502}
-  - component: {fileID: 1241932501}
-  m_Layer: 0
-  m_Name: NetworkMananger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1241932501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241932500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ProtocolType: 0
-  m_MaxPacketQueueSize: 128
-  m_MaxPayloadSize: 6144
-  m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 30000
-  ConnectionData:
-    Address: 127.0.0.1
-    Port: 7777
-    ServerListenAddress: 127.0.0.1
-  DebugSimulator:
-    PacketDelayMS: 0
-    PacketJitterMS: 0
-    PacketDropRate: 0
---- !u!114 &1241932502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241932500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NetworkConfig:
-    ProtocolVersion: 0
-    NetworkTransport: {fileID: 1241932501}
-    PlayerPrefab: {fileID: 104199965998226457, guid: 1404aaa78c770bc48ad96bfa5cfb892c, type: 3}
-    Prefabs:
-      NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 385bb2eb72b9c374a90565a40815a15d, type: 2}
-    TickRate: 30
-    ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
-    ConnectionData: 
-    EnableTimeResync: 0
-    TimeResyncInterval: 30
-    EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
-    ForceSamePrefabs: 1
-    RecycleNetworkIds: 1
-    NetworkIdRecycleDelay: 120
-    RpcHashSize: 0
-    LoadSceneTimeOut: 120
-    SpawnTimeout: 1
-    EnableNetworkLogs: 1
-    OldPrefabList: []
-  RunInBackground: 1
-  LogLevel: 0
---- !u!4 &1241932503
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241932500}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 176.67705, y: 214.8117, z: 59.84143}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1277939959
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,50 +1156,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 711823300}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1472926619
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1472926621}
-  - component: {fileID: 1472926620}
-  m_Layer: 0
-  m_Name: NetworkStartStuff
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1472926620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1472926619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad9a7c10913028f47b547eeef28f29ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1472926621
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1472926619}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1002.33545, y: 477.51093, z: 59.82541}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1639288635
 GameObject:
@@ -14347,8 +14206,12 @@ GameObject:
   - component: {fileID: 5756010381804545417}
   - component: {fileID: 8899486275328872815}
   - component: {fileID: 6902418479120096355}
-  - component: {fileID: 8899486275328872817}
   - component: {fileID: 8899486275328872816}
+  - component: {fileID: 8899486275328872817}
+  - component: {fileID: 8899486275328872818}
+  - component: {fileID: 8899486275328872821}
+  - component: {fileID: 8899486275328872820}
+  - component: {fileID: 8899486275328872819}
   m_Layer: 0
   m_Name: MultiGameScript
   m_TagString: Untagged
@@ -20243,19 +20106,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e3afe358ba4ac4485016fb458054b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enemy: {fileID: 6823708402512674163, guid: 56988286b39e0894eb874f7d6693ecaf, type: 3}
-  Coin: {fileID: 2454413220953191581, guid: 359d2a4f258c59240902e478f0f63e66, type: 3}
+  Enemy: {fileID: 2094028340004174716, guid: 56988286b39e0894eb874f7d6693ecaf, type: 3}
+  Coin: {fileID: 3989686239327102665, guid: 359d2a4f258c59240902e478f0f63e66, type: 3}
   MagnetPowerUp: {fileID: 7512444815576764851, guid: 3d6447e32e761354aabbd5a8a1d207ed, type: 3}
   TripleBulletPowerUp: {fileID: 7512444815576764851, guid: d1ab2e84e5b47e742a86e9e752742bd1, type: 3}
+  isMainPlayerFound: 0
   networkSpawned: 0
   isGameModeRapidFire: 0
   isGameModeGrowing: 0
   hasRapidFireModeStarted: 0
   isCurrentSceneRapidFireMode: 0
-  isMagnetPowerUpActive: 0
-  isTripleBulletPowerUpActive: 0
   hasGrowingModeStarted: 0
-  hasSceneBeenLoaded: 0
+  hasRapidFireSceneBeenLoaded: 0
+  hasMenuSceneBeenLoaded: 0
   fireRateText: {fileID: 5017567738995309541}
   respawnTimerText: {fileID: 6542326710163615446}
   enemyCountText: {fileID: 3257812444211421547}
@@ -20275,7 +20138,7 @@ MonoBehaviour:
   tripBulletPowerUpSpawn: {x: -5, y: 1, z: -5}
   totalTime: 0
   seconds: 0
-  respawnSeconds: 0
+  timeToMainMenu: 5
   originalTimerSpawnMagnetPowerUp: 10
   magnetRespawnTimer: 5
   originalTimerSpawnTripleBulletPowerUp: 10
@@ -20288,12 +20151,8 @@ MonoBehaviour:
   newEnemyTimer: 5
   increaseInGlobalEnemyForceMultiplier: 5
   globalEnemyForceMultiplier: 500
-  coinCount: 0
-  scoreCount:
-    m_InternalValue: 0
-  scoreMultiplier:
-    m_InternalValue: 0
-  addedEnemyScore:
+  initialScore: 0
+  totalFinalScore:
     m_InternalValue: 0
   genericDecimalPlaces: 2
   scoreDecimalPlaces: 0
@@ -20310,18 +20169,20 @@ MonoBehaviour:
   invincibilitySpawnRange: 100
   skipTutorial: 0
   isPlayerInvincible: 0
+  enemyCount: 0
   enemyFull: 0
   keepReducingSpawnTimer: 0
   canSpawnEnemies: 0
   canSpawnMagnetPowerUp: 0
   canSpawnTripleBulletPowerUp: 0
-  enemyCounter: 0
   enemyKillCounter: 0
-  maxEnemies: 100
+  maxEnemies: 50
   spawnEnemyNow: 0
   spawnCoinNow: 0
   spawnMagnetPowerUpNow: 0
   spawnTripleBulletPowerUpNow: 0
+  scoreCountRounded: 
+  newEnemyTimerRounded: 
 --- !u!224 &6985339876043777060
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30960,7 +30821,7 @@ MonoBehaviour:
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
+  DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
 --- !u!135 &8899486275328872816
 SphereCollider:
@@ -30996,6 +30857,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allPlayers: []
+--- !u!114 &8899486275328872818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193616016968478965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a78bcdc2c18af74ba6accd67c80e91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allEnemies: []
+  enemyCount: 0
+--- !u!114 &8899486275328872819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193616016968478965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 560070a7f885a8a4fb9793c67f87b6fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allCoins: []
+  coinCount: 0
+--- !u!114 &8899486275328872820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193616016968478965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e02de14ba7de1d64cae0db21ad2ac3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allTriples: []
+  tripleCount: 0
+--- !u!114 &8899486275328872821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193616016968478965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4046c14c9d19443bd3e1c82a1a72ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allMagnets: []
+  magnetCount: 0
 --- !u!222 &8941919098254532080
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31029,7 +30946,7 @@ Transform:
   - {fileID: 1652564949587748173}
   - {fileID: 8765977898140164970}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9022550660823849301
 MeshFilter:

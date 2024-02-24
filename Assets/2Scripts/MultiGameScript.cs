@@ -9,6 +9,14 @@ using System.Runtime.CompilerServices;
 
 public class MultiGameScript : NetworkBehaviour
 {
+
+    private static MultiGameScript instance;
+
+    public static MultiGameScript Instance
+    {
+        get { return instance; }
+    }
+
     [Header("Game Objects")]
     //public GameObject Player;
     public GameObject Enemy;
@@ -38,12 +46,15 @@ public class MultiGameScript : NetworkBehaviour
     public bool hasRapidFireModeStarted = false;
     public bool isCurrentSceneRapidFireMode = false;
 
-    public bool isMagnetPowerUpActive = false;
-    public bool isTripleBulletPowerUpActive = false;
+    //public bool isMagnetPowerUpActive = false;
+    //public bool isTripleBulletPowerUpActive = false;
 
     public bool hasGrowingModeStarted = false;
 
-    public bool hasSceneBeenLoaded = false;
+    public bool hasRapidFireSceneBeenLoaded = false;
+    public bool hasMenuSceneBeenLoaded = false;
+
+    //public bool hasRapidFireEnded = false;
 
     [Header("Texts")]
     [SerializeField] Text fireRateText;
@@ -72,7 +83,8 @@ public class MultiGameScript : NetworkBehaviour
     [Header("Clock Timer")]
     [SerializeField] float totalTime;
     [SerializeField] int seconds;
-    [SerializeField] int respawnSeconds;
+    //[SerializeField] int respawnSeconds;
+    [SerializeField] float timeToMainMenu;
 
     [Header("Powerups Respawn Timers")]
     [SerializeField] float originalTimerSpawnMagnetPowerUp;
@@ -97,15 +109,17 @@ public class MultiGameScript : NetworkBehaviour
     public float globalEnemyForceMultiplier;
 
     [Header("Coins and Score")]
-    public float coinCount;
+    //public float coinCount;
+    //public NetworkVariable<int> coinCount = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     //public float scoreCount;
     //public float scoreMultiplier;
     //public float addedEnemyScore;
 
-    public NetworkVariable<float> scoreCount = new();
-    public NetworkVariable<float> scoreMultiplier = new();
-    public NetworkVariable<float> addedEnemyScore = new();
-    public NetworkVariable<float> totalFinalScore = new();
+    //public NetworkVariable<float> scoreCount = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    //public NetworkVariable<float> scoreMultiplier = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    //public NetworkVariable<float> addedEnemyScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public float initialScore = 0f;
+    public NetworkVariable<float> totalFinalScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
     [Header("Decimal Places")]
@@ -131,9 +145,12 @@ public class MultiGameScript : NetworkBehaviour
     public bool skipTutorial = false;
 
     [Header("Player Booleans")]
+    //public int playerCount;
+    //public int originalPlayerCount;
     public bool isPlayerInvincible = false;
 
     [Header("Enemy Booleans")]
+    public int enemyCount;
     public bool enemyFull = false;
     public bool keepReducingSpawnTimer = false;
 
@@ -143,7 +160,7 @@ public class MultiGameScript : NetworkBehaviour
     public bool canSpawnTripleBulletPowerUp = false;
 
     [Header("Enemy variables")]
-    public int enemyCounter;
+    //public int enemyCounter;
     public int enemyKillCounter;
     public int maxEnemies;
 
@@ -153,16 +170,25 @@ public class MultiGameScript : NetworkBehaviour
     public bool spawnMagnetPowerUpNow = false;
     public bool spawnTripleBulletPowerUpNow = false;
 
-    string scoreCountRounded;
-    string newEnemyTimerRounded;
-    string magnetTimerRounded;
-    string tripleBulletTimerRounded;
+    public string scoreCountRounded;
+    public string newEnemyTimerRounded;
+    //public string magnetTimerRounded;
+    //public string tripleBulletTimerRounded;
 
 
     private void Awake()
     {
 
-        //DontDestroyOnLoad(gameObject);
+        if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }   
+
+        instance = this;
+
+        //DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
 
         //if (SceneManager.GetActiveScene().name == "Rapid Fire")
         //{
@@ -212,25 +238,41 @@ public class MultiGameScript : NetworkBehaviour
 
         //if (!IsServer) return;
 
-        GetComponent<NetworkObject>().Spawn();
+        if(!GetComponent<NetworkObject>().IsSpawned)
+        {
+            GetComponent<NetworkObject>().Spawn();
+        }
 
     }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-        scoreCount.Value = 0f;
-        scoreMultiplier.Value = 1f;
-        addedEnemyScore.Value = 0f;
-    }
+    //public override void OnNetworkSpawn()
+    //{
+    //    base.OnNetworkSpawn();
+    //    scoreCount.Value = 0f;
+    //    scoreMultiplier.Value = 1f;
+    //    addedEnemyScore.Value = 0f;
+    //}
+
+    //public override void OnNetworkSpawn()
+    //{
+    //    if(IsServer)
+    //    {
+
+    //    }
+    //    base.OnNetworkSpawn();
+    //}
 
     void Update()
     {
+        //playerCount = GetComponent<MultiPlayerCount>().playerCount.Value;
+        enemyCount = GetComponent<MultiEnemyCount>().enemyCount;
+
+        
+
 
         if (!mainPlayer && !isMainPlayerFound)
         {
             mainPlayer = GetComponent<MultiPlayerCount>().allPlayers[0];
-            Debug.Log(mainPlayer);
             isMainPlayerFound = true;
         }
 
@@ -243,10 +285,21 @@ public class MultiGameScript : NetworkBehaviour
             Application.Quit();
         }
 
+        if(SceneManager.GetActiveScene().name == "Multi Main Menu")
+        {
+            isGameModeRapidFire = false;
+            hasRapidFireModeStarted = false;
+            isCurrentSceneRapidFireMode = false;
+            hasRapidFireSceneBeenLoaded = false;
+            
+        }
 
-        if (SceneManager.GetActiveScene().name == "Multi Rapid Fire" && hasSceneBeenLoaded == false)
+        if (SceneManager.GetActiveScene().name == "Multi Rapid Fire" && hasRapidFireSceneBeenLoaded == false)
         {
             isCurrentSceneRapidFireMode = true;
+            hasMenuSceneBeenLoaded = false;
+
+            //originalPlayerCount = GetComponent<MultiPlayerCount>().allPlayers.Count;
 
             //if (playerScript)
             //{
@@ -258,10 +311,10 @@ public class MultiGameScript : NetworkBehaviour
             //    bulletReticle = FindObjectOfType<BulletPoint>();
             //}
 
-            if (mainPlayer)
-            {
-                mainPlayer.transform.position = playerRapidFireSpawn;
-            }
+            //if (mainPlayer)
+            //{
+            //    mainPlayer.transform.position = playerRapidFireSpawn;
+            //}
 
             isGameModeRapidFire = true;
 
@@ -272,19 +325,19 @@ public class MultiGameScript : NetworkBehaviour
             //stage5 = stage5ToSet;
             //stage6 = stage6ToSet;
 
-            hasSceneBeenLoaded = true;
+            hasRapidFireSceneBeenLoaded = true;
 
         }
 
-        if (hasRapidFireModeStarted == true)
+        if (hasRapidFireModeStarted)
         {
-            fireRateText.gameObject.SetActive(true);
-            respawnTimerText.gameObject.SetActive(true);
-            enemyCountText.gameObject.SetActive(true);
-            timerText.gameObject.SetActive(true);
-            enemiesKilled.gameObject.SetActive(true);
-            coinsCollected.gameObject.SetActive(true);
-            totalScore.gameObject.SetActive(true);
+            //fireRateText.gameObject.SetActive(true);
+            //respawnTimerText.gameObject.SetActive(true);
+            //enemyCountText.gameObject.SetActive(true);
+            //timerText.gameObject.SetActive(true);
+            //enemiesKilled.gameObject.SetActive(true);
+            //coinsCollected.gameObject.SetActive(true);
+            //totalScore.gameObject.SetActive(true);
             //magnetText.gameObject.SetActive(true);
             //tripleBulletText.gameObject.SetActive(true);
 
@@ -302,30 +355,18 @@ public class MultiGameScript : NetworkBehaviour
             newEnemyTimer = 0f;
         }
 
-        //for(int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
-        //{
-        //    totalFinalScore.Value += GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().playerScore.Value;
-        //}
+        //totalFinalScore.Value = GetComponent<MultiPlayerCount>().allPlayers[0].GetComponent<MultiMainPlayer>().playerScore.Value + GetComponent<MultiPlayerCount>().allPlayers[1].GetComponent<MultiMainPlayer>().playerScore.Value;
 
-        scoreCount.Value = coinCount * scoreMultiplier.Value + addedEnemyScore.Value;
+        //scoreCount.Value = coinCount * scoreMultiplier.Value + addedEnemyScore.Value;
 
-        scoreCountRounded = scoreCount.Value.ToString("F" + scoreDecimalPlaces);
+        scoreCountRounded = totalFinalScore.Value.ToString("F" + scoreDecimalPlaces);
         newEnemyTimerRounded = newEnemyTimer.ToString("F" + newEnemyDecimalPlaces);
-        magnetTimerRounded = magnetPowerUpTime.ToString("F" + genericDecimalPlaces);
-        tripleBulletTimerRounded = tripleBulletPowerUpTime.ToString("F" + genericDecimalPlaces);
 
 
-        //if (mainPlayer)
+        //if (isGameModeRapidFire == true)
         //{
-        //    mainPlayer.GetComponentInChildren<MagnetPowerBar>().UpdateMagnetBar(originalMagnetPowerUpTime, magnetPowerUpTime);
-        //    mainPlayer.GetComponentInChildren<TripleBulletPowerBar>().UpdateTripleBulletBar(originalTripleBulletPowerUpTime, tripleBulletPowerUpTime);
+        //    globalEnemyForceMultiplier += Time.deltaTime * increaseInGlobalEnemyForceMultiplier;
         //}
-
-
-        if (isGameModeRapidFire == true)
-        {
-            globalEnemyForceMultiplier += Time.deltaTime * increaseInGlobalEnemyForceMultiplier;
-        }
 
         if (spawnMagnetPowerUpNow == true)
         {
@@ -348,47 +389,47 @@ public class MultiGameScript : NetworkBehaviour
         }
 
 
-        if (isMagnetPowerUpActive == true)
+        if (hasRapidFireModeStarted && !AreAllPlayersDead())
         {
-            magnetPowerUpTime -= Time.deltaTime;
 
-            if (magnetPowerUpTime <= 0f)
+            globalEnemyForceMultiplier += Time.deltaTime * increaseInGlobalEnemyForceMultiplier;
+
+            UpdateFinalScoreServerRpc();
+
+            Debug.Log(AreAllPlayersDead());
+
+
+            if (AreAllPlayersDead())
             {
-                magnetPowerUpTime = 0f;
-                isMagnetPowerUpActive = false;
+                Debug.Log("all players have died.");
             }
 
-        }
-
-        if (isTripleBulletPowerUpActive == true)
-        {
-            tripleBulletPowerUpTime -= Time.deltaTime;
-
-            if (tripleBulletPowerUpTime <= 0f)
-            {
-                tripleBulletPowerUpTime = 0f;
-                isTripleBulletPowerUpActive = false;
-            }
-
-        }
-
-
-        if (mainPlayer && hasRapidFireModeStarted == true)
-        {
-
+            //foreach(GameObject player in GetComponent<MultiPlayerCount>().allPlayers)
+            //{
+            //    Debug.Log("Player health: " + player.GetComponentInParent<MultiHealthState>().HealthPoint.Value.ToString());
+            //}
 
             totalTime += Time.deltaTime;
             seconds = (int)(totalTime);
 
             //fireRateText.text = "Fire Rate: " + bulletReticle.roundsPerSecond.ToString() + " / Second";
             respawnTimerText.text = "Enemy spawns every " + newEnemyTimerRounded + " Seconds";
-            enemyCountText.text = "Total Enemies in arena: " + enemyCounter.ToString();
+            enemyCountText.text = "Total Enemies in arena: " + GetComponent<MultiEnemyCount>().enemyCount.ToString();
             timerText.text = "Timer: " + seconds.ToString();
             enemiesKilled.text = "Enemies defeated: " + enemyKillCounter.ToString();
-            coinsCollected.text = "Orbs Collected: " + coinCount.ToString();
+            //coinsCollected.text = "Orbs Collected: " + coinCount.ToString();
             totalScore.text = "Total Score: " + scoreCountRounded;
-            magnetText.text = "Magnet Timer: " + magnetTimerRounded;
-            tripleBulletText.text = "Triple Bullet Timer: " + tripleBulletTimerRounded;
+
+            for (int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
+            {
+                GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().newEnemyTimerRounded.Value = newEnemyTimerRounded;
+                GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().enemyCounter.Value = GetComponent<MultiEnemyCount>().enemyCount;
+            }
+
+            //UpdatePlayerVariablesServerRpc();
+
+            //magnetText.text = "Magnet Timer: " + magnetTimerRounded;
+            //tripleBulletText.text = "Triple Bullet Timer: " + tripleBulletTimerRounded;
 
             if (canSpawnMagnetPowerUp == true)
             {
@@ -417,12 +458,12 @@ public class MultiGameScript : NetworkBehaviour
             if (canSpawnEnemies == true)
             {
 
-                if (enemyCounter >= maxEnemies)
+                if (GetComponent<MultiEnemyCount>().enemyCount >= maxEnemies)
                 {
                     enemyFull = true;
                 }
 
-                if (enemyCounter < maxEnemies)
+                if (GetComponent<MultiEnemyCount>().enemyCount < maxEnemies)
                 {
                     enemyFull = false;
                 }
@@ -438,7 +479,7 @@ public class MultiGameScript : NetworkBehaviour
                             newEnemyTimer -= stage1 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+                            //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                             if (enemyRespawnTimer <= 0)
                             {
@@ -452,7 +493,7 @@ public class MultiGameScript : NetworkBehaviour
                             newEnemyTimer -= stage2 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+                            //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                             if (enemyRespawnTimer <= 0)
                             {
@@ -466,7 +507,7 @@ public class MultiGameScript : NetworkBehaviour
                             newEnemyTimer -= stage3 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+                            //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                             if (enemyRespawnTimer <= 0)
                             {
@@ -480,7 +521,7 @@ public class MultiGameScript : NetworkBehaviour
                             newEnemyTimer -= stage4 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+                            //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                             if (enemyRespawnTimer <= 0)
                             {
@@ -494,7 +535,7 @@ public class MultiGameScript : NetworkBehaviour
                             newEnemyTimer -= stage5 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+                            //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                             if (enemyRespawnTimer <= 0)
                             {
@@ -508,7 +549,7 @@ public class MultiGameScript : NetworkBehaviour
                             newEnemyTimer -= stage6 * Time.deltaTime;
                             enemyRespawnTimer -= Time.deltaTime;
 
-                            respawnSeconds = (int)(enemyRespawnTimer % 60);
+                            //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                             if (enemyRespawnTimer <= 0)
                             {
@@ -522,7 +563,7 @@ public class MultiGameScript : NetworkBehaviour
                     {
                         enemyRespawnTimer -= Time.deltaTime;
 
-                        respawnSeconds = (int)(enemyRespawnTimer % 60);
+                        //respawnSeconds = (int)(enemyRespawnTimer % 60);
 
                         if (enemyRespawnTimer <= 0)
                         {
@@ -531,6 +572,85 @@ public class MultiGameScript : NetworkBehaviour
                         }
                     }
                 }
+            } 
+        }
+
+
+        if (AreAllPlayersDead())
+        {
+
+            Debug.Log("all players are dead.");
+
+            keepReducingSpawnTimer = false;
+
+            canSpawnEnemies = false;
+            canSpawnMagnetPowerUp = false;
+            canSpawnTripleBulletPowerUp = false;
+
+            timeToMainMenu -= Time.deltaTime;
+
+            if (timeToMainMenu <= 0f && !hasMenuSceneBeenLoaded)
+            {
+                //hasRapidFireEnded = true;
+                isGameModeRapidFire = false;
+                hasRapidFireModeStarted = false;
+                isCurrentSceneRapidFireMode = false;
+                hasRapidFireSceneBeenLoaded = false;
+
+                totalTime = 0f;
+
+                magnetRespawnTimer = 5f;
+                tripleBulletRespawnTimer = 10f;
+
+                enemyRespawnTimer = 5f;
+                newEnemyTimer = 5f;
+
+                globalEnemyForceMultiplier = 500f;
+                initialScore = 0f;
+
+                enemyKillCounter = 0;
+
+                DespawnAllEnemiesServerRpc();
+                DespawnAllMagnetsServerRpc();
+                DespawnAllTriplesServerRpc();
+                DespawnAllCoinsServerRpc();
+
+                //playerCount = originalPlayerCount;
+
+                for (int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
+                {
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().GetComponentInParent<MultiHealthState>().HealthPoint.Value = 5f;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().canMove.Value = true;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().isAlive.Value = true;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().hasPlayerDied.Value = false;
+
+                    //GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().SetCanvasFalseServerRpc();
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().coinCount.Value = 0;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().playerScore.Value = 0;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().playerScoreMultiplier.Value = 0;
+
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().canFire.Value = true;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().fireRateMultiplier.Value = 1.5f;
+
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().originalMagnetPowerUpTime.Value = 5f;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().magnetPowerUpTime.Value = 0f;
+
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().originalTriplePowerUpTime.Value = 5f;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().triplePowerUpTime.Value = 0f;
+
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isMagnetPowerUpActive.Value = false;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().hasMagnetTriggered.Value = false;
+
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isTriplePowerUpActive.Value = false;
+                    GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().hasTripleTriggered.Value = false;
+                }
+
+                NetworkManager.Singleton.SceneManager.LoadScene("Multi Main Menu", LoadSceneMode.Single);
+                hasMenuSceneBeenLoaded = true;
+
+                timeToMainMenu = 5f;
+
+                return;
             }
         }
 
@@ -539,6 +659,22 @@ public class MultiGameScript : NetworkBehaviour
         //    Debug.Log("It's not working :/");
         //}
 
+
+
+    }
+
+    public bool AreAllPlayersDead()
+    {
+
+        foreach(GameObject player in GetComponent<MultiPlayerCount>().allPlayers)
+        {
+            if(player.GetComponentInParent<MultiHealthState>().HealthPoint.Value != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     [ServerRpc]
@@ -546,7 +682,7 @@ public class MultiGameScript : NetworkBehaviour
     {
         GameObject debugEnemy = Instantiate(Enemy, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
         debugEnemy.GetComponent<NetworkObject>().Spawn();
-        enemyCounter++;
+        //enemyCounter++;
         spawnEnemyNow = false;
     }
 
@@ -556,7 +692,7 @@ public class MultiGameScript : NetworkBehaviour
         enemySpawn = new Vector3(Random.Range(enemySpawnRange, -enemySpawnRange), 1, (Random.Range(enemySpawnRange, -enemySpawnRange)));
         GameObject normalEnemy = Instantiate(Enemy, enemySpawn + tranDif, Quaternion.Euler(0, 0, 0));
         normalEnemy.GetComponent<NetworkObject>().Spawn();
-        enemyCounter++;
+        //enemyCounter++;
     }
 
     [ServerRpc]
@@ -569,22 +705,113 @@ public class MultiGameScript : NetworkBehaviour
 
     public void ReduceEnemy()
     {
-        addedEnemyScore.Value += 50f;
+        //addedEnemyScore.Value += 50f;
         enemyKillCounter++;
-        enemyCounter--;
+        //GetComponent<MultiEnemyCount>().enemyCount--;
+        //enemyCounter--;
     }
 
-    public void ActivateMagnetPowerUp()
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnAllEnemiesServerRpc()
     {
-        magnetPowerUpTime = originalMagnetPowerUpTime;
-        isMagnetPowerUpActive = true;
+        //GameObject[] enemiesToDestroy = GameObject.FindGameObjectsWithTag("MultiEnemy");
+
+        //foreach(GameObject enemy in enemiesToDestroy)
+        //{
+        //    enemy.GetComponent<NetworkObject>().Despawn();
+        //    Destroy(enemy);
+        //}
+
+        //for (int i = 0; i < GetComponent<MultiEnemyCount>().enemyCount; i++)
+        //{
+        //    if (GetComponent<MultiEnemyCount>().allEnemies[i] != null)
+        //    {
+        //        GetComponent<MultiEnemyCount>().allEnemies[i].GetComponentInParent<NetworkObject>().Despawn();
+        //        Destroy(GetComponent<MultiEnemyCount>().allEnemies[i]);
+        //        GetComponent<MultiEnemyCount>().enemyCount--;
+        //    }
+        //}
+
+        foreach(GameObject enemy in GetComponent<MultiEnemyCount>().allEnemies)
+        {
+            enemy.GetComponentInParent<NetworkObject>().Despawn();
+            Destroy(enemy);
+            GetComponent<MultiEnemyCount>().allEnemies.Remove(enemy);
+            //GetComponent<MultiEnemyCount>().enemyCount--;
+        }
     }
 
-    public void ActivateTripleBulletPowerUp()
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnAllMagnetsServerRpc()
     {
-        tripleBulletPowerUpTime = originalTripleBulletPowerUpTime;
-        isTripleBulletPowerUpActive = true;
+        foreach (GameObject magnet in GetComponent<MultiMagnetCount>().allMagnets)
+        {
+            magnet.GetComponentInParent<NetworkObject>().Despawn();
+            Destroy(magnet);
+            GetComponent<MultiMagnetCount>().allMagnets.Remove(magnet);
+            //GetComponent<MultiEnemyCount>().enemyCount--;
+        }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnAllTriplesServerRpc()
+    {
+        foreach (GameObject triple in GetComponent<MultiTripleCount>().allTriples)
+        {
+            triple.GetComponentInParent<NetworkObject>().Despawn();
+            Destroy(triple);
+            GetComponent<MultiTripleCount>().allTriples.Remove(triple);
+            //GetComponent<MultiEnemyCount>().enemyCount--;
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnAllCoinsServerRpc()
+    {
+        foreach (GameObject coin in GetComponent<MultiCoinCount>().allCoins)
+        {
+            coin.GetComponentInParent<NetworkObject>().Despawn();
+            Destroy(coin);
+            GetComponent<MultiCoinCount>().allCoins.Remove(coin);
+            //GetComponent<MultiEnemyCount>().enemyCount--;
+        }
+    }
+
+    private void UpdateFinalScore()
+    {
+        initialScore = 0f;
+
+        
+        for (int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
+        {
+            if(GetComponent<MultiPlayerCount>().allPlayers[i])
+            {
+                initialScore += GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().playerScore.Value;
+                totalFinalScore.Value = initialScore;
+                GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().totalPlayerScore.Value = initialScore;
+            }
+        }
+        
+        
+    }
+
+    [ServerRpc]
+    private void UpdateFinalScoreServerRpc()
+    {
+        UpdateFinalScore();
+    }
+
+    //public void ActivateMagnetPowerUp()
+    //{
+    //    magnetPowerUpTime = originalMagnetPowerUpTime;
+    //    isMagnetPowerUpActive = true;
+    //}
+
+    //public void ActivateTripleBulletPowerUp()
+    //{
+    //    tripleBulletPowerUpTime = originalTripleBulletPowerUpTime;
+    //    isTripleBulletPowerUpActive = true;
+    //}
 
     [ServerRpc]
     public void DebugSpawnMagnetPowerUpServerRpc()
@@ -618,12 +845,28 @@ public class MultiGameScript : NetworkBehaviour
         triple.GetComponent<NetworkObject>().Spawn();
     }
 
-    [ServerRpc]
-    public void UpdateScoreMultiplierServerRpc(float scoreToIncrease)
-    {
-        if(!IsOwner) return;
+    //[ServerRpc]
+    //public void UpdateScoreMultiplierServerRpc(float scoreToIncrease)
+    //{
+    //    if(!IsOwner) return;
 
-        scoreMultiplier.Value += scoreToIncrease;
-        Debug.Log(scoreMultiplier.Value);
-    }
+    //    scoreMultiplier.Value += scoreToIncrease;
+    //    Debug.Log(scoreMultiplier.Value);
+    //}
+
+    //[ServerRpc]
+    //private void UpdatePlayerVariablesServerRpc()
+    //{
+    //    UpdatePlayerVariablesClientRpc();
+    //}
+
+    //[ClientRpc]
+    //private void UpdatePlayerVariablesClientRpc()
+    //{
+    //    for (int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
+    //    {
+    //        GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().newEnemyTimerRounded = newEnemyTimerRounded;
+    //        GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().enemyCounter.Value = enemyCounter;
+    //    }
+    //}
 }

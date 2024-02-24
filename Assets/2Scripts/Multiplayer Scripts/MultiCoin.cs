@@ -9,6 +9,8 @@ public class MultiCoin : NetworkBehaviour
     //MainPlayer playerScript;
     //BulletPoint bulletReticle;
 
+    private MultiGameScript multiGameScript;
+
     public GameObject playerDetection;
 
     public GameObject particles;
@@ -34,6 +36,9 @@ public class MultiCoin : NetworkBehaviour
 
     void Start()
     {
+
+        multiGameScript = FindObjectOfType<MultiGameScript>();
+
         rb = GetComponent<Rigidbody>();
 
         //playerObject = GameObject.FindGameObjectWithTag("MultiPlayer");
@@ -62,6 +67,14 @@ public class MultiCoin : NetworkBehaviour
 
         if (playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer != null)
         {
+
+            if (playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.GetComponent<MultiMainPlayer>().isAlive.Value == false)
+            {
+                playerDetection.GetComponent<MultiPlayerDetection>().player.Remove(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer);
+                playerDetection.GetComponent<MultiPlayerDetection>().playerObject.Remove(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.gameObject);
+                Debug.Log("player removed");
+            }
+
             Vector3 playerObject = playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.transform.position;
 
             distanceToPlayer = Vector3.Distance(transform.position, playerObject);
@@ -103,10 +116,10 @@ public class MultiCoin : NetworkBehaviour
             //playerScript.AddCoins(1);
             //bulletReticle.IncreaseFireRate(fireRateToIncrease);
 
-            if (!IsOwner) return;
+            //if (!IsOwner) return;
 
-            other.GetComponent<MultiMainPlayer>().AddCoinsToPlayerClientRpc();
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().FireRateIncreaseClientRpc(fireRateToIncrease);
+            other.GetComponent<MultiMainPlayer>().UpdateScoreServerRpc();
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().ChangeFireRateServerRpc(fireRateToIncrease);
 
             //Debug.Log(other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().fireRateMultiplier);
 
@@ -124,6 +137,8 @@ public class MultiCoin : NetworkBehaviour
 
         Destroy(mesh);
         Destroy(gameObject);
+
+        multiGameScript.GetComponent<MultiCoinCount>().allCoins.Remove(gameObject);
     }
 
     [ServerRpc(RequireOwnership = false)]

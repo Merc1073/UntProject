@@ -125,15 +125,18 @@ public class MultiEnemyBullet : NetworkBehaviour
         if (other.GetComponent<MultiMainPlayer>())
         {
 
-            if (!IsOwner) return;
+            //if (!IsOwner) return;
 
-            other.GetComponent<MultiMainPlayer>().GetComponentInParent<MultiHealthState>().DecreaseHealthClientRpc(1f);
+            other.GetComponent<MultiMainPlayer>().GetComponentInParent<MultiHealthState>().DecreaseHealthServerRpc(1f);
 
             CreateParticlesServerRpc();
 
             if (!despawnInstructionSent)
             {
-                parent.DestroyEnemyBulletServerRpc();
+                if(parent)
+                {
+                    parent.DestroyEnemyBulletServerRpc();
+                }
                 despawnInstructionSent = true;
             }
 

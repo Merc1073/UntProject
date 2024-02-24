@@ -15,7 +15,7 @@ public class MultiMagnetPowerUp : NetworkBehaviour
 
     public bool particOnce = true;
 
-    //MultiGameScript multiGameScript;
+    private MultiGameScript multiGameScript;
 
     [SerializeField] float fadeDuration;
 
@@ -24,7 +24,7 @@ public class MultiMagnetPowerUp : NetworkBehaviour
     {
         //soundPlay = GetComponentInParent<GenericPlaySound>();
 
-        //multiGameScript = FindObjectOfType<MultiGameScript>();
+        multiGameScript = FindObjectOfType<MultiGameScript>();
 
         StartCoroutine(FadeIn());
     }
@@ -57,6 +57,7 @@ public class MultiMagnetPowerUp : NetworkBehaviour
     {
         if (other.GetComponent<MultiMainPlayer>())
         {
+            if (!IsOwner) return;
 
             other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isMagnetPowerUpActive.Value = true;
             other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().hasMagnetTriggered.Value = true;
@@ -68,12 +69,14 @@ public class MultiMagnetPowerUp : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void DespawnMagnetServerRpc()
+    private void DespawnMagnetServerRpc()
     {
         GetComponentInParent<NetworkObject>().Despawn();
 
         Destroy(mesh);
         Destroy(gameObject);
+
+        multiGameScript.GetComponent<MultiMagnetCount>().allMagnets.Remove(gameObject);
     }
 
     [ServerRpc(RequireOwnership = false)]

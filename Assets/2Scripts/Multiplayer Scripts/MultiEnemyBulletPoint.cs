@@ -34,6 +34,14 @@ public class MultiEnemyBulletPoint : NetworkBehaviour
 
         if (playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer != null)
         {
+
+            if (playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.GetComponent<MultiMainPlayer>().isAlive.Value == false)
+            {
+                playerDetection.GetComponent<MultiPlayerDetection>().player.Remove(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer);
+                playerDetection.GetComponent<MultiPlayerDetection>().playerObject.Remove(playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.gameObject);
+                Debug.Log("player removed");
+            }
+
             fireRate += Time.deltaTime;
 
             if (fireRate >= fireRateCooldown)
@@ -62,6 +70,7 @@ public class MultiEnemyBulletPoint : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void CreateEnemyBulletServerRpc()
     {
+
         Vector3 playerObject = playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.transform.position;
 
         Quaternion rotationToLookAt = Quaternion.LookRotation(playerObject - transform.position);

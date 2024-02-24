@@ -41,7 +41,7 @@ public class MultiPlayerDetection : NetworkBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("MultiPlayer"))
+        if (other.GetComponent<MultiMainPlayer>())
         {
             player.Add(other.transform);
             playerObject.Add(other.gameObject);

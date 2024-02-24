@@ -15,13 +15,14 @@ public class MultiTripleBulletPowerUp : NetworkBehaviour
 
     public bool particOnce = true;
 
-    //GameScript gameScript;
+    private MultiGameScript multiGameScript;
 
     [SerializeField] float fadeDuration;
 
 
     void Start()
     {
+        multiGameScript = FindObjectOfType<MultiGameScript>();
 
         //soundPlay = GetComponentInParent<GenericPlaySound>();
 
@@ -58,23 +59,26 @@ public class MultiTripleBulletPowerUp : NetworkBehaviour
     {
         if (other.GetComponent<MultiMainPlayer>())
         {
+            if (!IsOwner) return;
 
             other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isTriplePowerUpActive.Value = true;
             other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().hasTripleTriggered.Value = true;
 
             CreateParticlesServerRpc();
 
-            DespawnMagnetServerRpc();
+            DespawnTripleServerRpc();
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void DespawnMagnetServerRpc()
+    private void DespawnTripleServerRpc()
     {
         GetComponentInParent<NetworkObject>().Despawn();
 
         Destroy(mesh);
         Destroy(gameObject);
+
+        multiGameScript.GetComponent<MultiTripleCount>().allTriples.Remove(gameObject);
     }
 
     [ServerRpc(RequireOwnership = false)]

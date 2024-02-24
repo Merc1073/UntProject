@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TutorialRapidFire : MonoBehaviour
+public class MultiTutorialRapidFire : MonoBehaviour
 {
-
-    GameScript gameScript;
+    MultiGameScript multiGameScript;
     public GameObject tutorial;
 
     [Header("Section 1")]
@@ -28,7 +26,7 @@ public class TutorialRapidFire : MonoBehaviour
     public TMP_Text Two;
     public TMP_Text One;
     public TMP_Text Go;
-        
+
 
     [Header("Section Other")]
     public float timer;
@@ -39,11 +37,11 @@ public class TutorialRapidFire : MonoBehaviour
     private void Start()
     {
 
-        gameScript = FindObjectOfType<GameScript>();
+        multiGameScript = FindObjectOfType<MultiGameScript>();
 
         //if(gameScript.skipTutorial)
         //{
-            stage1.gameObject.SetActive(false);
+        stage1.gameObject.SetActive(false);
         //}
 
         //stage2
@@ -65,12 +63,12 @@ public class TutorialRapidFire : MonoBehaviour
 
     private void Update()
     {
-        if (!gameScript) return;
-        if(!gameScript.skipTutorial)
+        if (!multiGameScript) return;
+        if (!multiGameScript.skipTutorial)
         {
             timer += Time.deltaTime;
 
-            if(timer >= 0f + tutorialStartDelay)
+            if (timer >= 0f + tutorialStartDelay)
             {
                 stage1.gameObject.SetActive(true);
             }
@@ -131,7 +129,7 @@ public class TutorialRapidFire : MonoBehaviour
                         {
                             One.gameObject.SetActive(false);
                             Go.gameObject.SetActive(true);
-                            gameScript.hasRapidFireModeStarted = true;
+                            multiGameScript.hasRapidFireModeStarted = true;
 
                             if (timer >= 22.0f + tutorialStartDelay)
                             {
@@ -170,7 +168,7 @@ public class TutorialRapidFire : MonoBehaviour
                         {
                             One.gameObject.SetActive(false);
                             Go.gameObject.SetActive(true);
-                            gameScript.hasRapidFireModeStarted = true;
+                            multiGameScript.hasRapidFireModeStarted = true;
 
                             if (timer2 >= 6.0f)
                             {

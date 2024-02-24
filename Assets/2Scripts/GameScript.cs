@@ -206,12 +206,12 @@ public class GameScript : MonoBehaviour
         //    multiPlayerScript = FindObjectOfType<MultiMainPlayer>();
         //}
 
-        if(FindObjectOfType<MultiGameScript>())
+        if (FindObjectOfType<MultiGameScript>())
         {
             Destroy(gameObject);
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }

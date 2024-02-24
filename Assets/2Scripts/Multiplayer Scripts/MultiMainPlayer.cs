@@ -2,44 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SocialPlatforms.Impl;
+using Unity.Collections;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class MultiMainPlayer : NetworkBehaviour
 {
-    
 
+    [Header("Rapid Fire Text UI")]
+
+    public GameObject RapidFireUICanvas;
+
+    [SerializeField] private Text fireRateText;
+    [SerializeField] private Text enemyRespawnText;
+    [SerializeField] private Text enemyCountText;
+    [SerializeField] private Text timerText;
+    [SerializeField] private Text enemiesDefeatedText;
+    [SerializeField] private Text orbsCollectedText;
+    [SerializeField] private Text playerScoreText;
+    [SerializeField] private Text totalScoreText;
+
+
+    [Header("Everything Else")]
     public Vector3 tranDif;
 
     public LayerMask groundMask;
 
     public float forceMultiplier;
 
-    public NetworkVariable<int> coinCount = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    public NetworkVariable<float> playerScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    public NetworkVariable<int> playerScoreMultiplier = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<int> coinCount = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> playerScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> playerScoreMultiplier = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> totalPlayerScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
 
+    //public string newEnemyTimerRounded;
+    //public int enemyCounter;
+    public NetworkVariable<FixedString128Bytes> newEnemyTimerRounded = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> enemyCounter = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public AudioListener audioListener;
-    //public NetworkVariable<float> currentHealth = new NetworkVariable<float>();
-    //public NetworkVariable<float> maxHealth = new NetworkVariable<float>();
-    //public float currentHealth;
-    //public float maxHealth;
 
-   // public int coinCount;
-
+    //public bool isAlive = true;
+    public NetworkVariable<bool> isAlive = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    //public bool hasPlayerDied = false;
+    public NetworkVariable<bool> hasPlayerDied = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public bool particOnce = true;
-    public bool canMove = true;
+    //public bool canMove = true;
+    public NetworkVariable<bool> canMove = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public bool hasFoundGameScript = false;
 
-    public ParticleSystem particles;
+    public GameObject particles;
     public MeshRenderer mesh;
 
     public Transform canvasTransform1;
     public Transform canvasTransform2;
     public Transform canvasTransform3;
 
-    //MultiGameScript multiGameScript;
+    MultiGameScript multiGameScript;
     public GameObject multiBulletPoint;
 
     AudioSource src;
@@ -47,15 +69,13 @@ public class MultiMainPlayer : NetworkBehaviour
 
     private HealthBar playerHealthBar, magnetPowerBar, tripleBulletPowerBar;
 
-    private FollowMouse aimReticle;
-    private BulletPoint bulletReticle;
+    //private FollowMouse aimReticle;
+    //private BulletPoint bulletReticle;
 
     Rigidbody rb;
 
     void Start()
     {
-
-
 
         rb = GetComponent<Rigidbody>();
 
@@ -63,59 +83,71 @@ public class MultiMainPlayer : NetworkBehaviour
         magnetPowerBar = GetComponentInChildren<HealthBar>();
         tripleBulletPowerBar = GetComponentInChildren<HealthBar>();
 
-        aimReticle = FindObjectOfType<FollowMouse>();
-        bulletReticle = FindObjectOfType<BulletPoint>();
+        //aimReticle = FindObjectOfType<FollowMouse>();
+        //bulletReticle = FindObjectOfType<BulletPoint>();
         //multiGameScript = FindObjectOfType<MultiGameScript>();
 
         src = FindObjectOfType<AudioSource>();
 
         GetComponent<AudioListener>().enabled = false;
 
+        RapidFireUICanvas.SetActive(false);
+
         if (!IsLocalPlayer) return;
         
         GetComponent<AudioListener>().enabled = true;
-        
-
-        //currentHealth = maxHealth;
-
-        //if (playerHealthBar)
-        //{
-        //    playerHealthBar.UpdateHealthBar(maxHealth.Value, currentHealth.Value);
-        //}
 
     }
 
     public override void OnNetworkSpawn()
     {
-        //currentHealth.Value = 5f;
-        //maxHealth.Value = 5f;
+        UpdatePlayerVariablesServerRpc();
 
         if (!IsOwner) return;
 
-        //multiGameScript = FindObjectOfType<MultiGameScript>();
         UpdatePositionServerRpc();
     }
 
     void Update()
     {
 
+        //if(SceneManager.GetActiveScene().name == "Multi Main Menu")
+        //{
+        //    RapidFireUICanvas.SetActive(false);
+        //    coinCount.Value = 0;
+        //    playerScore.Value = 0;
+        //    playerScoreMultiplier.Value = 0;
+        //}
+
+        if(!multiGameScript && !hasFoundGameScript)
+        {
+            multiGameScript = FindObjectOfType<MultiGameScript>();
+            //multiGameScript.GetComponent<MultiGameScript>().enabled = true;
+            hasFoundGameScript = true;
+        }
+
+
+        if (IsLocalPlayer && multiGameScript.hasRapidFireModeStarted)
+        {
+            RapidFireUICanvas.SetActive(true);
+            fireRateText.text = "Fire Rate: " + multiBulletPoint.GetComponent<MultiBulletPoint>().roundsPerSecond.ToString() + " / Second";
+            enemyRespawnText.text = "Enemy spawns every " + newEnemyTimerRounded.Value + " Seconds";
+            enemyCountText.text = "Total Enemies in arena: " + enemyCounter.Value.ToString();
+            orbsCollectedText.text = "Orbs Collected: " + coinCount.Value.ToString();
+            playerScoreText.text = "Your score: " + playerScore.Value.ToString();
+            totalScoreText.text = "Total Score: " + totalPlayerScore.Value;
+
+        }
+
+        if (IsLocalPlayer && SceneManager.GetActiveScene().name == "Multi Main Menu")
+        {
+            RapidFireUICanvas.SetActive(false);
+        }
+
+
         if (!IsOwner) return;
 
-        //Debug.Log(playerScore.Value + " " + OwnerClientId);
-        //Debug.Log(hasFoundGameScript);
-
-        //if (!multiGameScript && !hasFoundGameScript)
-        //{
-        //    multiGameScript = FindObjectOfType<MultiGameScript>();
-        //    hasFoundGameScript = true;
-        //}
-
-        //if (multiGameScript)
-        //{
-        //    Debug.Log(multiGameScript.scoreMultiplier.Value);
-        //}
-
-        
+        UpdateFinalScoreServerRpc(totalPlayerScore.Value);
 
         audioListener.transform.position = transform.position;
 
@@ -129,50 +161,49 @@ public class MultiMainPlayer : NetworkBehaviour
             transform.position += new Vector3(0, -0.1f, 0) * Time.deltaTime * 100;
         }
 
-        //if (transform.position.y < 0.9f)
-        //{
-        //    transform.position += new Vector3(0, +0.1f, 0) * Time.deltaTime * 100;
-        //}
-
-        //if (currentHealth.Value < 0f)
-        //{
-        //    currentHealth.Value = 0;
-        //}
-
-        if (GetComponentInParent<MultiHealthState>().HealthPoint.Value <= 0f)
+        if(transform.position.y < -2.0f)
         {
-            //if(!IsOwner) return;
-            DeactivatePlayerServerRpc();
+            transform.position += new Vector3(0, 5f, 0);
         }
 
-        //if(Input.GetMouseButton(0))
+        if (GetComponentInParent<MultiHealthState>().HealthPoint.Value <= 0f && !hasPlayerDied.Value && isAlive.Value)
+        {
+            //if (!IsOwner) return;
+
+            PlayerDiedPart1ServerRpc();
+
+            //multiGameScript.GetComponent<MultiPlayerCount>().playerCount.Value--;
+            //UpdatePlayerCountServerRpc();
+
+            CreateParticlesServerRpc();
+
+            //Debug.Log("Executed");
+        }
+
+        if(GetComponentInParent<MultiHealthState>().HealthPoint.Value < 0f)
+        {
+            UpdatePlayerHealthServerRpc(0f);
+        }
+
+        //else
         //{
-
-        //    RaycastHit hit;
-
-        //    if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, groundMask))
-        //    {
-
-        //        Vector3 directionToMouse = transform.position - hit.point;
-        //        directionToMouse = directionToMouse.normalized * forceMultiplier;
-
-        //        //clone = Instantiate(clone, hit.point + tranDif, rotation);
-        //        rb.AddForce(-directionToMouse + tranDif * Time.deltaTime);
-        //    }
+        //    GetComponentInParent<MultiHealthState>().HealthPoint.Value = 5f;
+        //    isAlive.Value = true;
+        //    canMove = true;
+        //    hasPlayerDied = false;
         //}
 
-        if (canMove == true)
+
+        if (canMove.Value == true)
         {
             rb.AddForce(movement * forceMultiplier * Time.deltaTime);
         }
 
-        //if (!IsServer) return;
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
-            Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
-        }
+    }
 
+    private void FixedUpdate()
+    {
+        
     }
 
     private void LateUpdate()
@@ -213,8 +244,8 @@ public class MultiMainPlayer : NetworkBehaviour
     //    }
     //}
 
-    [ClientRpc]
-    public void AddCoinsToPlayerClientRpc()
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdateScoreServerRpc()
     {
 
         //if (!IsOwner) return;
@@ -224,15 +255,30 @@ public class MultiMainPlayer : NetworkBehaviour
 
         playerScore.Value = coinCount.Value * playerScoreMultiplier.Value;
 
-        UpdatePlayerScoreClientRpc(playerScore.Value);
-
-        //multiGameScript = FindObjectOfType<MultiGameScript>();
-        //multiGameScript.UpdateScoreMultiplierServerRpc(1f);
-        //multiGameScript.coinCount += coins;
-
-        //Debug.Log(multiGameScript.scoreMultiplier.Value);
+        //UpdatePlayerScoreClientRpc(playerScore.Value);
 
     }
+
+    //[ServerRpc]
+    //public void AddCoinsToPlayerClientRpc()
+    //{
+
+    //    //if (!IsOwner) return;
+
+    //    coinCount.Value += 1;
+    //    playerScoreMultiplier.Value += 1;
+
+    //    playerScore.Value = coinCount.Value * playerScoreMultiplier.Value;
+
+    //    UpdatePlayerScoreClientRpc(playerScore.Value);
+
+    //    //multiGameScript = FindObjectOfType<MultiGameScript>();
+    //    //multiGameScript.UpdateScoreMultiplierServerRpc(1f);
+    //    //multiGameScript.coinCount += coins;
+
+    //    //Debug.Log(multiGameScript.scoreMultiplier.Value);
+
+    //}
 
     [ServerRpc(RequireOwnership = false)]
     private void UpdatePositionServerRpc()
@@ -246,14 +292,63 @@ public class MultiMainPlayer : NetworkBehaviour
         transform.parent.gameObject.SetActive(false);
     }
 
-    [ClientRpc]
-    private void UpdatePlayerScoreClientRpc(float newScore)
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateFinalScoreServerRpc(float scoreValue)
     {
-        //if (!IsOwner) return;
-
-        playerScore.Value = newScore;
-
-        Debug.Log(newScore + " " + OwnerClientId);
+        totalPlayerScore.Value = scoreValue;
     }
+
+    //[ClientRpc]
+    //private void UpdatePlayerScoreClientRpc(float newScore)
+    //{
+
+    //    playerScore.Value = newScore;
+
+    //    Debug.Log(newScore + " " + OwnerClientId);
+    //}
+
+    [ServerRpc(RequireOwnership = false)]
+    private void CreateParticlesServerRpc()
+    {
+        GameObject deathParticle = Instantiate(particles, transform.position, Quaternion.identity);
+        deathParticle.GetComponent<NetworkObject>().Spawn();
+    }
+
+    //[ServerRpc(RequireOwnership = false)]
+    //private void UpdatePlayerCountServerRpc()
+    //{
+    //    multiGameScript.GetComponent<MultiPlayerCount>().playerCount.Value--;
+    //}
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdatePlayerVariablesServerRpc()
+    {
+        isAlive.Value = true;
+        hasPlayerDied.Value = false;
+        canMove.Value = true;
+        totalPlayerScore.Value = 0f;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayerDiedPart1ServerRpc()
+    {
+        multiBulletPoint.GetComponent<MultiBulletPoint>().canFire.Value = false;
+        isAlive.Value = false;
+        canMove.Value = false;
+        hasPlayerDied.Value = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerHealthServerRpc(float healthChange)
+    {
+        GetComponentInParent<MultiHealthState>().HealthPoint.Value = healthChange;
+    }
+
+
+    //[ServerRpc]
+    //private void PlayerDiedPart2ServerRpc()
+    //{
+    //    hasPlayerDied.Value = true;
+    //}
 
 }
