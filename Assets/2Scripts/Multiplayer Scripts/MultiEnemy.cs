@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Bson;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -46,6 +47,7 @@ public class MultiEnemy : NetworkBehaviour
     public Vector3 targetGrowthScale;
 
     public bool particOnce = true;
+    public bool isDead = false;
 
 
 
@@ -123,7 +125,7 @@ public class MultiEnemy : NetworkBehaviour
     void Update()
     {
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && isDead)
         {
 
             currentCoinCounter = Random.Range(minCoins, maxCoins);
@@ -185,6 +187,28 @@ public class MultiEnemy : NetworkBehaviour
         {
             currentHealth -= 1;
 
+            //if(other.GetComponent<MultiBullet>().GetComponent<NetworkObject>().OwnerClientId == 
+            //    playerDetection.GetComponent<MultiPlayerDetection>().targetPlayer.GetComponent<MultiMainPlayer>().GetComponentInParent<NetworkObject>().OwnerClientId)
+            //{
+            //    UpdatePlayerScoreServerRpc();
+            //}
+
+            if(currentHealth <= 0f)
+            {
+                foreach(GameObject player in playerDetection.GetComponent<MultiPlayerDetection>().playerObject)
+                {
+                    if(other.GetComponent<MultiBullet>().GetComponent<NetworkObject>().OwnerClientId == 
+                        player.GetComponent<MultiMainPlayer>().GetComponentInParent<NetworkObject>().OwnerClientId)
+                    {
+                        player.GetComponent<MultiMainPlayer>().UpdateEnemyScoreServerRpc(50f);
+                        player.GetComponent<MultiMainPlayer>().UpdateScoreServerRpc();
+                        isDead = true;
+                        Debug.Log("player found, score added.");
+                        break;
+                    }
+                }
+            }
+
             if (enemyHealthBar)
             {
                 enemyHealthBar.UpdateHealthBar(maxHealth, currentHealth);
@@ -216,6 +240,12 @@ public class MultiEnemy : NetworkBehaviour
         Destroy(gameObject);
 
         multiGameScript.GetComponent<MultiEnemyCount>().allEnemies.Remove(gameObject);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdatePlayerScoreServerRpc()
+    {
+        playerDetection.GetComponent<MultiPlayerDetection>().targetPlayerObject.GetComponent<MultiMainPlayer>().enemyScore.Value += 50f;
     }
 
 }

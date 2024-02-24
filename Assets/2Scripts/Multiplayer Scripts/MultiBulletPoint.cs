@@ -84,7 +84,7 @@ public class MultiBulletPoint : NetworkBehaviour
     public Vector3 tranDif;
 
     [SerializeField]
-    private List<GameObject> spawnedMultiBullets = new List<GameObject>();
+    private List<GameObject> spawnedMultiBullets = new();
 
 
     void Start()
@@ -212,9 +212,10 @@ public class MultiBulletPoint : NetworkBehaviour
         }
     }
 
-
     private void FireNormalBullet()
     {
+
+        if (!IsOwner) return;
 
         CreateBulletNoiseServerRpc();
 
@@ -232,6 +233,8 @@ public class MultiBulletPoint : NetworkBehaviour
 
     private void FireTripleBullet()
     {
+
+        if (!IsOwner) return;
 
         CreateBulletNoiseServerRpc();
 
@@ -258,6 +261,8 @@ public class MultiBulletPoint : NetworkBehaviour
 
         GameObject clone = Instantiate(bullet, transform.position, rotationToLookAt);
 
+        //clone.GetComponent<MultiBullet>().OwnerClientId = NetworkManager.Singleton.LocalClientId;
+
         if (isMagnetPowerUpActive.Value)
         {
             clone.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
@@ -266,8 +271,8 @@ public class MultiBulletPoint : NetworkBehaviour
         spawnedMultiBullets.Add(clone);
 
         clone.GetComponent<MultiBullet>().parent = this;
-        clone.GetComponent<NetworkObject>().Spawn();
-        //clone.GetComponent<NetworkObject>().SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        //clone.GetComponent<NetworkObject>().Spawn();
+        clone.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
 
     }
 
@@ -291,12 +296,12 @@ public class MultiBulletPoint : NetworkBehaviour
         clone3.transform.Rotate(0, -10, 0);
 
 
-        if (isMagnetPowerUpActive.Value)
-        {
-            clone1.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
-            clone2.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
-            clone3.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
-        }
+        //if (isMagnetPowerUpActive.Value)
+        //{
+        //    clone1.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
+        //    clone2.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
+        //    clone3.GetComponent<MultiBullet>().isMagnetPowerUpActive = true;
+        //}
 
         spawnedMultiBullets.Add(clone1);
         spawnedMultiBullets.Add(clone2);
@@ -306,10 +311,13 @@ public class MultiBulletPoint : NetworkBehaviour
         clone2.GetComponent<MultiBullet>().parent = this;
         clone3.GetComponent<MultiBullet>().parent = this;
 
-        clone1.GetComponent<NetworkObject>().Spawn();
-        clone2.GetComponent<NetworkObject>().Spawn();
-        clone3.GetComponent<NetworkObject>().Spawn();
+        //clone1.GetComponent<NetworkObject>().Spawn();
+        //clone2.GetComponent<NetworkObject>().Spawn();
+        //clone3.GetComponent<NetworkObject>().Spawn();
         //clone.GetComponent<NetworkObject>().SpawnWithOwnership(serverRpcParams.Receive.SenderClientId);
+        clone1.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+        clone2.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+        clone3.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
 
     }
 
@@ -522,5 +530,17 @@ public class MultiBulletPoint : NetworkBehaviour
     public void ActivateTriplePowerUpBoolTriggerServerRpc()
     {
         hasTripleTriggered.Value = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ActivateMagnetPowerUpBoolServerRpc()
+    {
+        isMagnetPowerUpActive.Value = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ActivateMagnetPowerUpBoolTriggerServerRpc()
+    {
+        hasMagnetTriggered.Value = true;
     }
 }

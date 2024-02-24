@@ -34,6 +34,7 @@ public class MultiMainPlayer : NetworkBehaviour
 
     public NetworkVariable<int> coinCount = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<float> playerScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> enemyScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> playerScoreMultiplier = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<float> totalPlayerScore = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -42,6 +43,7 @@ public class MultiMainPlayer : NetworkBehaviour
     //public int enemyCounter;
     public NetworkVariable<FixedString128Bytes> newEnemyTimerRounded = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> enemyCounter = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> rapidTimer = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public AudioListener audioListener;
 
@@ -133,6 +135,7 @@ public class MultiMainPlayer : NetworkBehaviour
             fireRateText.text = "Fire Rate: " + multiBulletPoint.GetComponent<MultiBulletPoint>().roundsPerSecond.ToString() + " / Second";
             enemyRespawnText.text = "Enemy spawns every " + newEnemyTimerRounded.Value + " Seconds";
             enemyCountText.text = "Total Enemies in arena: " + enemyCounter.Value.ToString();
+            timerText.text = "Time Elapsed: " + rapidTimer.Value.ToString();
             orbsCollectedText.text = "Orbs Collected: " + coinCount.Value.ToString();
             playerScoreText.text = "Your score: " + playerScore.Value.ToString();
             totalScoreText.text = "Total Score: " + totalPlayerScore.Value;
@@ -222,10 +225,10 @@ public class MultiMainPlayer : NetworkBehaviour
     //private void OnTriggerEnter(Collider other)
     //{
     //    if (!IsServer) return;
-    //    if(other.GetComponent<MultiBullet>()/* && GetComponentInParent<NetworkObject>().OwnerClientId != other.GetComponent<NetworkObject>().OwnerClientId*/)
+    //    if (other.GetComponent<MultiBullet>() && GetComponentInParent<NetworkObject>().OwnerClientId != other.GetComponent<NetworkObject>().OwnerClientId)
     //    {
-    //        //GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
-    //        //Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
+    //        GetComponentInParent<MultiHealthState>().HealthPoint.Value -= 1f;
+    //        Debug.Log(GetComponentInParent<MultiHealthState>().HealthPoint.Value);
 
     //        other.GetComponent<MultiBullet>().CreateParticlesServerRpc();
     //        other.GetComponent<MultiBullet>().GetComponent<NetworkObject>().Despawn();
@@ -253,7 +256,7 @@ public class MultiMainPlayer : NetworkBehaviour
         coinCount.Value += 1;
         playerScoreMultiplier.Value += 1;
 
-        playerScore.Value = coinCount.Value * playerScoreMultiplier.Value;
+        playerScore.Value = coinCount.Value * playerScoreMultiplier.Value + enemyScore.Value;
 
         //UpdatePlayerScoreClientRpc(playerScore.Value);
 
@@ -326,6 +329,7 @@ public class MultiMainPlayer : NetworkBehaviour
         isAlive.Value = true;
         hasPlayerDied.Value = false;
         canMove.Value = true;
+        enemyScore.Value = 0f;
         totalPlayerScore.Value = 0f;
     }
 
@@ -344,6 +348,11 @@ public class MultiMainPlayer : NetworkBehaviour
         GetComponentInParent<MultiHealthState>().HealthPoint.Value = healthChange;
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdateEnemyScoreServerRpc(float addedScore)
+    {
+        enemyScore.Value += addedScore;
+    }
 
     //[ServerRpc]
     //private void PlayerDiedPart2ServerRpc()

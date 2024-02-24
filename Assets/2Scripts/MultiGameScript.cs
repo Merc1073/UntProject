@@ -424,6 +424,7 @@ public class MultiGameScript : NetworkBehaviour
             {
                 GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().newEnemyTimerRounded.Value = newEnemyTimerRounded;
                 GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().enemyCounter.Value = GetComponent<MultiEnemyCount>().enemyCount;
+                GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().rapidTimer.Value = seconds;
             }
 
             //UpdatePlayerVariablesServerRpc();
@@ -598,6 +599,7 @@ public class MultiGameScript : NetworkBehaviour
                 hasRapidFireSceneBeenLoaded = false;
 
                 totalTime = 0f;
+                seconds = 0;
 
                 magnetRespawnTimer = 5f;
                 tripleBulletRespawnTimer = 10f;
@@ -779,8 +781,8 @@ public class MultiGameScript : NetworkBehaviour
 
     private void UpdateFinalScore()
     {
-        initialScore = 0f;
 
+        initialScore = 0f;
         
         for (int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
         {
@@ -788,11 +790,19 @@ public class MultiGameScript : NetworkBehaviour
             {
                 initialScore += GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().playerScore.Value;
                 totalFinalScore.Value = initialScore;
+                //GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().totalPlayerScore.Value = initialScore;
+            }
+        }
+
+        for(int i = 0; i < GetComponent<MultiPlayerCount>().allPlayers.Count; i++)
+        {
+            if(GetComponent<MultiPlayerCount>().allPlayers[i])
+            {
                 GetComponent<MultiPlayerCount>().allPlayers[i].GetComponent<MultiMainPlayer>().totalPlayerScore.Value = initialScore;
             }
         }
-        
-        
+
+
     }
 
     [ServerRpc]

@@ -57,10 +57,10 @@ public class MultiMagnetPowerUp : NetworkBehaviour
     {
         if (other.GetComponent<MultiMainPlayer>())
         {
-            if (!IsOwner) return;
+            //if (!IsOwner) return;
 
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isMagnetPowerUpActive.Value = true;
-            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().hasMagnetTriggered.Value = true;
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().ActivateMagnetPowerUpBoolServerRpc();
+            other.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().ActivateMagnetPowerUpBoolTriggerServerRpc();
 
             CreateParticlesServerRpc();
 

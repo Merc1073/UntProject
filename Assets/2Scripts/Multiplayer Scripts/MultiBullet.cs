@@ -60,6 +60,19 @@ public class MultiBullet : NetworkBehaviour
     void Update()
     {
 
+        foreach(GameObject player in GetComponentInChildren<MultiPlayerCount>().allPlayers)
+        {
+            if(player.GetComponent<MultiMainPlayer>().GetComponentInParent<NetworkObject>().OwnerClientId == GetComponent<NetworkObject>().OwnerClientId)
+            {
+                if(player.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isMagnetPowerUpActive.Value)
+                {
+                    isMagnetPowerUpActive = true;
+                    Debug.Log("magnet is active for player number " + OwnerClientId + ".");
+                    break;
+                }
+            }
+        }
+
         timer += Time.deltaTime;
 
         AdjustTrailWidth();
@@ -71,11 +84,14 @@ public class MultiBullet : NetworkBehaviour
 
         if (timer >= bulletDuration)
         {
-            if (!IsOwner) return;
-            parent.DestroyBulletServerRpc();
+            //if (!IsOwner) return;
+            if(parent)
+            {
+                parent.DestroyBulletServerRpc();
+            }
         }
 
-        if(!IsOwner) return;
+        //if(!IsOwner) return;
 
         if (isMagnetPowerUpActive == true)
         {
@@ -156,26 +172,34 @@ public class MultiBullet : NetworkBehaviour
     {
         if (other.GetComponent<MultiEnemy>())
         {
-            if (!IsOwner) return;
+            //if (!IsOwner) return;
 
             CreateParticlesServerRpc();
 
             if(!despawnInstructionSent)
             {
-                parent.DestroyBulletServerRpc();
+                if(parent)
+                {
+                    parent.DestroyBulletServerRpc();
+                }
+
                 despawnInstructionSent = true;
             }
         }
 
         if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Ground"))
         {
-            if (!IsOwner) return;
+            //if (!IsOwner) return;
 
             CreateParticlesServerRpc();
 
             if (!despawnInstructionSent)
             {
-                parent.DestroyBulletServerRpc();
+                if(parent)
+                {
+                    parent.DestroyBulletServerRpc();
+                }
+
                 despawnInstructionSent = true;
             }
         }

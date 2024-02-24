@@ -248,8 +248,8 @@ MonoBehaviour:
   particles: {fileID: 4843336463963981155, guid: 731569542eeaeab49b5dcf49ef8239a3, type: 3}
   mesh: {fileID: 9123294631809258596}
   enemyDetection: {fileID: 1030056848952071590}
-  bulletSpeed: 30
-  bulletDuration: 1
+  bulletSpeed: 20
+  bulletDuration: 3
   magnetSpeed: 3
   magnetDistance: 15
   shrinkSpeed: 1
@@ -323,6 +323,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1284903876340828206}
   - component: {fileID: 7564726147986645181}
+  - component: {fileID: 246488613269683508}
   - component: {fileID: 2022350993167579943}
   m_Layer: 9
   m_Name: EnemyDetectionSphere
@@ -362,6 +363,19 @@ MonoBehaviour:
   targetEnemy: {fileID: 0}
   enemyObject: []
   targetEnemyObject: {fileID: 0}
+--- !u!114 &246488613269683508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030056848952071590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 723db934660f8db4ab733c85f888d29f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allPlayers: []
 --- !u!135 &2022350993167579943
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -381,7 +395,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 100
+  m_Radius: 2000
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8802028334953704535
 GameObject:
