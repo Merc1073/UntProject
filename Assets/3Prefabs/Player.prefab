@@ -1260,7 +1260,7 @@ MonoBehaviour:
   player: {fileID: 3597099468003325986}
   groundMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1056
   src: {fileID: 810652935535324080}
   pewSound: {fileID: 8300000, guid: ca9091bf8810ec642b03eced312a34c3, type: 3}
   rotateVelocity: 0

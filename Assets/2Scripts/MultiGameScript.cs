@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
+using UnityEditor.PackageManager;
 
 public class MultiGameScript : NetworkBehaviour
 {
@@ -175,6 +176,10 @@ public class MultiGameScript : NetworkBehaviour
     //public string magnetTimerRounded;
     //public string tripleBulletTimerRounded;
 
+    //private void Start()
+    //{
+    //    GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId);
+    //}
 
     private void Awake()
     {
@@ -273,6 +278,7 @@ public class MultiGameScript : NetworkBehaviour
         if (!mainPlayer && !isMainPlayerFound)
         {
             mainPlayer = GetComponent<MultiPlayerCount>().allPlayers[0];
+            Debug.Log(mainPlayer);
             isMainPlayerFound = true;
         }
 
@@ -396,7 +402,7 @@ public class MultiGameScript : NetworkBehaviour
 
             UpdateFinalScoreServerRpc();
 
-            Debug.Log(AreAllPlayersDead());
+            //Debug.Log(AreAllPlayersDead());
 
 
             if (AreAllPlayersDead())

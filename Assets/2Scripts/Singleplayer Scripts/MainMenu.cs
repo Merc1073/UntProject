@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
 using TMPro;
+using Unity.Netcode;
 
 public class MainMenu : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class MainMenu : MonoBehaviour
     Transform rapidFireButton;
     Transform growthButton;
     Transform backButtonGameModes;
+
+    Transform startHostButton;
+    Transform startClientButton;
 
 
     public Text tutorialText;
@@ -70,6 +74,9 @@ public class MainMenu : MonoBehaviour
     public float growthDistanceToPlayer;
     public float backGameModesDistanceToPlayer;
 
+    public float startHostDistanceToPlayer;
+    public float startClientDistanceToPlayer;
+
     void Start()
     {
 
@@ -89,6 +96,9 @@ public class MainMenu : MonoBehaviour
         growthButton = transform.GetChild(7);
         backButtonGameModes = transform.GetChild(8);
 
+        startHostButton = transform.GetChild(9);
+        startClientButton = transform.GetChild(10);
+
         yesButton.gameObject.SetActive(false);
         noButton.gameObject.SetActive(false);
         backButtonStart.gameObject.SetActive(false);
@@ -96,6 +106,9 @@ public class MainMenu : MonoBehaviour
         rapidFireButton.gameObject.SetActive(false);
         growthButton.gameObject.SetActive(false);
         backButtonGameModes.gameObject.SetActive(false);
+
+        startHostButton.gameObject.SetActive(true);
+        startClientButton.gameObject.SetActive(true);
 
         tutorialText.gameObject.SetActive(false);
 
@@ -106,7 +119,7 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    void Update()
+    async void Update()
     {
 
 
@@ -165,6 +178,16 @@ public class MainMenu : MonoBehaviour
         if(backButtonGameModes && player)
         {
             backGameModesDistanceToPlayer = Vector3.Distance(backButtonGameModes.transform.position, player.transform.position);
+        }
+
+        if(startHostButton && player)
+        {
+            startHostDistanceToPlayer = Vector3.Distance(startHostButton.transform.position, player.transform.position);
+        }
+
+        if(startClientButton && player)
+        {
+            startClientDistanceToPlayer = Vector3.Distance(startClientButton.transform.position, player.transform.position);
         }
 
 
@@ -344,6 +367,26 @@ public class MainMenu : MonoBehaviour
                 ActivateObject(startButton.gameObject);
                 ActivateObject(gameModesButton.gameObject);
                 ActivateObject(quitButton.gameObject);
+            }
+        }
+
+        if (startHostButton.gameObject.activeSelf == true)
+        {
+            if (startHostDistanceToPlayer <= generalDistanceFromPlayer)
+            {
+                CreateParticleEffect(gameStartParticle, startHostButton.transform.position, Quaternion.Euler(Vector3.zero));
+
+                if (RelayManager.Instance.IsRelayEnabled)
+                    await RelayManager.Instance.SetupRelay();
+
+                NetworkManager.Singleton.StartHost();
+
+                if (player)
+                {
+                    Destroy(player.gameObject);
+                }
+
+                SceneManager.LoadScene("Multi Main Menu");
             }
         }
 

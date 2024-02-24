@@ -67,7 +67,7 @@ public class MultiBullet : NetworkBehaviour
                 if(player.GetComponent<MultiMainPlayer>().multiBulletPoint.GetComponent<MultiBulletPoint>().isMagnetPowerUpActive.Value)
                 {
                     isMagnetPowerUpActive = true;
-                    Debug.Log("magnet is active for player number " + OwnerClientId + ".");
+                    //Debug.Log("magnet is active for player number " + OwnerClientId + ".");
                     break;
                 }
             }

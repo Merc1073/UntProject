@@ -7,6 +7,7 @@ using UnityEngine.SocialPlatforms.Impl;
 using Unity.Collections;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using UnityEditor.PackageManager;
 
 public class MultiMainPlayer : NetworkBehaviour
 {
@@ -76,8 +77,14 @@ public class MultiMainPlayer : NetworkBehaviour
 
     Rigidbody rb;
 
+
     void Start()
     {
+
+        if(!GetComponentInParent<NetworkObject>().IsSpawned)
+        {
+            GetComponentInParent<NetworkObject>().Spawn();
+        }
 
         rb = GetComponent<Rigidbody>();
 
@@ -113,6 +120,11 @@ public class MultiMainPlayer : NetworkBehaviour
     void Update()
     {
 
+        //if(!GetComponent<AudioListener>().isActiveAndEnabled)
+        //{
+        //    GetComponent<AudioListener>().enabled = true;
+        //}
+
         //if(SceneManager.GetActiveScene().name == "Multi Main Menu")
         //{
         //    RapidFireUICanvas.SetActive(false);
@@ -131,6 +143,7 @@ public class MultiMainPlayer : NetworkBehaviour
 
         if (IsLocalPlayer && multiGameScript.hasRapidFireModeStarted)
         {
+            Debug.Log("works");
             RapidFireUICanvas.SetActive(true);
             fireRateText.text = "Fire Rate: " + multiBulletPoint.GetComponent<MultiBulletPoint>().roundsPerSecond.ToString() + " / Second";
             enemyRespawnText.text = "Enemy spawns every " + newEnemyTimerRounded.Value + " Seconds";
