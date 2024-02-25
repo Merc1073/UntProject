@@ -53,6 +53,7 @@ public class MultiMainPlayer : NetworkBehaviour
     //public bool hasPlayerDied = false;
     public NetworkVariable<bool> hasPlayerDied = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public bool particOnce = true;
+    private bool hasParticlesBeenCreated = false;
     //public bool canMove = true;
     public NetworkVariable<bool> canMove = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public bool hasFoundGameScript = false;
@@ -322,8 +323,12 @@ public class MultiMainPlayer : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void CreateParticlesServerRpc()
     {
-        GameObject deathParticle = Instantiate(particles, transform.position, Quaternion.identity);
-        deathParticle.GetComponent<NetworkObject>().Spawn();
+        if(!hasParticlesBeenCreated)
+        {
+            GameObject deathParticle = Instantiate(particles, transform.position, Quaternion.identity);
+            deathParticle.GetComponent<NetworkObject>().Spawn();
+            hasParticlesBeenCreated = true;
+        }
     }
 
     //[ServerRpc(RequireOwnership = false)]
