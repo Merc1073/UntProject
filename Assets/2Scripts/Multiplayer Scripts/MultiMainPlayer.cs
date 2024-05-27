@@ -14,6 +14,7 @@ public class MultiMainPlayer : NetworkBehaviour
     [Header("Rapid Fire Text UI")]
 
     public GameObject RapidFireUICanvas;
+    public GameObject CameraGameObject;
 
     [SerializeField] private Text fireRateText;
     [SerializeField] private Text enemyRespawnText;
@@ -229,6 +230,9 @@ public class MultiMainPlayer : NetworkBehaviour
 
         canvasTransform3.position = transform.position + new Vector3(0, 4, -2);
         canvasTransform3.rotation = Quaternion.Euler(90, 0, 0);
+
+        RapidFireUICanvas.transform.position = CameraGameObject.transform.position + new Vector3(0, -19, 0);
+
         //canvasTransform.LookAt(transform.position + Camera.main.transform.forward);
     }
 

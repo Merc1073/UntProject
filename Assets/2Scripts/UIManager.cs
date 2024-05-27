@@ -2,6 +2,7 @@ using DilmerGames.Core.Singletons;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -37,6 +38,10 @@ public class UIManager : Singleton<UIManager>
     void Update()
     {
         //playersInGameText.text = $"Players in game: {PlayersManager.Instance.PlayersInGame}";
+        if(!player)
+        {
+            player = GameObject.FindGameObjectWithTag("MasterSinglePlayer");
+        }
     }
 
     void Start()
@@ -50,7 +55,6 @@ public class UIManager : Singleton<UIManager>
         //        Logger.Instance.LogInfo("Unable to start server...");
         //});
 
-        player = GameObject.FindGameObjectWithTag("MasterSinglePlayer");
 
         // START HOST
         startHostButton?.onClick.AddListener(async () =>

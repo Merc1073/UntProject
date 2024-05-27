@@ -47,6 +47,9 @@ public class MainMenu : MonoBehaviour
     public bool startButtonActivated = false;
     public bool quitButtonActivated = false;
 
+    public bool hasHostButtonHit = false;
+    public bool hasClientButtonHit = false;
+
     private float timer;
     public float generalDistanceFromPlayer;
     public float PlayerCannotMoveForXSeconds;
@@ -372,12 +375,17 @@ public class MainMenu : MonoBehaviour
 
         //if (startHostButton.gameObject.activeSelf == true)
         //{
-        //    if (startHostDistanceToPlayer <= generalDistanceFromPlayer)
+        //    if (startHostDistanceToPlayer <= generalDistanceFromPlayer && !hasHostButtonHit)
         //    {
+
+        //        hasHostButtonHit = true;
+
         //        CreateParticleEffect(gameStartParticle, startHostButton.transform.position, Quaternion.Euler(Vector3.zero));
 
         //        if (RelayManager.Instance.IsRelayEnabled)
-        //            await RelayManager.Instance.SetupRelay();
+        //        {
+        //            RelayManager.Instance.SetupRelay();
+        //        }
 
         //        NetworkManager.Singleton.StartHost();
 
